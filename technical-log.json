@@ -2,40 +2,31 @@
   {
     "id": 1,
     "timestamp": "2025-05-15T10:00:00Z",
-    "userRequest": "Začínáme nový projekt Fixit Guru alfa verze. Každá nová funkce se zapíše do svého souboru. Soubory budou katalogovany. Každý požadavek bude zanesen do technického deníku. Každá nová změna bude vždy přidána k ostatním.",
-    "implementation": "Inicializace projektu, nastavení základní architektury (React + Tailwind + Gemini API). Implementace systému logování změn (Technical Journal), katalogizace souborů (File Catalog) a modularizace klíčových funkcí do samostatných utilit.",
-    "filesChanged": [
-      "App.tsx",
-      "constants.tsx",
-      "index.html",
-      "types.ts",
-      "technical-log.json",
-      "file-catalog.json",
-      "services/logService.ts",
-      "services/catalogService.ts",
-      "services/geminiService.ts",
-      "utils/safetyCheck.ts",
-      "utils/promptBuilder.ts",
-      "components/TechnicalLog.tsx"
-    ]
+    "userRequest": "Začínáme nový projekt Fixit Guru alfa verze...",
+    "implementation": "Inicializace projektu, nastavení základní architektury (React + Tailwind + Gemini API). Implementace systému logování změn, katalogizace souborů a modularizace funkcí.",
+    "filesChanged": ["App.tsx", "constants.tsx", "index.html", "types.ts", "technical-log.json", "file-catalog.json", "services/logService.ts", "services/catalogService.ts", "services/geminiService.ts", "utils/safetyCheck.ts", "utils/promptBuilder.ts", "components/TechnicalLog.tsx"]
   },
   {
     "id": 2,
     "timestamp": "2025-05-15T11:30:00Z",
-    "userRequest": "Každá stránka bude mít svůj soubor... Stránky webu můžou být zapisovány do svých HTML souborů",
-    "implementation": "Modularizace informačních stránek do samostatných HTML souborů v adresáři /pages. Implementace PageService pro dynamické asynchronní načítání obsahu stránek. Refaktoring hlavní komponenty App.tsx pro odstranění statického textu a jeho nahrazení dynamickým injektováním obsahu přes dangerouslySetInnerHTML.",
+    "userRequest": "Každá stránka bude mít svůj soubor...",
+    "implementation": "Modularizace informačních stránek do samostatných HTML souborů v adresáři /pages. Implementace PageService pro dynamické asynchronní načítání obsahu.",
+    "filesChanged": ["technical-log.json", "file-catalog.json", "App.tsx", "services/pageService.ts", "pages/help.html", "pages/manifest.html", "pages/eco.html", "pages/law.html", "pages/ui.html", "pages/backlog.html", "pages/expert.html"]
+  },
+  {
+    "id": 3,
+    "timestamp": "2025-05-15T14:00:00Z",
+    "userRequest": "Design overhaul: Microsoft Fluent Design (Mica, Acrylic, 8px radius), Left Sidebar (☰), Tiles, GitHub Deploy.",
+    "implementation": "Kompletní přepracování UI do stylu Microsoft Fluent Design. Implementace Mica pozadí a Acrylic karet. Změna zaoblení na 8px. Restrukturalizace navigace do levého sidebaru. Příprava deployment workflow pro GitHub Actions.",
     "filesChanged": [
       "technical-log.json",
       "file-catalog.json",
+      "index.html",
       "App.tsx",
-      "services/pageService.ts",
-      "pages/help.html",
-      "pages/manifest.html",
-      "pages/eco.html",
-      "pages/law.html",
-      "pages/ui.html",
-      "pages/backlog.html",
-      "pages/expert.html"
+      "components/Menu.tsx",
+      "components/AgentCard.tsx",
+      "components/Modal.tsx",
+      ".github/workflows/deploy.yml"
     ]
   }
 ]

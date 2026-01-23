@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [modalContent, setModalContent] = useState<string>('');
   
@@ -25,10 +25,9 @@ const App: React.FC = () => {
     }
   }, [messages, isLoading]);
 
-  // Dynamicky načte obsah stránky, když se změní activeModal
   useEffect(() => {
     if (activeModal && activeModal !== 'log') {
-      setModalContent('<div class="animate-pulse flex space-y-4 flex-col"><div class="h-4 bg-white/10 rounded w-3/4"></div><div class="h-4 bg-white/10 rounded"></div><div class="h-4 bg-white/10 rounded w-5/6"></div></div>');
+      setModalContent('<div class="animate-pulse flex space-y-3 flex-col"><div class="h-3 bg-white/5 rounded w-3/4"></div><div class="h-3 bg-white/5 rounded"></div><div class="h-3 bg-white/5 rounded w-5/6"></div></div>');
       fetchPageContent(activeModal).then(setModalContent);
     }
   }, [activeModal]);
@@ -73,145 +72,147 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col relative overflow-hidden text-white bg-[#000814]">
-      {/* Background Auras */}
-      <div className="aura w-[500px] h-[500px] top-[-100px] left-[-100px] bg-blue-600"></div>
-      <div className="aura w-[400px] h-[400px] bottom-[-50px] right-[-50px] bg-cyan-900"></div>
-
-      {/* Header */}
-      <header className="p-6 flex justify-between items-center z-40">
-        <div className="flex items-center gap-3">
-          {currentAgent ? (
-            <button 
-              onClick={resetChat}
-              className="w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
-            >
-              ←
-            </button>
-          ) : (
-             <div className="text-xl font-black tracking-tighter text-blue-400">GURU.V2</div>
-          )}
-          <h1 className="text-sm font-bold tracking-[0.2em] opacity-80">
-            {currentAgent ? `${currentAgent.name} // ${currentAgent.title}` : 'FIXIT GURU ALPHA'}
-          </h1>
-        </div>
-        <button 
-          onClick={() => setIsMenuOpen(true)}
-          className="w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
-        >
-          <div className="flex flex-col gap-1">
-            <div className="w-1 h-1 bg-white rounded-full"></div>
-            <div className="w-1 h-1 bg-white rounded-full"></div>
-            <div className="w-1 h-1 bg-white rounded-full"></div>
-          </div>
-        </button>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 overflow-hidden p-6 relative z-30 flex flex-col">
-        {!currentAgent ? (
-          <div className="h-full flex flex-col justify-center items-center">
-            <div className="text-center mb-12 max-w-xl">
-              <h2 className="text-5xl font-black mb-4 tracking-tight leading-none">Vítejte v Synthesis.</h2>
-              <p className="text-white/40 text-sm font-light uppercase tracking-[0.3em]">Vyberte svého experta na opravy</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl">
-              {AGENTS.map(agent => (
-                <AgentCard 
-                  key={agent.id} 
-                  agent={agent} 
-                  onClick={() => setCurrentAgent(agent)} 
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="flex-1 flex flex-col glass rounded-[3rem] border-white/10 shadow-2xl overflow-hidden mb-6">
-            <div 
-              ref={scrollRef}
-              className="flex-1 overflow-y-auto p-8 space-y-6 scroll-smooth"
-            >
-              {messages.length === 0 && (
-                <div className="h-full flex flex-col items-center justify-center text-center opacity-30 space-y-4">
-                  <div className="text-6xl">{currentAgent.icon}</div>
-                  <p className="text-sm max-w-xs leading-relaxed uppercase tracking-widest">
-                    Zadejte dotaz k opravě nebo údržbě. {currentAgent.name} je připraven.
-                  </p>
-                </div>
-              )}
-              {messages.map((m, i) => (
-                <div 
-                  key={i} 
-                  className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}
-                >
-                  <div className={`max-w-[80%] p-5 rounded-3xl ${
-                    m.role === 'user' 
-                      ? 'bg-blue-600/80 text-white rounded-tr-none shadow-lg' 
-                      : 'glass border-white/5 text-white/90 rounded-tl-none leading-relaxed'
-                  }`}>
-                    {m.text.split('\n').map((line, idx) => (
-                      <p key={idx} className={idx > 0 ? 'mt-3' : ''}>{line}</p>
-                    ))}
-                    <div className="text-[10px] opacity-40 mt-2 text-right">
-                      {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="glass p-4 rounded-3xl rounded-tl-none flex gap-1">
-                    <div className="w-2 h-2 bg-white/40 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-white/40 rounded-full animate-bounce delay-75"></div>
-                    <div className="w-2 h-2 bg-white/40 rounded-full animate-bounce delay-150"></div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Input Area */}
-            <div className="p-6 bg-white/5 border-t border-white/10">
-              <div className="relative flex items-center gap-4">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Zeptejte se na cokoli..."
-                  className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-white/20"
-                />
-                <button 
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !input.trim()}
-                  className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center hover:bg-blue-400 hover:text-white transition-all disabled:opacity-20 disabled:grayscale"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" fill="currentColor"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="p-4 text-[10px] text-center text-white/30 uppercase tracking-[0.3em] font-light z-40 bg-[#000814]">
-        {COPYRIGHT}
-      </footer>
-
-      {/* Menu & Modals */}
+    <div className="h-screen w-full flex relative overflow-hidden text-white bg-[#000814]">
+      {/* Sidebar Navigation */}
       <Menu 
-        isOpen={isMenuOpen} 
-        onClose={() => setIsMenuOpen(false)} 
-        onSelect={(id) => {
-          setIsMenuOpen(false);
-          setActiveModal(id);
-        }}
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)} 
+        onSelect={(id) => setActiveModal(id)}
+        activeModal={activeModal}
       />
 
-      {/* Technický deník má speciální komponentu */}
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'pl-64' : 'pl-16'}`}>
+        {/* Header */}
+        <header className="p-4 flex justify-between items-center z-40 border-b border-white/5 acrylic">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="w-10 h-10 flex items-center justify-center rounded-fluent hover:bg-white/5 transition-colors reveal-focus"
+            >
+              ☰
+            </button>
+            <div className="flex flex-col">
+              <div className="text-xs font-black tracking-tighter text-blue-400">GURU.V2</div>
+              <h1 className="text-[10px] font-bold tracking-[0.2em] opacity-40 uppercase">
+                {currentAgent ? `${currentAgent.name} // ${currentAgent.title}` : 'FIXIT GURU ALPHA'}
+              </h1>
+            </div>
+          </div>
+          {currentAgent && (
+            <button 
+              onClick={resetChat}
+              className="px-4 py-2 text-xs font-medium acrylic hover:bg-white/10 transition-colors reveal-focus"
+            >
+              Ukončit relaci
+            </button>
+          )}
+        </header>
+
+        {/* Main Workspace */}
+        <main className="flex-1 overflow-hidden p-6 relative z-30 flex flex-col">
+          {!currentAgent ? (
+            <div className="h-full flex flex-col justify-center max-w-6xl mx-auto w-full">
+              <div className="mb-10">
+                <h2 className="text-4xl font-bold mb-2 tracking-tight">Vítejte v Synthesis.</h2>
+                <p className="text-white/40 text-xs font-medium uppercase tracking-[0.2em]">Centrum pro opravy a udržitelnost</p>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {AGENTS.map(agent => (
+                  <AgentCard 
+                    key={agent.id} 
+                    agent={agent} 
+                    onClick={() => setCurrentAgent(agent)} 
+                  />
+                ))}
+              </div>
+
+              <div className="mt-12 p-6 acrylic border-white/5 max-w-2xl">
+                <h3 className="text-sm font-bold mb-2 uppercase tracking-widest text-blue-400">Rychlá diagnostika</h3>
+                <p className="text-sm text-white/60 mb-4 leading-relaxed">Vyberte si agenta výše pro zahájení interaktivní diagnostiky. Každý náš expert využívá nejmodernější model Gemini 3 pro přesné a bezpečné rady.</p>
+                <div className="flex gap-4">
+                   <div className="text-[10px] px-3 py-1 acrylic-deep rounded-full border border-white/10 opacity-60">Status: Alpha 0.1.0</div>
+                   <div className="text-[10px] px-3 py-1 acrylic-deep rounded-full border border-white/10 opacity-60">Engine: Gemini 3 Flash</div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col acrylic overflow-hidden mb-4 animate-fluent">
+              <div 
+                ref={scrollRef}
+                className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth"
+              >
+                {messages.length === 0 && (
+                  <div className="h-full flex flex-col items-center justify-center text-center opacity-20 space-y-4">
+                    <div className="text-5xl">{currentAgent.icon}</div>
+                    <p className="text-xs max-w-xs leading-relaxed uppercase tracking-[0.2em] font-bold">
+                      {currentAgent.name} čeká na vaše instrukce
+                    </p>
+                  </div>
+                )}
+                {messages.map((m, i) => (
+                  <div 
+                    key={i} 
+                    className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-fluent`}
+                  >
+                    <div className={`max-w-[85%] p-4 rounded-fluent ${
+                      m.role === 'user' 
+                        ? 'bg-blue-600/90 text-white shadow-lg' 
+                        : 'acrylic-deep border-white/5 text-white/90 leading-relaxed text-sm'
+                    }`}>
+                      {m.text.split('\n').map((line, idx) => (
+                        <p key={idx} className={idx > 0 ? 'mt-2' : ''}>{line}</p>
+                      ))}
+                      <div className="text-[9px] opacity-30 mt-2 text-right uppercase font-mono">
+                        {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="acrylic-deep px-4 py-3 rounded-fluent flex gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-white/20 rounded-full animate-bounce"></div>
+                      <div className="w-1.5 h-1.5 bg-white/20 rounded-full animate-bounce delay-75"></div>
+                      <div className="w-1.5 h-1.5 bg-white/20 rounded-full animate-bounce delay-150"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Input Area */}
+              <div className="p-4 bg-white/5 border-t border-white/5">
+                <div className="relative flex items-center gap-3">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder="Zadejte dotaz (např. 'jak vyměnit displej u iPhonu')"
+                    className="flex-1 acrylic-deep border border-white/10 rounded-fluent px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-white/20 text-sm"
+                  />
+                  <button 
+                    onClick={handleSendMessage}
+                    disabled={isLoading || !input.trim()}
+                    className="w-12 h-12 bg-white text-black rounded-fluent flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all disabled:opacity-10 reveal-focus"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
+
+        {/* Footer */}
+        <footer className="p-3 text-[9px] text-center text-white/20 uppercase tracking-[0.2em] font-medium z-40 bg-[#000814]/50 border-t border-white/5">
+          {COPYRIGHT}
+        </footer>
+      </div>
+
+      {/* Modals */}
       <Modal 
         title="Technický deník & Katalog" 
         isOpen={activeModal === 'log'} 
@@ -220,13 +221,12 @@ const App: React.FC = () => {
         <TechnicalLog />
       </Modal>
 
-      {/* Ostatní stránky se načítají dynamicky z HTML souborů */}
       <Modal 
         title={getModalTitle(activeModal)} 
         isOpen={activeModal !== null && activeModal !== 'log'} 
         onClose={() => setActiveModal(null)}
       >
-        <div dangerouslySetInnerHTML={{ __html: modalContent }} />
+        <div className="prose prose-invert prose-sm" dangerouslySetInnerHTML={{ __html: modalContent }} />
       </Modal>
     </div>
   );
