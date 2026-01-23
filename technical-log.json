@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2025-05-15T10:00:00Z",
+    "userRequest": "Začínáme nový projekt Fixit Guru alfa verze. Každá nová funkce se zapíše do svého souboru. Soubory budou katalogovany. Každý požadavek bude zanesen do technického deníku. Každá nová změna bude vždy přidána k ostatním.",
+    "implementation": "Inicializace projektu, nastavení základní architektury (React + Tailwind + Gemini API). Implementace systému logování změn (Technical Journal), katalogizace souborů (File Catalog) a modularizace klíčových funkcí do samostatných utilit.",
+    "filesChanged": [
+      "App.tsx",
+      "constants.tsx",
+      "index.html",
+      "types.ts",
+      "technical-log.json",
+      "file-catalog.json",
+      "services/logService.ts",
+      "services/catalogService.ts",
+      "services/geminiService.ts",
+      "utils/safetyCheck.ts",
+      "utils/promptBuilder.ts",
+      "components/TechnicalLog.tsx"
+    ]
+  },
+  {
+    "id": 2,
+    "timestamp": "2025-05-15T11:30:00Z",
+    "userRequest": "Každá stránka bude mít svůj soubor... Stránky webu můžou být zapisovány do svých HTML souborů",
+    "implementation": "Modularizace informačních stránek do samostatných HTML souborů v adresáři /pages. Implementace PageService pro dynamické asynchronní načítání obsahu stránek. Refaktoring hlavní komponenty App.tsx pro odstranění statického textu a jeho nahrazení dynamickým injektováním obsahu přes dangerouslySetInnerHTML.",
+    "filesChanged": [
+      "technical-log.json",
+      "file-catalog.json",
+      "App.tsx",
+      "services/pageService.ts",
+      "pages/help.html",
+      "pages/manifest.html",
+      "pages/eco.html",
+      "pages/law.html",
+      "pages/ui.html",
+      "pages/backlog.html",
+      "pages/expert.html"
+    ]
+  }
+]

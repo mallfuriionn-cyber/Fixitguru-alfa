@@ -1,0 +1,7 @@
+{
+  "name": "FixIt Guru v2.1",
+  "description": "Komplexní operační rozhraní pro opravy, udržitelnost a technologie od Studio Synthesis.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
