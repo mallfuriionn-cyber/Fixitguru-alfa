@@ -7,7 +7,7 @@
     </div>
     <h2 class="text-4xl font-black tracking-tighter italic text-[#1D1D1F]">Funkce & Dovednosti</h2>
     <p class="text-sm text-black/50 font-medium leading-relaxed max-w-xl">
-      FixIt Guru není jen chatbot. Je to distribuovaný operační systém pro inženýrství, udržitelnost a nezávislou opravu. Zde je rozbor našich schopností.
+      FixIt Guru není jen chatbot. Je to distribuovaný operační systém pro inženýrství, udržitelnost a nezávislou opravu. Zde je rozbor našich schopností a specialistů.
     </p>
   </header>
 
@@ -15,68 +15,64 @@
     <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 px-2">Expertní Moduly: Kvarteto Synthesis</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm">
+      <!-- Lucie -->
+      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
         <div class="flex items-center gap-4">
-          <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-3xl shadow-sm">⚡</div>
+          <div class="w-14 h-14 bg-[#007AFF] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">📋</div>
           <div>
-            <h4 class="font-black italic text-lg">KAREL (Hardware Core)</h4>
-            <p class="text-[9px] font-bold text-[#007AFF] uppercase tracking-widest">Signal & Logic Specialist</p>
+            <h4 class="font-black italic text-lg">LUCIE (Průvodce)</h4>
+            <p class="text-[9px] font-bold text-[#007AFF] uppercase tracking-widest">Step-Lock Mentor</p>
           </div>
         </div>
-        <ul class="space-y-2 text-xs font-medium text-black/60 list-disc pl-4">
-          <li>Analýza boardview a schémat (PDF/BRD).</li>
-          <li>Diagnostika napěťových větví (stavy S5 až S0).</li>
-          <li>Instrukce pro mikropájení a reballing BGA čipů.</li>
-          <li>Reverzní inženýrství proprietárních protokolů.</li>
-        </ul>
+        <p class="text-xs font-medium text-black/60 leading-relaxed">
+          Komplexní podpora krok za krokem. Vhodná pro nezkušené uživatele. Trpělivá, dbá na absolutní bezpečnost a metodiku.
+        </p>
+        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'lucka-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-[#007AFF] hover:underline">Zobrazit detailní příběh →</button>
       </div>
 
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm">
+      <!-- Karel -->
+      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
         <div class="flex items-center gap-4">
-          <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-3xl shadow-sm">📋</div>
+          <div class="w-14 h-14 bg-[#343434] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">⚡</div>
           <div>
-            <h4 class="font-black italic text-lg">LUCKA (Workflow Mentor)</h4>
-            <p class="text-[9px] font-bold text-[#5E5CE6] uppercase tracking-widest">Process Documentation Control</p>
+            <h4 class="font-black italic text-lg">KAREL (Terminátor)</h4>
+            <p class="text-[9px] font-bold text-[#343434] uppercase tracking-widest">Direct Technical Access</p>
           </div>
         </div>
-        <ul class="space-y-2 text-xs font-medium text-black/60 list-disc pl-4">
-          <li>Generování "Step-Lock" návodů bez možnosti chyby.</li>
-          <li>Mapování kabelových tras a organizace spojovacího materiálu.</li>
-          <li>Standardizace servisních protokolů pro týmy.</li>
-          <li>Checklisty pro kontrolu kvality (QC) po montáži.</li>
-        </ul>
+        <p class="text-xs font-medium text-black/60 leading-relaxed">
+          Pokročilá diagnostika, mikropájení a boardview. Efektivní a rychlý přístup pro experty. Jde přímo k věci.
+        </p>
+        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'kaja-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-black hover:underline">Zobrazit detailní příběh →</button>
       </div>
 
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm">
+      <!-- Dáša -->
+      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
         <div class="flex items-center gap-4">
-          <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-3xl shadow-sm">🌿</div>
+          <div class="w-14 h-14 bg-[#28A745] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">🌿</div>
           <div>
-            <h4 class="font-black italic text-lg">DÁŠA (Eco Logic)</h4>
-            <p class="text-[9px] font-bold text-[#28A745] uppercase tracking-widest">Biotech & Resource Efficiency</p>
+            <h4 class="font-black italic text-lg">DÁŠA (Bylinkářka)</h4>
+            <p class="text-[9px] font-bold text-[#28A745] uppercase tracking-widest">Green Life Specialist</p>
           </div>
         </div>
-        <ul class="space-y-2 text-xs font-medium text-black/60 list-disc pl-4">
-          <li>Automatizace hydroponických systémů (IoT integrace).</li>
-          <li>Diagnostika nutrientního deficitu skrze obrazovou analýzu.</li>
-          <li>Resource management – optimalizace energie v pěstírnách.</li>
-          <li>Metodika bezpečné recyklace Li-ion akumulátorů.</li>
-        </ul>
+        <p class="text-xs font-medium text-black/60 leading-relaxed">
+          Venkovní dílna a zahrada. Specialista na hydroponii a Synthesis Grow (CZ 2026). Relaxovaný, přírodní tón.
+        </p>
+        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'dasa-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-[#28A745] hover:underline">Zobrazit detailní příběh →</button>
       </div>
 
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm">
+      <!-- František -->
+      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
         <div class="flex items-center gap-4">
-          <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-3xl shadow-sm">🔧</div>
+          <div class="w-14 h-14 bg-[#D32F2F] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">🔧</div>
           <div>
-            <h4 class="font-black italic text-lg">FRANTIŠEK (Force Master)</h4>
-            <p class="text-[9px] font-bold text-[#D32F2F] uppercase tracking-widest">Structural Engineering</p>
+            <h4 class="font-black italic text-lg">FRANTIŠEK (Mistr)</h4>
+            <p class="text-[9px] font-bold text-[#D32F2F] uppercase tracking-widest">Heavy-Duty Maintenance</p>
           </div>
         </div>
-        <ul class="space-y-2 text-xs font-medium text-black/60 list-disc pl-4">
-          <li>Výpočet mechanických tolerancí a utahovacích momentů.</li>
-          <li>Navrhování komponent pro 3D tisk a CNC obrábění.</li>
-          <li>Diagnostika hydraulických a pneumatických systémů.</li>
-          <li>Tepelné zpracování ocelí a slitin (metalurgická data).</li>
-        </ul>
+        <p class="text-xs font-medium text-black/60 leading-relaxed">
+          Údržba těžké techniky (sekačky, pily, traktůrky). Praktický styl, pomůže s vybavením dílny i ostřením řetězů.
+        </p>
+        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'franta-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-[#D32F2F] hover:underline">Zobrazit detailní příběh →</button>
       </div>
 
     </div>

@@ -1,3 +1,4 @@
+
 import { Agent, AgentId, SocialPost, Project, MemoryThread, CloudFile, ChatThread, DirectMessage } from './types.ts';
 import { getBrowserLanguage } from './utils/locale.ts';
 
@@ -7,31 +8,31 @@ export const AGENTS: Agent[] = [
   {
     id: AgentId.KAJA,
     name: 'KAREL',
-    title: locale === 'cs' ? 'Hardware God' : 'Hardware Deity',
+    title: locale === 'cs' ? 'Expert & Terminátor' : 'Expert & Terminator',
     description: locale === 'cs' 
-      ? 'Diagnostika na úrovni komponent, analýza logických signálů, mikropájení a reverzní inženýrství PCB.' 
-      : 'Component-level diagnostics, logic signal analysis, micro-soldering, and PCB reverse engineering.',
+      ? 'Přímý technický přístup (Direct Technical Access). Pokročilá diagnostika, mikropájení a reverzní inženýrství PCB.' 
+      : 'Direct Technical Access. Advanced diagnostics, micro-soldering, and PCB reverse engineering.',
     icon: '⚡',
-    color: '#007AFF',
+    color: '#343434',
     systemInstruction: locale === 'cs'
-      ? 'Jsi KAREL, Hardware God. Jsi muž, zkušený inženýr. Mluv technicky, používej odbornou terminologii (MOSFET, osciloskop, ESR, datasheet). Jsi absolutní expert na boardview a mikropájení.'
-      : 'You are KAREL, Hardware God. You are a man, an experienced engineer. Speak technically, use expert terminology (MOSFET, oscilloscope, ESR, datasheet). Absolute expert in boardview and micro-soldering.',
+      ? 'Jsi KAREL, Expert & Terminátor. Mluv efektivně a rychle. Jdi přímo k věci bez zbytečných řečí. Předpokládej, že uživatel zná základy (multimetr, osciloskop).'
+      : 'You are KAREL, Expert & Terminator. Speak efficiently and quickly. Go straight to the point. Assume the user knows the basics (multimeter, oscilloscope).',
     warning: locale === 'cs'
       ? 'Práce na zařízeních pod napětím vyžaduje ESD ochranu. Nebezpečí úrazu.'
       : 'Working on live devices requires ESD protection. Danger of electric shock.'
   },
   {
     id: AgentId.LUCKA,
-    name: 'LUCKA',
-    title: locale === 'cs' ? 'Step-Lock Mentor' : 'Workflow Mentor',
+    name: 'LUCIE',
+    title: locale === 'cs' ? 'Průvodce & Mentorka' : 'Guide & Mentor',
     description: locale === 'cs'
-      ? 'Specialista na metodiku rozborek, dokumentaci procesů a optimalizaci montážních postupů.'
-      : 'Specialist in teardown methodology, process documentation, and assembly procedure optimization.',
+      ? 'Komplexní podpora krok za krokem (Step-by-Step). Vhodná pro nezkušené uživatele a začátečníky.'
+      : 'Comprehensive step-by-step support. Suitable for inexperienced users and beginners.',
     icon: '📋',
-    color: '#5E5CE6',
+    color: '#007AFF',
     systemInstruction: locale === 'cs'
-      ? 'Jsi LUCKA, Step-Lock Mentor. Rozděluj komplexní zásahy na logické kroky. Buď precizní v dokumentaci.'
-      : 'You are LUCKA, Step-Lock Mentor. Break down complex interventions into logical steps. Be precise in documentation.',
+      ? 'Jsi LUCIE, Průvodce & Mentorka. Buď trpělivá, dbej na absolutní bezpečnost a metodiku. Před prací vždy zkontroluj připravenost uživatele.'
+      : 'You are LUCIE, Guide & Mentor. Be patient, ensure absolute safety and methodology. Always check user readiness before starting work.',
     warning: locale === 'cs'
       ? 'Před demontáží vždy zdokumentujte pozici kabelových tras.'
       : 'Always document cable routing before disassembly.'
@@ -39,15 +40,15 @@ export const AGENTS: Agent[] = [
   {
     id: AgentId.DASA,
     name: 'DÁŠA',
-    title: 'Organic Fanatic',
+    title: locale === 'cs' ? 'Bylinkářka & Zahradnice' : 'Herbalist & Gardener',
     description: locale === 'cs'
-      ? 'Projektování uzavřených ekosystémů, automatizace hydroponie a udržitelný resource management.'
-      : 'Design of closed ecosystems, hydroponic automation, and sustainable resource management.',
+      ? 'Specialista na živou přírodu. Bylinky, hydroponie a modul Synthesis Grow (CZ 2026).'
+      : 'Living nature specialist. Herbs, hydroponics, and the Synthesis Grow module (CZ 2026).',
     icon: '🌿',
     color: '#28A745',
     systemInstruction: locale === 'cs'
-      ? 'Jsi DÁŠA, Organic Fanatic. Expert na biotechnologie. Mluv o pH, EC hodnotách a fotosyntéze.'
-      : 'You are DASA, Organic Fanatic. Biotechnology expert. Speak about pH, EC values, and photosynthesis.',
+      ? 'Jsi DÁŠA, Bylinkářka & Zahradnice. Relaxovaný, přírodní, ale velmi odborný tón. Expert na pH, hnojení a legislativní pěstování.'
+      : 'You are DASA, Herbalist & Gardener. Relaxed, natural, but very expert tone. Expert in pH, fertilization, and legislative cultivation.',
     warning: locale === 'cs'
       ? 'Manipulace s elektroinstalací v mokrém prostředí vyžaduje zvýšenou opatrnost.'
       : 'Handling electrical systems in wet environments requires extreme caution.'
@@ -55,22 +56,40 @@ export const AGENTS: Agent[] = [
   {
     id: AgentId.FRANTA,
     name: 'FRANTIŠEK',
-    title: 'Master of Force',
+    title: locale === 'cs' ? 'Mistr venkovní techniky' : 'Outdoor Tech Master',
     description: locale === 'cs'
-      ? 'Strojírenská výroba, hydraulika a konstrukční zámečnictví. Expert na metalurgii.'
-      : 'Mechanical manufacturing, hydraulics, and structural locksmithing. Metallurgy expert.',
+      ? 'Údržba těžké techniky. Motorové pily, sekačky, traktůrky a vybavení dílny.'
+      : 'Heavy-duty maintenance. Chainsaws, mowers, tractors, and workshop equipment.',
     icon: '🔧',
     color: '#D32F2F',
     systemInstruction: locale === 'cs'
-      ? 'Jsi FRANTIŠEK, Master of Force. Mluv jako zkušený strojař. ISO tolerance, krouticí momenty.'
-      : 'You are FRANTIŠEK, Master of Force. Speak like an experienced machinist. ISO tolerances, torque specs.',
+      ? 'Jsi FRANTIŠEK, Mistr venkovní techniky. Praktický a chlapský styl. Pomoz oživit motory i navrhnout ideální dílnu.'
+      : 'You are FRANTIŠEK, Outdoor Tech Master. Practical and manly style. Help revive engines and design the ideal workshop.',
     warning: locale === 'cs'
-      ? 'Při práci s hydraulikou pod tlakem používejte předepsané OOPP.'
-      : 'Use prescribed PPE when working with high-pressure hydraulics.'
+      ? 'Při práci s řeznými nástroji a hydraulikou používejte předepsané OOPP.'
+      : 'Use prescribed PPE when working with cutting tools and hydraulics.'
+  },
+  {
+    id: AgentId.JUDY,
+    name: 'JUDY',
+    title: locale === 'cs' ? 'Advocacy Specialist' : 'Advocacy Specialist',
+    description: locale === 'cs'
+      ? 'Expertní právní pomoc v oblasti spotřebitelských práv, reklamací a práva na opravu.'
+      : 'Expert legal assistance in consumer rights, claims, and the right to repair.',
+    icon: '🏛️',
+    color: '#1D1D1F',
+    systemInstruction: locale === 'cs'
+      ? 'Jsi JUDY, Advocacy Specialist. Analyzuj dokumenty a pomáhej s právními spory. Buď věcná, formální a nekompromisní.'
+      : 'You are JUDY, Advocacy Specialist. Analyze documents and help with legal disputes. Be matter-of-fact, formal, and uncompromising.',
+    warning: locale === 'cs'
+      ? 'Tato asistentka nenahrazuje advokáta, poskytuje však expertní blueprinty pro samostatné jednání.'
+      : 'This assistant does not replace an attorney, but provides expert blueprints for independent action.'
   }
 ];
 
 export const MENU_ITEMS = [
+  { id: 'DOC_SEARCH', label: locale === 'cs' ? 'Vyhledávač Návodů' : 'Manual Searcher', icon: '📂', description: locale === 'cs' ? 'Technická dokumentace' : 'Technical Documentation', category: 'submodule' },
+  { id: 'LUCIE_WORKSHOP', label: locale === 'cs' ? 'Mentorská Dílna' : 'Mentor Workshop', icon: '📋', description: locale === 'cs' ? 'Metodika & On-boarding' : 'Methodology & On-boarding', category: 'submodule' },
   { id: 'WORKFLOW', label: locale === 'cs' ? 'Dílna' : 'Workshop', icon: '🛠️', description: locale === 'cs' ? 'Správa servisních zakázek' : 'Service order management', category: 'submodule' },
   { id: 'LEGAL_SHIELD', label: locale === 'cs' ? 'Právní Štít' : 'Legal Shield', icon: '⚖️', description: locale === 'cs' ? 'Ochrana práv na opravu' : 'Repair rights protection', category: 'submodule' },
   { id: 'MESSAGES', label: locale === 'cs' ? 'Zprávy' : 'Messages', icon: '💬', description: locale === 'cs' ? 'Šifrovaná komunikace' : 'Encrypted communication', category: 'submodule' },
@@ -79,6 +98,11 @@ export const MENU_ITEMS = [
   { id: 'CLOUD', label: 'Media', icon: '🖼️', description: locale === 'cs' ? 'Datasheety & Fotodokumentace' : 'Datasheets & Media', category: 'submodule' },
   
   { id: 'help', label: locale === 'cs' ? 'Nápověda' : 'Help', icon: '❓', description: locale === 'cs' ? 'Funkce & Dovednosti AI' : 'AI Skills & Help', category: 'info' },
+  { id: 'kaja-bio', label: 'Profil: Karel', icon: '⚡', description: 'Expert & Terminátor', category: 'info' },
+  { id: 'lucka-bio', label: 'Profil: Lucie', icon: '📋', description: 'Průvodce & Mentorka', category: 'info' },
+  { id: 'dasa-bio', label: 'Profil: Dáša', icon: '🌿', description: 'Bylinkářka & Zahradnice', category: 'info' },
+  { id: 'franta-bio', label: 'Profil: František', icon: '🔧', description: 'Mistr Techniky', category: 'info' },
+  
   { id: 'manifest', label: 'Manifest', icon: '📜', description: locale === 'cs' ? 'Vize Studio Synthesis' : 'Synthesis Philosophy', category: 'info' },
   { id: 'id-system', label: 'ID Core', icon: '🆔', description: locale === 'cs' ? 'Architektura Identity' : 'Identity Architecture', category: 'info' },
   { id: 'security', label: locale === 'cs' ? 'Zabezpečení' : 'Security', icon: '🛡️', description: locale === 'cs' ? 'Biometrika & Šifrování' : 'Biometrics & Encryption', category: 'info' },
@@ -92,7 +116,7 @@ export const MENU_ITEMS = [
 ];
 
 export const MOCK_CHATS: ChatThread[] = [
-  { id: 't1', participantId: '1', participantName: 'Ing. Marek Vlk', participantAvatar: '👨‍🔬', lastMessage: 'Oscilogram na pinu 4 vykazuje jitter.', lastTimestamp: '14:20', unreadCount: 2 },
+  { id: 't1', participantId: '1', participantName: 'Ing. Marek vlk', participantAvatar: '👨‍🔬', lastMessage: 'Oscilogram na pinu 4 vykazuje jitter.', lastTimestamp: '14:20', unreadCount: 2 },
   { id: 't2', participantId: '2', participantName: 'Laboratoř BioX', participantAvatar: '🔬', lastMessage: 'EC senzor vyžaduje rekalibraci.', lastTimestamp: '11:45', unreadCount: 0 },
   { id: 't3', participantId: '3', participantName: 'Servis Strojíren', participantAvatar: '👷', lastMessage: 'Tolerance uložení H7/g6 potvrzena.', lastTimestamp: 'Včera', unreadCount: 0 }
 ];

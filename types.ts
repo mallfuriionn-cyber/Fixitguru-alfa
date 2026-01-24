@@ -1,8 +1,10 @@
+
 export enum AgentId {
   KAJA = 'kaja',
   LUCKA = 'lucka',
   DASA = 'dasa',
-  FRANTA = 'franta'
+  FRANTA = 'franta',
+  JUDY = 'judy'
 }
 
 export enum UserRole {
@@ -28,79 +30,49 @@ export interface Message {
   role: 'user' | 'model';
   text: string;
   timestamp: Date;
+  attachments?: string[];
 }
 
-export interface DirectMessage {
+export interface ExtractedPersonalData {
+  fullName?: string;
+  address?: string;
+  email?: string;
+  phone?: string;
+  orderNumber?: string;
+  purchaseDate?: string;
+  vendorName?: string;
+  productName?: string;
+  price?: string;
+}
+
+export interface LegalDispute {
   id: string;
-  senderId: string;
-  senderName: string;
-  senderAvatar: string;
-  text: string;
-  timestamp: string;
+  title: string;
+  date: string;
+  status: 'Otevřeno' | 'Probíhá' | 'Vyřešeno' | 'Zamítnuto';
+  attachments: { name: string; url: string; type: string }[];
+  chatTranscript: Message[];
+  extractedData?: ExtractedPersonalData;
+  consentGiven: boolean;
 }
 
-export interface ChatThread {
+export interface SocialPost {
   id: string;
-  participantId: string;
-  participantName: string;
-  participantAvatar: string;
-  lastMessage: string;
-  lastTimestamp: string;
-  unreadCount: number;
-}
-
-export interface User {
-  id: string; 
-  secretId: string; 
-  virtualHash: string; 
-  email: string;
-  username: string;
-  name: string;
-  role: UserRole;
-  level: number;
+  authorId: string;
+  author: string;
   avatar: string;
-  bio?: string;
-  specialization?: string[];
-  equipment: string[];
-  isAdmin?: boolean;
-  isOwner?: boolean;
-  registrationDate: string;
-  lastLogin: string;
-  stats: {
-    repairs: number;
-    growing: number;
-    success: string;
-    publishedPosts: number;
-  };
-  // Biometrické provázání
-  biometricsLinked?: {
-    face: boolean;
-    fingerprint: boolean;
-    verified: boolean;
-    safeEnvironmentEnabled: boolean;
-    accessLogs: { date: string; type: string; status: string }[];
-  };
-  // Admin & Center Metadata
-  guruLevelLabel?: string;
-  activeAssistantId?: AgentId;
-  hardwareLog?: string[];
-  adminNotes?: {
-    queryLogs: string[];
-    errorReports: { topic: string; date: string; resolved: boolean }[];
-    savedProcedures: string[];
-  };
-  permissions?: {
-    canPublishWithoutApproval: boolean;
-    hasExpertManuals: boolean;
-    isAgeVerified: boolean;
-    isModerator: boolean;
-  };
+  title: string;
+  type: string;
+  image: string;
+  description: string;
+  tools: string[];
+  status: string;
 }
 
 export interface Project {
   id: string;
   title: string;
-  status: 'Příjem' | 'Diagnostika' | 'Práce' | 'Hotovo';
+  status: string;
   agentId: AgentId;
   lastUpdate: string;
 }
@@ -115,25 +87,76 @@ export interface MemoryThread {
 
 export interface CloudFile {
   id: string;
-  type: 'photo' | 'schema';
+  type: 'schema' | 'photo';
   url: string;
   ownerId: string;
-  agentId?: AgentId;
-  isPublic?: boolean;
+  agentId: AgentId;
 }
 
-export interface SocialPost {
+export interface ChatThread {
   id: string;
-  authorId: string;
-  author: string;
+  participantId: string;
+  participantName: string;
+  participantAvatar: string;
+  lastMessage: string;
+  lastTimestamp: string;
+  unreadCount: number;
+}
+
+export interface DirectMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string;
+  text: string;
+  timestamp: string;
+}
+
+export interface User {
+  id: string; 
+  secretId: string; 
+  virtualHash: string; 
+  email: string;
+  username: string;
+  name: string;
+  role: UserRole;
+  level: number;
   avatar: string;
-  title: string;
-  type: 'oprava' | 'pěstování' | 'konstrukce';
-  image: string;
-  description: string;
-  tools: string[];
-  status: 'draft' | 'pending' | 'published';
-  comments?: { id: string; user: string; text: string; date: string }[];
+  bio?: string;
+  isAdmin?: boolean;
+  isOwner?: boolean;
+  registrationDate: string;
+  lastLogin: string;
+  stats: {
+    repairs: number;
+    growing: number;
+    success: string;
+    publishedPosts: number;
+  };
+  disputes?: LegalDispute[];
+  security: {
+    method: 'PASSWORD' | 'GOOGLE' | 'PASSKEY_HARDWARE';
+    level: 'Základní' | 'Vysoká' | 'Maximální';
+    hardwareHandshake: boolean;
+    lastAuthAt: string;
+  };
+  biometricsLinked?: {
+    face: boolean;
+    fingerprint: boolean;
+    verified: boolean;
+    safeEnvironmentEnabled: boolean;
+    accessLogs: { date: string; type: string; status: string }[];
+  };
+  equipment: string[];
+  specialization?: string[];
+  permissions?: {
+    canPublishWithoutApproval: boolean;
+    hasExpertManuals: boolean;
+    isAgeVerified: boolean;
+    isModerator: boolean;
+  };
+  activeAssistantId?: AgentId;
+  guruLevelLabel?: string;
 }
 
 export interface MenuItem {
@@ -143,8 +166,6 @@ export interface MenuItem {
   description: string;
   category: 'submodule' | 'info' | 'user';
   enabled?: boolean;
-  minRole?: UserRole;
-  config?: Record<string, any>;
 }
 
-export type ViewState = 'REGISTRATION' | 'DETAILED_REGISTRATION' | 'HUB' | 'CHAT' | 'PROFILE' | 'SOCIAL' | 'WORKFLOW' | 'MEMORY' | 'CLOUD' | 'ADMIN' | 'MESSAGES' | 'LEGAL_SHIELD';
+export type ViewState = 'REGISTRATION' | 'DETAILED_REGISTRATION' | 'HUB' | 'CHAT' | 'PROFILE' | 'SOCIAL' | 'WORKFLOW' | 'MEMORY' | 'CLOUD' | 'ADMIN' | 'MESSAGES' | 'LEGAL_SHIELD' | 'LEGAL_ASSISTANT_CHAT' | 'LUCIE_WORKSHOP' | 'DOC_SEARCH';
