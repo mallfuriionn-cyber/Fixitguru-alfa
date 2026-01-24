@@ -1,20 +1,17 @@
 {
   "project": "FixIt Guru v2.1",
-  "version": "0.1.0-alpha",
+  "version": "0.2.1-alpha-B2",
   "files": [
-    { "path": "index.html", "description": "Vstupní HTML bod aplikace s Fluent Design styly." },
-    { "path": "index.tsx", "description": "Vstupní bod Reactu." },
-    { "path": "App.tsx", "description": "Hlavní layout se sidebarem a Mica efektem." },
-    { "path": "types.ts", "description": "TypeScript definice." },
-    { "path": "constants.tsx", "description": "Konstanty a menu." },
-    { "path": "technical-log.json", "description": "Technický deník." },
-    { "path": "file-catalog.json", "description": "Katalog souborů." },
-    { "path": "components/AgentCard.tsx", "description": "Fluent Tile komponenta." },
-    { "path": "components/Menu.tsx", "description": "Levý sidebar." },
-    { "path": "components/Modal.tsx", "description": "Acrylic modální okno." },
-    { "path": "components/TechnicalLog.tsx", "description": "Log změn." },
-    { "path": "services/geminiService.ts", "description": "Gemini API integrace." },
-    { "path": "services/pageService.ts", "description": "Načítání HTML obsahu." },
-    { "path": ".github/workflows/deploy.yml", "description": "Automatizace nasazení přes GitHub Actions." }
+    { "path": "index.html", "description": "Apple-style HTML5 základ s adaptivním layoutem." },
+    { "path": "App.tsx", "description": "Core aplikace s logikou chatu, T&C a správou agentů." },
+    { "path": "constants.tsx", "description": "Definice agentů, menu a globálních textů." },
+    { "path": "types.ts", "description": "TypeScript definice a rozhraní." },
+    { "path": "components/AgentCard.tsx", "description": "Dlaždice v mřížce 2x2 s dynamickým accentem." },
+    { "path": "components/Modal.tsx", "description": "Fullscreen modal pro Apple-like interakce." },
+    { "path": "components/VoiceControl.tsx", "description": "Vizuální indikátor Vocal Link." },
+    { "path": "components/TechnicalLog.tsx", "description": "Systémový prohlížeč logů a katalogu." },
+    { "path": "services/geminiService.ts", "description": "Implementace Gemini 3 Pro API." },
+    { "path": "utils/promptBuilder.ts", "description": "Skládání systémových instrukcí pro agenty." },
+    { "path": "technical-log.json", "description": "Historie změn a milníků projektu." }
   ]
 }

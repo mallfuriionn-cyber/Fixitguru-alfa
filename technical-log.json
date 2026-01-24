@@ -1,32 +1,31 @@
+
 [
   {
-    "id": 1,
-    "timestamp": "2025-05-15T10:00:00Z",
-    "userRequest": "Začínáme nový projekt Fixit Guru alfa verze...",
-    "implementation": "Inicializace projektu, nastavení základní architektury (React + Tailwind + Gemini API). Implementace systému logování změn, katalogizace souborů a modularizace funkcí.",
-    "filesChanged": ["App.tsx", "constants.tsx", "index.html", "types.ts", "technical-log.json", "file-catalog.json", "services/logService.ts", "services/catalogService.ts", "services/geminiService.ts", "utils/safetyCheck.ts", "utils/promptBuilder.ts", "components/TechnicalLog.tsx"]
+    "id": 20,
+    "timestamp": "2026-02-12T14:30:00Z",
+    "userRequest": "Oprav rozvržení celkové. Oprav logo, přidej nebo oprav funkce...",
+    "implementation": "Kompletní redesign dle protokolu Synthesis Terminal v2.1. Implementována hluboká námořnická modř, glassmorphism a pulzující aury. Zpřesněno kvarteto asistentů.",
+    "filesChanged": ["index.html", "App.tsx", "constants.tsx", "components/AdminPanel.tsx", "technical-log.json"]
   },
   {
-    "id": 2,
-    "timestamp": "2025-05-15T11:30:00Z",
-    "userRequest": "Každá stránka bude mít svůj soubor...",
-    "implementation": "Modularizace informačních stránek do samostatných HTML souborů v adresáři /pages. Implementace PageService pro dynamické asynchronní načítání obsahu.",
-    "filesChanged": ["technical-log.json", "file-catalog.json", "App.tsx", "services/pageService.ts", "pages/help.html", "pages/manifest.html", "pages/eco.html", "pages/law.html", "pages/ui.html", "pages/backlog.html", "pages/expert.html"]
+    "id": 21,
+    "timestamp": "2026-02-12T15:15:00Z",
+    "userRequest": "Obsah stránek v menu výplň správným obsahem",
+    "implementation": "Kompletní přepis všech 7 HTML stránek v adresáři pages/. Přidány hluboké popisy vizí, legislativy a technického stacku.",
+    "filesChanged": ["pages/help.html", "pages/manifest.html", "pages/eco.html", "pages/law.html", "pages/ui.html", "pages/backlog.html", "pages/expert.html", "technical-log.json"]
   },
   {
-    "id": 3,
-    "timestamp": "2025-05-15T14:00:00Z",
-    "userRequest": "Design overhaul: Microsoft Fluent Design (Mica, Acrylic, 8px radius), Left Sidebar (☰), Tiles, GitHub Deploy.",
-    "implementation": "Kompletní přepracování UI do stylu Microsoft Fluent Design. Implementace Mica pozadí a Acrylic karet. Změna zaoblení na 8px. Restrukturalizace navigace do levého sidebaru. Příprava deployment workflow pro GitHub Actions.",
-    "filesChanged": [
-      "technical-log.json",
-      "file-catalog.json",
-      "index.html",
-      "App.tsx",
-      "components/Menu.tsx",
-      "components/AgentCard.tsx",
-      "components/Modal.tsx",
-      ".github/workflows/deploy.yml"
-    ]
+    "id": 22,
+    "timestamp": "2026-02-12T16:00:00Z",
+    "userRequest": "Odstranění referencí na Apple hardware a styl.",
+    "implementation": "Kompletní sanitizace kódu a dat. Odstraněny názvy jako MacBook, iPhone, Apple ID. Nahrazeno termíny Synthesis Workstation, Apex Terminal a Global Synthesis ID. Upraveny CSS třídy z animate-apple-in na animate-synthesis-in.",
+    "filesChanged": ["index.html", "App.tsx", "constants.tsx", "components/RegistrationModule.tsx", "pages/ui.html", "pages/law.html", "pages/help.html"]
+  },
+  {
+    "id": 23,
+    "timestamp": "2026-02-12T17:00:00Z",
+    "userRequest": "Asistent Kája je muž Karel a tak ho budem oslovovat",
+    "implementation": "Změna jména asistenta Kája na Karel v celém systému, úprava systémových instrukcí na mužský rod a expertní tón.",
+    "filesChanged": ["constants.tsx", "pages/help.html", "technical-log.json"]
   }
 ]

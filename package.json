@@ -1,5 +1,5 @@
 {
-  "name": "fixit-guru-v2.1",
+  "name": "synthesis-os-v2.1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react-dom": "^19.2.3",
     "react": "^19.2.3",
-    "@google/genai": "^1.38.0"
+    "react-dom": "^19.2.3",
+    "@google/genai": "^1.38.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

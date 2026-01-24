@@ -1,9 +1,42 @@
-<div class="space-y-4">
-  <p>Systém aktuálně využívá model <strong>Gemini 3 Flash Preview</strong> pro rychlou a efektivní odezvu.</p>
-  <div class="glass p-4 rounded-xl border-white/5">
-    <p class="text-xs uppercase opacity-40 mb-2">Technické specifikace</p>
-    <p>API SDK: @google/genai</p>
-    <p>Engine: Synthesis Core v2.1</p>
-    <p>Deployment: GitHub Actions Auto-dist</p>
-  </div>
+
+<div class="space-y-12 animate-synthesis-in pb-20">
+  <header class="p-12 bg-black text-white rounded-[56px] space-y-10 relative overflow-hidden shadow-2xl">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-[#007AFF] blur-[150px] opacity-20"></div>
+    <div class="space-y-4 relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/20">
+        <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+        <span class="text-[9px] font-black uppercase tracking-widest text-white/60">System Core 2.1.2-B</span>
+      </div>
+      <h3 class="text-5xl font-black italic tracking-tighter">Synthesis Kernel</h3>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+      <div class="bg-white/5 p-6 rounded-[32px] border border-white/10 space-y-1">
+        <p class="text-[9px] font-black uppercase opacity-30 tracking-widest">Status</p>
+        <p class="text-xl font-black text-green-400">OPTIMAL</p>
+      </div>
+      <div class="bg-white/5 p-6 rounded-[32px] border border-white/10 space-y-1">
+        <p class="text-[9px] font-black uppercase opacity-30 tracking-widest">Latency</p>
+        <p class="text-xl font-black text-blue-400">142ms</p>
+      </div>
+      <div class="bg-white/5 p-6 rounded-[32px] border border-white/10 space-y-1">
+        <p class="text-[9px] font-black uppercase opacity-30 tracking-widest">Security</p>
+        <p class="text-xl font-black text-purple-400">Hardened</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="space-y-8">
+    <div class="bg-white border border-black/5 rounded-[48px] p-10 shadow-sm space-y-6">
+       <h4 class="text-[10px] font-black uppercase tracking-[0.3em] opacity-30">AI Handshake Engine</h4>
+       <p class="text-sm text-black/60 leading-relaxed font-medium">
+         FixIt Guru využívá Gemini 3 Pro pro multimodální uvažování. Systém dokáže současně analyzovat fotografie boardview i technický text datasheetu pro nalezení nejkratší cesty k opravě.
+       </p>
+       <div class="flex gap-4 pt-4">
+         <div class="flex-1 h-1 bg-black/5 rounded-full overflow-hidden">
+           <div class="h-full bg-[#007AFF] w-[85%]"></div>
+         </div>
+       </div>
+    </div>
+  </section>
 </div>

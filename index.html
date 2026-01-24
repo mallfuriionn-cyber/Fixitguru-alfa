@@ -1,83 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixIt Guru v2.1 | Studio Synthesis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Synthesis OS v2.1 | FixIt Guru</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --mica-bg: #000814;
-            --acrylic-bg: rgba(255, 255, 255, 0.08);
-            --fluent-border: rgba(255, 255, 255, 0.12);
-            --fluent-radius: 8px;
+            --synthesis-bg: #FBFBFD;
+            --synthesis-card: rgba(255, 255, 255, 0.8);
+            --synthesis-accent: #007AFF;
+            --synthesis-border: rgba(0, 0, 0, 0.06);
+            --synthesis-text: #1D1D1F;
         }
         body {
-            font-family: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--synthesis-bg);
+            color: var(--synthesis-text);
             margin: 0;
             padding: 0;
-            background-color: var(--mica-bg);
-            color: #ffffff;
             overflow: hidden;
-            /* Mica simulation */
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(8, 145, 178, 0.05) 0%, transparent 50%);
+            height: 100dvh;
+            -webkit-font-smoothing: antialiased;
+            touch-action: manipulation;
         }
-        .acrylic {
-            background: var(--acrylic-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid var(--fluent-border);
-            border-radius: var(--fluent-radius);
+        #root {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-        .acrylic-deep {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(30px) saturate(150%);
-            -webkit-backdrop-filter: blur(30px) saturate(150%);
+        .glass {
+            background: var(--synthesis-card);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--synthesis-border);
         }
-        .reveal-focus:hover {
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+        .animate-synthesis-in {
+            animation: synthesisIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .sidebar-item-active {
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 3px solid #3b82f6;
+        @keyframes synthesisIn {
+            from { opacity: 0; transform: scale(0.97) translateY(15px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .rounded-fluent {
-            border-radius: var(--fluent-radius);
+        .pulse-aura {
+            box-shadow: 0 0 50px rgba(0, 122, 255, 0.08);
+            animation: pulseAura 4s infinite ease-in-out;
         }
-        ::-webkit-scrollbar {
-            width: 4px;
+        @keyframes pulseAura {
+            0%, 100% { box-shadow: 0 0 40px rgba(0, 122, 255, 0.05); }
+            50% { box-shadow: 0 0 80px rgba(0, 122, 255, 0.12); }
         }
-        ::-webkit-scrollbar-track {
-            background: transparent;
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .bubble-user {
+            background-color: var(--synthesis-accent);
+            color: white;
+            border-radius: 24px 24px 4px 24px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .bubble-model {
+            background-color: white;
+            border: 1px solid var(--synthesis-border);
+            color: var(--synthesis-text);
+            border-radius: 24px 24px 24px 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .prose-synthesis h2, .prose-synthesis h3, .prose-synthesis h4 {
+            color: #1D1D1F;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -0.04em;
         }
-        .animate-fluent {
-            animation: fadeIn 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+        .prose-synthesis p {
+            color: rgba(29, 29, 31, 0.7);
+            line-height: 1.6;
+        }
+        .dark .prose-synthesis p {
+            color: rgba(255, 255, 255, 0.7);
         }
     </style>
 <script type="importmap">
 {
   "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0"
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "react-markdown": "https://esm.sh/react-markdown@^10.1.0",
+    "remark-gfm": "https://esm.sh/remark-gfm@^4.0.1"
   }
 }
 </script>
 </head>
-<body>
+<body class="safe-top overflow-hidden">
     <div id="root"></div>
 </body>
 </html>

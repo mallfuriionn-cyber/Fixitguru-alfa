@@ -1,5 +1,5 @@
 import React from 'react';
-import { COPYRIGHT } from '../constants';
+import { COPYRIGHT } from '../constants.tsx';
 
 interface ModalProps {
   title: string;
@@ -12,24 +12,29 @@ export const Modal: React.FC<ModalProps> = ({ title, isOpen, onClose, children }
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative acrylic w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-fluent">
-        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-white/5">
-          <h2 className="text-lg font-bold tracking-tight">{title}</h2>
-          <button 
-            onClick={onClose} 
-            className="w-8 h-8 flex items-center justify-center rounded-fluent hover:bg-white/10 transition-colors reveal-focus"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="p-6 overflow-y-auto text-white/80 leading-relaxed text-sm">
-          {children}
-        </div>
-        <div className="p-3 border-t border-white/10 text-center text-[9px] text-white/30 uppercase tracking-[0.2em]">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-white animate-fluent-in">
+      {/* Header Modal */}
+      <div className="px-6 pt-12 pb-4 flex justify-between items-center border-b border-black/5 bg-white/80 backdrop-blur-xl">
+        <h2 className="text-xl font-bold tracking-tight text-black">{title}</h2>
+        <button 
+          onClick={onClose} 
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-black/5 border border-black/5 active:scale-90 transition-transform"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-6 text-black/70 leading-relaxed font-medium">
+        {children}
+      </div>
+
+      {/* Footer */}
+      <div className="p-8 border-t border-black/5 text-center bg-[#FBFBFD]">
+        <p className="text-[10px] text-black/30 uppercase tracking-[0.2em] font-bold">
           {COPYRIGHT}
-        </div>
+        </p>
+        <div className="h-6" /> {/* Space for home indicator */}
       </div>
     </div>
   );

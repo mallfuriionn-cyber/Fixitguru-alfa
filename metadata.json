@@ -1,6 +1,6 @@
 {
-  "name": "FixIt Guru v2.1",
-  "description": "Komplexní operační rozhraní pro opravy, udržitelnost a technologie od Studio Synthesis.",
+  "name": "Synthesis OS v2.1",
+  "description": "FixIt Guru — Light & Modular Design System. Kvarteto asistentů Studio Synthesis.",
   "requestFramePermissions": [
     "microphone"
   ]

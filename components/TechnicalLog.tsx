@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
-import { fetchLogs, LogEntry } from '../services/logService';
-import { fetchCatalog, CatalogData } from '../services/catalogService';
+import { fetchLogs, LogEntry } from '../services/logService.ts';
+import { fetchCatalog, CatalogData } from '../services/catalogService.ts';
 
 export const TechnicalLog: React.FC = () => {
   const [logs, setLogs] = useState<LogEntry[]>([]);
