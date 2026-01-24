@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -16,6 +15,7 @@ import { CloudModule } from './components/CloudModule.tsx';
 import { AdminPanel } from './components/AdminPanel.tsx';
 import { DetailedRegistration } from './components/DetailedRegistration.tsx';
 import { MessagesModule } from './components/MessagesModule.tsx';
+import { LegalShieldModule } from './components/LegalShieldModule.tsx';
 import { gemini } from './services/geminiService.ts';
 import { fetchPageContent } from './services/pageService.ts';
 import { getBrowserLanguage } from './utils/locale.ts';
@@ -110,7 +110,8 @@ const App: React.FC = () => {
       'MEMORY': 'MEMORY', 
       'CLOUD': 'CLOUD', 
       'ADMIN': 'ADMIN', 
-      'MESSAGES': 'MESSAGES'
+      'MESSAGES': 'MESSAGES',
+      'LEGAL_SHIELD': 'LEGAL_SHIELD'
     };
 
     if (viewStates[id]) {
@@ -152,6 +153,7 @@ const App: React.FC = () => {
       case 'MEMORY': return <MemoryModule onBack={() => setView('HUB')} />;
       case 'CLOUD': return <CloudModule onBack={() => setView('HUB')} />;
       case 'MESSAGES': return <MessagesModule onBack={() => setView('HUB')} />;
+      case 'LEGAL_SHIELD': return <LegalShieldModule onBack={() => setView('HUB')} />;
       case 'ADMIN': return <AdminPanel agents={agents} menuItems={menuItems} onUpdateAgents={setAgents} onUpdateMenu={setMenuItems} onBack={() => setView('HUB')} />;
       case 'CHAT': return (
         <div className="flex-1 flex flex-col h-full overflow-hidden animate-synthesis-in max-w-5xl mx-auto w-full px-4 bg-[#FBFBFD]">
@@ -230,39 +232,48 @@ const App: React.FC = () => {
             ))}
           </section>
 
-          {/* Info Area */}
-          <section className="space-y-5">
-             <div className="p-8 glass rounded-[44px] flex items-center justify-between shadow-sm">
-                <div className="space-y-1">
-                   <p className="text-[10px] font-black uppercase tracking-widest text-black/20">{locale === 'cs' ? 'Stav Uzlu' : 'Node Status'}</p>
-                   <p className="text-lg font-black text-green-600 italic">Synthesis Core Active</p>
-                </div>
-                <div className="flex -space-x-3">
-                   {['⚡', '🛡️', '📡'].map((icon, i) => (
-                     <div key={i} className="w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center text-xl shadow-lg ring-4 ring-[#FBFBFD]">{icon}</div>
-                   ))}
-                </div>
-             </div>
+          {/* New Section Divider & Extra Features */}
+          <section className="space-y-8">
+            <div className="relative py-4">
+              <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                <div className="w-full border-t border-black/5"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-[#FBFBFD] px-4 text-[10px] font-black uppercase tracking-[0.4em] text-black/20 italic">
+                  {locale === 'cs' ? 'Specializovaná Podpora' : 'Specialized Support'}
+                </span>
+              </div>
+            </div>
 
-             <div className="grid grid-cols-2 gap-5">
-                <div className="p-8 glass rounded-[44px] flex flex-col justify-between aspect-square shadow-sm">
-                   <span className="text-4xl">🛠️</span>
-                   <div>
-                      <p className="text-4xl font-black italic text-[#1D1D1F] leading-none">12</p>
-                      <p className="text-[11px] font-black uppercase tracking-widest text-black/20 mt-2">{locale === 'cs' ? 'Repairs' : 'Repairs'}</p>
-                   </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <button 
+                onClick={() => navigateTo('LEGAL_SHIELD')}
+                className="p-8 glass rounded-[40px] border border-black/5 flex items-center gap-6 hover:border-[#007AFF]/30 transition-all text-left shadow-sm group"
+              >
+                <div className="w-16 h-16 bg-[#007AFF]/5 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">⚖️</div>
+                <div className="space-y-1">
+                  <h4 className="text-xl font-black italic tracking-tighter text-[#1D1D1F]">
+                    {locale === 'cs' ? 'Právní Štít' : 'Legal Shield'}
+                  </h4>
+                  <p className="text-xs text-black/40 font-medium leading-relaxed">
+                    {locale === 'cs' ? 'Pomoc při reklamacích a vymáhání práva na opravu.' : 'Support for claims and enforcing the right to repair.'}
+                  </p>
                 </div>
-                <button 
-                  onClick={() => navigateTo('SOCIAL')}
-                  className="p-8 bg-black text-white rounded-[44px] flex flex-col justify-between aspect-square text-left shadow-2xl hover:bg-black/90 active:scale-95 transition-all"
-                >
-                   <span className="text-4xl">🌐</span>
-                   <div className="space-y-1">
-                      <p className="text-lg font-black italic leading-tight">{locale === 'cs' ? 'Komunitní Hub' : 'Community Hub'}</p>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Explore Feed</p>
-                   </div>
-                </button>
-             </div>
+              </button>
+
+              <button 
+                onClick={() => navigateTo('id-system')}
+                className="p-8 glass rounded-[40px] border border-black/5 flex items-center gap-6 hover:border-[#007AFF]/30 transition-all text-left shadow-sm group"
+              >
+                <div className="w-16 h-16 bg-[#007AFF]/5 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">🆔</div>
+                <div className="space-y-1">
+                  <h4 className="text-xl font-black italic tracking-tighter text-[#1D1D1F]">Synthesis ID Core</h4>
+                  <p className="text-xs text-black/40 font-medium leading-relaxed">
+                    {locale === 'cs' ? 'Správa vaší digitální reputace a oprávnění.' : 'Manage your digital reputation and permissions.'}
+                  </p>
+                </div>
+              </button>
+            </div>
           </section>
 
           <footer className="pt-12 text-center pb-16 opacity-15">

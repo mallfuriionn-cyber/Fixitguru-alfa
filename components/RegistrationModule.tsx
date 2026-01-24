@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { User, UserRole } from '../types.ts';
 import { COPYRIGHT } from '../constants.tsx';
 
@@ -27,40 +27,42 @@ const generateSecretId = () => {
 };
 
 export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin, onRegisterClick }) => {
-  const [email, setEmail] = useState('');
-  const [step, setStep] = useState<'email' | 'password' | 'register'>('email');
+  const [identifier, setIdentifier] = useState('');
+  const [step, setStep] = useState<'gateway' | 'id_entry' | 'register'>('gateway');
+  const [isScanning, setIsScanning] = useState(false);
+  const [isDissolving, setIsDissolving] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleContinue = () => {
-    if (email === 'sarji@seznam.cz' || email === 'admin@synthesis.cz') {
-      setStep('password');
-    } else if (email.includes('@')) {
-      setStep('register');
-    }
+  const startBiometric = () => {
+    setIsScanning(true);
+    // Simulace plynulého plnění a přechodu do Dashboardu
+    setTimeout(() => {
+      setIsScanning(false);
+      setIsDissolving(true);
+      setTimeout(() => {
+        finalizeLogin('sarji@seznam.cz'); // Default login via Biometric for demo
+      }, 800);
+    }, 2800);
   };
 
-  const handleGuest = () => {
-    onLogin(null);
-  };
-
-  const finalizeLogin = () => {
-    const isAdmin = email === 'sarji@seznam.cz' || email === 'admin@synthesis.cz';
-    const isOwner = email === 'sarji@seznam.cz';
-    const secretId = generateSecretId();
+  const finalizeLogin = (idInput: string) => {
+    const isAdmin = idInput === 'sarji@seznam.cz' || idInput === 'admin@synthesis.cz' || idInput.includes('ADMIN');
+    const isOwner = idInput === 'sarji@seznam.cz' || idInput.includes('MALLFURION');
+    const secretId = idInput.toUpperCase().startsWith('SID-') ? idInput.toUpperCase() : generateSecretId();
 
     onLogin({
       id: isAdmin ? 'admin-001' : 'u-' + Math.random().toString(36).substr(2, 9),
       secretId: secretId,
       virtualHash: generateVirtualHash(secretId),
-      email: email,
-      username: email.split('@')[0],
-      name: isOwner ? 'Mallfurion' : email.split('@')[0],
+      email: idInput.includes('@') ? idInput : 'user@synthesis.id',
+      username: idInput.split('@')[0],
+      name: isOwner ? 'Mallfurion' : (idInput.split('@')[0] || 'Synthesis Guru'),
       role: isOwner ? UserRole.ADMINISTRATOR : (isAdmin ? UserRole.ADMINISTRATOR : UserRole.SUBSCRIBER),
       level: isOwner ? 99 : (isAdmin ? 50 : 1),
       avatar: isOwner ? '✦' : (isAdmin ? '🛡️' : '👤'),
       bio: isOwner ? 'Zakladatel Studio Synthesis a hlavní vizionář systému FixIt Guru.' : '',
       specialization: isOwner ? ['Core Dev', 'Synthesis Overlord'] : [],
-      equipment: isOwner ? ['Všechna oprávnění', 'Root Access'] : ['Kladivo', 'Multimetr'],
+      equipment: isOwner ? ['Všechna oprávnění', 'Root Access'] : ['Základní diagnostika'],
       isAdmin: isAdmin,
       isOwner: isOwner,
       registrationDate: isOwner ? '01.01.2025' : new Date().toLocaleDateString(),
@@ -70,122 +72,103 @@ export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin,
         growing: isOwner ? 45 : 0,
         success: '100%',
         publishedPosts: isOwner ? 25 : 0
+      },
+      biometricsLinked: {
+        face: true,
+        fingerprint: true,
+        verified: true,
+        safeEnvironmentEnabled: false,
+        accessLogs: [{ date: new Date().toLocaleString(), type: 'Biometric Portal', status: 'Authorized' }]
       }
     });
   };
 
+  if (step === 'gateway') {
+    return (
+      <div className={`flex-1 bg-white flex flex-col items-center justify-center transition-all duration-1000 ${isDissolving ? 'portal-dissolve' : 'animate-synthesis-in'}`}>
+        <div 
+          onClick={!isScanning ? startBiometric : undefined}
+          className={`relative w-48 h-48 flex items-center justify-center cursor-pointer group ${isScanning ? 'scanning' : ''}`}
+        >
+          {/* Minimalist Fingerprint SVG */}
+          <svg className="fingerprint-svg w-32 h-32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C9.5 2 7.3 3.1 5.8 4.8M12 2C14.5 2 16.7 3.1 18.2 4.8M5.8 4.8C4.6 6.1 4 7.9 4 10V14M18.2 4.8C19.4 6.1 20 7.9 20 10V14M4 14C4 18.4 7.6 22 12 22C16.4 22 20 18.4 20 14M12 6C9.8 6 8 7.8 8 10V14M12 6C14.2 6 16 7.8 16 10V14M8 14C8 16.2 9.8 18 12 18C14.2 18 16 16.2 16 14M12 10V14" 
+              stroke={isScanning ? "#007AFF" : "#E5E5EA"} 
+              strokeWidth="0.8" 
+              strokeLinecap="round" 
+              className="fingerprint-path transition-colors duration-500"
+            />
+          </svg>
+          
+          <div className={`absolute inset-0 rounded-full border-2 border-[#007AFF]/10 transition-all duration-1000 ${isScanning ? 'scale-125 opacity-0' : 'scale-100 opacity-100'}`}></div>
+          {isScanning && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-40 h-40 border border-[#007AFF]/20 rounded-full animate-ping"></div>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-12 text-center space-y-4">
+          <p className={`text-[10px] font-black uppercase tracking-[0.5em] transition-all duration-500 ${isScanning ? 'text-[#007AFF] animate-pulse' : 'text-black/20'}`}>
+            {isScanning ? 'Autorizace Synthesis ID...' : 'Přiložte prst pro vstup'}
+          </p>
+          {!isScanning && (
+            <button 
+              onClick={() => setStep('id_entry')}
+              className="text-[9px] font-black text-[#007AFF] uppercase tracking-widest hover:underline pt-4 block mx-auto"
+            >
+              Použít Synthesis ID klíč
+            </button>
+          )}
+        </div>
+        
+        <footer className="absolute bottom-10">
+          <p className="text-[8px] font-black uppercase tracking-[0.5em] text-black/5 italic">{COPYRIGHT}</p>
+        </footer>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 bg-[#FBFBFD] text-[#1D1D1F] flex flex-col items-center justify-center px-8 animate-synthesis-in relative overflow-hidden">
-      {/* Background Auras */}
-      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#007AFF]/5 blur-[150px] rounded-full"></div>
-      <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-purple-500/5 blur-[120px] rounded-full"></div>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#007AFF]/5 blur-[150px] rounded-full"></div>
       
       <div className="w-full max-w-[420px] space-y-12 relative z-10">
         <div className="flex flex-col items-center space-y-8">
-          <div className="relative group">
-            <div className="w-24 h-24 bg-white rounded-[32px] flex items-center justify-center text-5xl font-black shadow-2xl glass border border-black/5 group-hover:border-black/10 transition-all duration-500 pulse-aura">
-              S
-            </div>
-            <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#007AFF] rounded-full border-4 border-[#FBFBFD] flex items-center justify-center shadow-lg">
-              <span className="text-[10px] font-black text-white">ID</span>
-            </div>
-          </div>
-          
+          <div className="w-24 h-24 bg-white rounded-[32px] flex items-center justify-center text-5xl font-black shadow-2xl glass border border-black/5 pulse-aura">S</div>
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-black tracking-tighter italic text-[#1D1D1F] leading-none">Synthesis Terminal</h1>
-            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[#007AFF]/60">Identity Core v2.1 Alpha</p>
+            <h1 className="text-4xl font-black tracking-tighter italic text-[#1D1D1F] leading-none">Synthesis ID</h1>
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[#007AFF]/60">Manual Authentication Core</p>
           </div>
         </div>
 
         <div className="space-y-6">
-          {step === 'email' && (
-            <div className="space-y-4 animate-synthesis-in">
-              <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : ''}`}>
-                <input
-                  type="email"
-                  value={email}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleContinue()}
-                  placeholder="Synthesis ID nebo E-mail"
-                  className="w-full h-[72px] bg-white border border-black/5 rounded-[28px] px-8 focus:ring-4 ring-[#007AFF]/10 focus:border-[#007AFF]/20 transition-all outline-none text-base font-bold text-[#1D1D1F] placeholder:text-black/20 shadow-sm"
-                />
-              </div>
-              <button 
-                onClick={handleContinue}
-                disabled={!email.includes('@') && email.length < 3}
-                className="w-full h-[72px] bg-black text-white rounded-[28px] font-black text-[11px] uppercase tracking-[0.3em] active:scale-95 transition-all shadow-2xl disabled:opacity-20 disabled:pointer-events-none hover:bg-black/90"
-              >
-                Inicializovat Vstup
-              </button>
-              
-              <div className="flex items-center gap-4 py-2">
-                <div className="h-px bg-black/5 flex-1"></div>
-                <span className="text-[9px] font-black uppercase tracking-widest text-black/20">nebo</span>
-                <div className="h-px bg-black/5 flex-1"></div>
-              </div>
-              
-              <button 
-                onClick={onRegisterClick}
-                className="w-full h-[72px] glass text-black rounded-[28px] font-black text-[11px] uppercase tracking-[0.3em] active:scale-95 transition-all border border-black/5 hover:bg-white"
-              >
-                Vytvořit Synthesis ID
-              </button>
-            </div>
-          )}
-
-          {(step === 'password' || step === 'register') && (
-            <div className="space-y-6 animate-synthesis-in">
-              <div className="p-6 glass rounded-[32px] text-center border border-black/5">
-                <p className="text-[9px] font-black text-[#007AFF] uppercase tracking-[0.3em] mb-1">Identita Rozpoznána</p>
-                <p className="text-sm font-bold text-[#1D1D1F]/80">{email}</p>
-              </div>
-              
-              <div className="space-y-4">
-                <input
-                  type={step === 'password' ? 'password' : 'text'}
-                  placeholder={step === 'password' ? 'Heslo Jádra' : 'Zadejte své jméno'}
-                  className="w-full h-[72px] bg-white border border-black/5 rounded-[28px] px-8 outline-none text-base font-bold focus:ring-4 ring-[#007AFF]/10 text-[#1D1D1F] placeholder:text-black/20 shadow-sm"
-                  autoFocus
-                  onKeyDown={(e) => e.key === 'Enter' && finalizeLogin()}
-                />
-                <button 
-                  onClick={finalizeLogin}
-                  className="w-full h-[72px] bg-[#007AFF] text-white rounded-[28px] font-black text-[11px] uppercase tracking-[0.3em] active:scale-95 transition-all shadow-xl shadow-blue-500/20"
-                >
-                  {step === 'password' ? 'Odemknout Uzel' : 'Potvrdit Registraci'}
-                </button>
-              </div>
-              
-              <button 
-                onClick={() => setStep('email')} 
-                className="w-full text-[9px] font-black text-black/20 uppercase tracking-[0.3em] hover:text-black/40 transition-colors"
-              >
-                ← Změnit Přístupové Údaje
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="pt-10 border-t border-black/5 flex flex-col items-center gap-6">
-          <button 
-            onClick={handleGuest}
-            className="text-[10px] font-black text-black/30 hover:text-black transition-colors uppercase tracking-[0.3em] py-5 glass w-full rounded-[24px]"
-          >
-            Vstoupit jako Host (Anonymous)
-          </button>
-          
-          <div className="flex items-center gap-3 px-4 py-2 bg-green-500/10 rounded-full border border-green-500/20">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.3)]"></div>
-            <span className="text-[9px] font-black text-green-600/60 uppercase tracking-widest">Synthesis Node: Active</span>
+          <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : ''}`}>
+            <input
+              type="text"
+              value={identifier}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onChange={(e) => setIdentifier(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && finalizeLogin(identifier)}
+              placeholder="Synthesis ID (SID-...) nebo E-mail"
+              className="w-full h-[72px] bg-white border border-black/5 rounded-[28px] px-8 focus:ring-4 ring-[#007AFF]/10 focus:border-[#007AFF]/20 outline-none text-base font-bold text-[#1D1D1F] shadow-sm"
+            />
           </div>
+          <button 
+            onClick={() => finalizeLogin(identifier)}
+            className="w-full h-[72px] bg-black text-white rounded-[28px] font-black text-[11px] uppercase tracking-[0.3em] active:scale-95 transition-all shadow-2xl"
+          >
+            Vstoupit do terminálu
+          </button>
+          <button 
+            onClick={() => setStep('gateway')}
+            className="w-full text-[10px] font-black text-black/20 uppercase tracking-widest text-center"
+          >
+            Zpět k Biometrice
+          </button>
         </div>
       </div>
-
-      <footer className="absolute bottom-10 text-center">
-        <p className="text-[9px] font-black uppercase tracking-[0.5em] text-black/10 italic">{COPYRIGHT}</p>
-      </footer>
     </div>
   );
 };

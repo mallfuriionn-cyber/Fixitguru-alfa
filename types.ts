@@ -1,4 +1,3 @@
-
 export enum AgentId {
   KAJA = 'kaja',
   LUCKA = 'lucka',
@@ -51,9 +50,9 @@ export interface ChatThread {
 }
 
 export interface User {
-  id: string; // Interní ID systému
-  secretId: string; // Unikátní tajné ID (Nikdy nezveřejňovat)
-  virtualHash: string; // Veřejný hash viditelný pro adminy
+  id: string; 
+  secretId: string; 
+  virtualHash: string; 
   email: string;
   username: string;
   name: string;
@@ -72,6 +71,14 @@ export interface User {
     growing: number;
     success: string;
     publishedPosts: number;
+  };
+  // Biometrické provázání
+  biometricsLinked?: {
+    face: boolean;
+    fingerprint: boolean;
+    verified: boolean;
+    safeEnvironmentEnabled: boolean;
+    accessLogs: { date: string; type: string; status: string }[];
   };
   // Admin & Center Metadata
   guruLevelLabel?: string;
@@ -140,4 +147,4 @@ export interface MenuItem {
   config?: Record<string, any>;
 }
 
-export type ViewState = 'REGISTRATION' | 'DETAILED_REGISTRATION' | 'HUB' | 'CHAT' | 'PROFILE' | 'SOCIAL' | 'WORKFLOW' | 'MEMORY' | 'CLOUD' | 'ADMIN' | 'MESSAGES';
+export type ViewState = 'REGISTRATION' | 'DETAILED_REGISTRATION' | 'HUB' | 'CHAT' | 'PROFILE' | 'SOCIAL' | 'WORKFLOW' | 'MEMORY' | 'CLOUD' | 'ADMIN' | 'MESSAGES' | 'LEGAL_SHIELD';

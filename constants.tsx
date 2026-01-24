@@ -1,4 +1,3 @@
-
 import { Agent, AgentId, SocialPost, Project, MemoryThread, CloudFile, ChatThread, DirectMessage } from './types.ts';
 import { getBrowserLanguage } from './utils/locale.ts';
 
@@ -73,6 +72,7 @@ export const AGENTS: Agent[] = [
 
 export const MENU_ITEMS = [
   { id: 'WORKFLOW', label: locale === 'cs' ? 'Dílna' : 'Workshop', icon: '🛠️', description: locale === 'cs' ? 'Správa servisních zakázek' : 'Service order management', category: 'submodule' },
+  { id: 'LEGAL_SHIELD', label: locale === 'cs' ? 'Právní Štít' : 'Legal Shield', icon: '⚖️', description: locale === 'cs' ? 'Ochrana práv na opravu' : 'Repair rights protection', category: 'submodule' },
   { id: 'MESSAGES', label: locale === 'cs' ? 'Zprávy' : 'Messages', icon: '💬', description: locale === 'cs' ? 'Šifrovaná komunikace' : 'Encrypted communication', category: 'submodule' },
   { id: 'MEMORY', label: locale === 'cs' ? 'Archiv' : 'Archive', icon: '📓', description: locale === 'cs' ? 'Technická dokumentace' : 'Technical documentation', category: 'submodule' },
   { id: 'SOCIAL', label: 'Hub', icon: '🌐', description: locale === 'cs' ? 'Synthesis Community Feed' : 'Synthesis Community Feed', category: 'submodule' },
@@ -81,6 +81,7 @@ export const MENU_ITEMS = [
   { id: 'help', label: locale === 'cs' ? 'Nápověda' : 'Help', icon: '❓', description: locale === 'cs' ? 'Funkce & Dovednosti AI' : 'AI Skills & Help', category: 'info' },
   { id: 'manifest', label: 'Manifest', icon: '📜', description: locale === 'cs' ? 'Vize Studio Synthesis' : 'Synthesis Philosophy', category: 'info' },
   { id: 'id-system', label: 'ID Core', icon: '🆔', description: locale === 'cs' ? 'Architektura Identity' : 'Identity Architecture', category: 'info' },
+  { id: 'security', label: locale === 'cs' ? 'Zabezpečení' : 'Security', icon: '🛡️', description: locale === 'cs' ? 'Biometrika & Šifrování' : 'Biometrics & Encryption', category: 'info' },
   { id: 'eco', label: 'Eko-vize', icon: '🌍', description: locale === 'cs' ? 'Resource Efficiency' : 'Resource Efficiency', category: 'info' },
   { id: 'law', label: locale === 'cs' ? 'Právo' : 'Law', icon: '⚖️', description: locale === 'cs' ? 'Právo na opravu' : 'Right to repair', category: 'info' },
   { id: 'ui', label: locale === 'cs' ? 'Vzhled' : 'Design', icon: '🎨', description: 'Design Blueprint', category: 'info' },
