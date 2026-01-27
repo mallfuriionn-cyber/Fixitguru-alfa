@@ -1,229 +1,226 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Agent, Message, ExtractedPersonalData, LegalDispute } from '../types.ts';
+import { Agent, Message, ExtractedPersonalData, LegalDispute, Language, User, UserRole } from '../types.ts';
 import { gemini } from '../services/geminiService.ts';
 
 interface LegalAssistantModuleProps {
-  agent: Agent;
-  onBack: () => void;
+  agent: Agent; lang: Language; onBack: () => void;
   onSaveDispute: (dispute: LegalDispute) => void;
+  onUpdateVault: (data: any) => void;
+  onShowBio: () => void;
+  user?: User; initialMessages?: Message[]; activeDispute?: LegalDispute | null;
 }
 
-export const LegalAssistantModule: React.FC<LegalAssistantModuleProps> = ({ agent, onBack, onSaveDispute }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+export const LegalAssistantModule: React.FC<LegalAssistantModuleProps> = ({ 
+  agent, lang, onBack, onSaveDispute, onUpdateVault, user, initialMessages, activeDispute
+}) => {
+  const [messages, setMessages] = useState<Message[]>(initialMessages || []);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [attachments, setAttachments] = useState<File[]>([]);
-  const [hasConsent, setHasConsent] = useState(false);
-  const [extractedData, setExtractedData] = useState<ExtractedPersonalData | null>(null);
-  
+  const [extractedData, setExtractedData] = useState<ExtractedPersonalData | null>(activeDispute?.extractedData || null);
+  const [lastDraft, setLastDraft] = useState<string | null>(null);
+  const [isSaved, setIsSaved] = useState(!!activeDispute);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setMessages([{
-      role: 'model',
-      text: `### Dobrý den, jsem JUDY.
-Vaše digitální asistentka pro ochranu spotřebitelských práv. ⚖️
-
-Můžeme začít analýzou vašeho problému. Máte k dispozici **reklamační protokol**, **účtenku** nebo **fakturu**? Můžete je nahrát pomocí ikony sponky.
-
-*Poznámka: Pokud mi udělíte souhlas, mohu z dokumentů automaticky vyčíst vaše osobní údaje a připravit kompletní podklady pro reklamaci.*`,
-      timestamp: new Date()
-    }]);
+    if (messages.length === 0) {
+      setMessages([{ role: 'model', text: `### Dobrý den, jsem JUDY. ⚖️\nPomůžu vám s jakýmkoliv **právním sporem**. Nahrajte dokument nebo popište problém.`, timestamp: new Date() }]);
+    }
   }, []);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => { 
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); 
   }, [messages]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setAttachments(prev => [...prev, ...Array.from(e.target.files!)]);
-    }
+  // Vyčistí text od technických bloků pro export na papír
+  const cleanTextForPrint = (text: string) => {
+    if (!text) return "";
+    return text
+      .split(/EXTRAKCE\s*:/i)[0] // Odstraní JSON extrakci na konci
+      .replace(/```json[\s\S]*?```/gi, "") // Odstraní JSON bloky
+      .replace(/```markdown/gi, "")
+      .replace(/```/gi, "")
+      .replace(/#/g, "") // Odstraní hash značky pro tisk (čistý text)
+      .trim();
   };
 
   const handleSendMessage = async () => {
-    if ((!input.trim() && attachments.length === 0) || isLoading) return;
-
+    if (!input.trim() || isLoading) return;
     const currentInput = input;
-    const currentAttachments = [...attachments];
-    const attachmentNames = currentAttachments.map(f => f.name).join(', ');
-    const userMessage = currentInput + (attachmentNames ? `\n\n[Přílohy: ${attachmentNames}]` : '');
-
-    setMessages(prev => [...prev, { 
-      role: 'user', 
-      text: userMessage, 
-      timestamp: new Date(),
-      attachments: currentAttachments.map(f => URL.createObjectURL(f))
-    }]);
-    
     setInput('');
-    setAttachments([]);
+    setMessages(prev => [...prev, { role: 'user', text: currentInput, timestamp: new Date() }]);
     setIsLoading(true);
-
-    const botMsg: Message = { role: 'model', text: '', timestamp: new Date() };
-    setMessages(prev => [...prev, botMsg]);
 
     try {
       const history = messages.map(m => ({ role: m.role, parts: [{ text: m.text }] }));
-      
-      const systemPrompt = hasConsent 
-        ? `${agent.systemInstruction}\nUživatel udělil SOUHLAS se zpracováním osobních údajů. Pokud v textu nebo dokumentech najdeš jméno, adresu, email, telefon, číslo objednávky, prodejce nebo cenu, vypiš je na KONCI své odpovědi v tomto formátu (mimo markdown blok pro model, ale viditelné jako text): EXTRAKCE: {"fullName": "...", "address": "...", "email": "...", "phone": "...", "orderNumber": "...", "purchaseDate": "...", "vendorName": "...", "productName": "...", "price": "..."}`
-        : agent.systemInstruction;
-
-      const stream = gemini.streamMessage({ ...agent, systemInstruction: systemPrompt }, history, userMessage);
+      const stream = gemini.streamMessage(agent, history, [{ text: currentInput }], lang, [{ googleSearch: {} }]);
+      setMessages(prev => [...prev, { role: 'model', text: '', timestamp: new Date() }]);
       let fullText = "";
       for await (const chunk of stream) {
-        fullText += chunk;
-        setMessages(prev => {
-          const next = [...prev];
-          next[next.length - 1].text = fullText;
-          return next;
-        });
-      }
-
-      // Pokus o extrakci dat z textu odpovědi
-      if (hasConsent && fullText.includes('EXTRAKCE:')) {
-        try {
-          const jsonStr = fullText.split('EXTRAKCE:')[1].trim();
-          const data = JSON.parse(jsonStr);
-          setExtractedData(prev => ({ ...prev, ...data }));
-        } catch (e) {
-          console.warn("Chyba při parsování extrahovaných dat", e);
+        if (chunk.text) {
+          fullText += chunk.text;
+          setMessages(prev => {
+            const next = [...prev]; 
+            next[next.length - 1].text = fullText; 
+            return next;
+          });
         }
       }
-
-    } catch (error) {
-      console.error("Legal Assistant Error:", error);
-    } finally {
-      setIsLoading(false);
-    }
+      
+      // Pokud je odpověď dlouhá, pravděpodobně jde o draft dokumentu
+      if (fullText.length > 250) { 
+        setLastDraft(fullText); 
+        setIsSaved(false); 
+      }
+      
+      const extraction = fullText.match(/EXTRAKCE\s*:\s*(\{.*\})/is);
+      if (extraction) {
+        try { 
+          const parsed = JSON.parse(extraction[1]);
+          setExtractedData(parsed); 
+          onUpdateVault(parsed);
+        } catch(e) { console.warn("Extrakce selhala"); }
+      }
+    } catch (err) {
+      console.error("Judy Kernel Error:", err);
+    } finally { setIsLoading(false); }
   };
 
-  const finalizeAndSave = () => {
-    const newDispute: LegalDispute = {
-      id: 'claim-' + Math.random().toString(36).substr(2, 9),
-      title: extractedData?.productName ? `Reklamace: ${extractedData.productName}` : 'Právní případ - ' + new Date().toLocaleDateString(),
+  const handlePrint = () => {
+    if ('vibrate' in navigator) navigator.vibrate(10);
+    window.print();
+  };
+
+  const handleSave = () => {
+    const dispute: LegalDispute = {
+      id: activeDispute?.id || 'disp-' + Date.now(),
+      title: extractedData?.documentType || 'Právní případ',
       date: new Date().toLocaleDateString(),
       status: 'Probíhá',
-      attachments: attachments.map(f => ({ name: f.name, url: URL.createObjectURL(f), type: f.type })),
+      attachments: [],
       chatTranscript: messages,
-      extractedData: extractedData || undefined,
-      consentGiven: hasConsent
+      extractedData: extractedData || undefined
     };
-    onSaveDispute(newDispute);
-    onBack();
+    onSaveDispute(dispute);
+    setIsSaved(true);
+    if ('vibrate' in navigator) navigator.vibrate([10, 30]);
   };
 
+  const isIntegrityVerified = user?.role === UserRole.ARCHITECT || (user?.virtualDocument?.isVerified && !user?.privacyDelay);
+  const printPortal = document.getElementById('print-portal');
+  const docToPrint = cleanTextForPrint(lastDraft || (messages.length > 0 ? messages[messages.length - 1].text : ""));
+
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#FBFBFD] animate-synthesis-in max-w-5xl mx-auto w-full px-4">
-      <header className="py-6 border-b border-black/5 flex justify-between items-center bg-[#FBFBFD]/80 backdrop-blur-xl shrink-0 sticky top-0 z-10">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-lg active:scale-90 transition-transform">←</button>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-2xl shadow-sm bg-[#1D1D1F] text-white">⚖️</div>
+    <div className="flex-1 flex flex-col h-full bg-[#FBFBFD] overflow-hidden animate-synthesis-in max-w-5xl mx-auto w-full relative">
+      
+      {/* EXPORT MATRICE (PORTAL) */}
+      {printPortal && createPortal(
+        <div className="legal-paper-preview">
+          <header style={{ borderBottom: '2px solid black', paddingBottom: '20px', marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <div>
-              <h3 className="text-lg font-black italic leading-none">JUDY Advocate</h3>
-              <p className="text-[9px] font-black uppercase tracking-widest text-[#007AFF] mt-1">Digital Rights Core</p>
+              <h1 style={{ margin: 0, fontSize: '24pt', fontWeight: 900, fontStyle: 'italic', textTransform: 'uppercase' }}>Právní Listina</h1>
+              <p style={{ margin: 0, fontSize: '8pt', opacity: 0.5, letterSpacing: '2px', fontWeight: 900 }}>SYNT-ADVOCACY PROTOCOL v5.8</p>
             </div>
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ margin: 0, fontSize: '10pt', fontWeight: 700 }}>DATUM: {new Date().toLocaleDateString()}</p>
+              <p style={{ margin: 0, fontSize: '7pt', opacity: 0.4 }}>SID: {user?.virtualHash || 'ANONYMOUS-HANDSHAKE'}</p>
+            </div>
+          </header>
+
+          <div style={{ fontSize: '12pt', whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
+            {docToPrint}
           </div>
+
+          <footer style={{ marginTop: '60px', paddingTop: '20px', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+             <div style={{ fontSize: '7pt', opacity: 0.4, maxWidth: '300px' }}>
+               Dokument vygenerován systémem FixIt Guru Alpha. Ověřeno Synthesis Integrity Enginem. Tento dokument má doporučující charakter.
+             </div>
+             <div className="synthesis-seal">
+               <span style={{ fontSize: '18pt', fontWeight: 900, fontStyle: 'italic' }}>S</span>
+               <span style={{ fontSize: '5pt', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>Verified</span>
+             </div>
+          </footer>
+        </div>,
+        printPortal
+      )}
+
+      <header className="h-16 px-6 border-b border-black/5 flex justify-between items-center bg-white/80 backdrop-blur-xl shrink-0 sticky top-0 z-10">
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-sm font-bold active:scale-90 transition-transform">←</button>
+          <div className="w-8 h-8 bg-black text-white rounded-lg flex items-center justify-center text-lg">⚖️</div>
+          <h3 className="font-black italic text-sm uppercase tracking-widest">JUDY</h3>
         </div>
-        <div className="flex gap-2">
-          {messages.length > 1 && (
-            <button 
-              onClick={finalizeAndSave}
-              className="h-10 px-6 bg-[#007AFF] text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all"
-            >
-              Uložit reklamaci
-            </button>
-          )}
+        <div className="flex items-center gap-2">
+           <span className="text-[8px] font-black uppercase text-black/30">
+             {isIntegrityVerified ? 'SVID INTEGRITY' : 'ANONYM MODE'}
+           </span>
+           <div className={`w-1.5 h-1.5 rounded-full ${isIntegrityVerified ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-amber-500 animate-pulse'}`}></div>
         </div>
       </header>
 
-      {!hasConsent && (
-        <div className="mx-4 my-4 p-6 bg-yellow-50 border border-yellow-100 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <span className="text-2xl">🔐</span>
-            <p className="text-[10px] font-bold text-yellow-800 leading-tight uppercase tracking-wider">
-               Povolte JUDY přístup k osobním údajům pro automatické vyplnění podkladů.
-            </p>
-          </div>
-          <button 
-            onClick={() => setHasConsent(true)} 
-            className="px-6 py-3 bg-yellow-600 text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm active:scale-95 transition-all"
-          >
-            Udělit souhlas
-          </button>
-        </div>
-      )}
-
-      {extractedData && hasConsent && (
-        <div className="mx-4 mb-4 p-6 bg-green-50 border border-green-100 rounded-[32px] space-y-3">
-          <div className="flex justify-between items-center border-b border-green-200 pb-2">
-            <p className="text-[9px] font-black text-green-700 uppercase tracking-widest">Extrahovaná data z dokumentů</p>
-            <span className="text-xs">✅</span>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {extractedData.fullName && (
-              <div>
-                <p className="text-[8px] font-bold text-green-800/40 uppercase">Klient</p>
-                <p className="text-[10px] font-black text-green-900">{extractedData.fullName}</p>
-              </div>
-            )}
-            {extractedData.vendorName && (
-              <div>
-                <p className="text-[8px] font-bold text-green-800/40 uppercase">Prodejce</p>
-                <p className="text-[10px] font-black text-green-900">{extractedData.vendorName}</p>
-              </div>
-            )}
-            {extractedData.orderNumber && (
-              <div>
-                <p className="text-[8px] font-bold text-green-800/40 uppercase">ID Objednávky</p>
-                <p className="text-[10px] font-black text-green-900">{extractedData.orderNumber}</p>
-              </div>
-            )}
-            {extractedData.price && (
-              <div>
-                <p className="text-[8px] font-bold text-green-800/40 uppercase">Částka</p>
-                <p className="text-[10px] font-black text-green-900">{extractedData.price}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      <div className="flex-1 overflow-y-auto py-8 space-y-6 no-scrollbar">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar pb-40">
         {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[85%] md:max-w-[70%] p-6 rounded-[32px] ${m.role === 'user' ? 'bg-[#007AFF] text-white shadow-xl' : 'bg-white border border-black/5 shadow-sm'}`}>
-              <div className="prose-synthesis">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text.split('EXTRAKCE:')[0]}</ReactMarkdown>
+          <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+            <div className={`p-6 rounded-[32px] max-w-[90%] shadow-sm ${m.role === 'user' ? 'bubble-user' : 'bubble-model bg-white border border-black/5'}`}>
+              <div className="prose-synthesis text-sm">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {m.text}
+                </ReactMarkdown>
               </div>
+              
+              {m.role === 'model' && i > 0 && m.text.length > 200 && (
+                <div className="mt-8 pt-8 border-t border-black/5 flex flex-col gap-3">
+                   <button 
+                    onClick={handlePrint} 
+                    className="w-full h-14 bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all"
+                   >
+                    <span>🖨️</span> EXPORTOVAT DO PDF
+                   </button>
+                   <button 
+                    onClick={handleSave} 
+                    className={`w-full h-12 rounded-xl font-black text-[8px] uppercase tracking-widest transition-all ${isSaved ? 'bg-green-500 text-white' : 'bg-black/5 text-black/40 hover:bg-black/10'}`}
+                   >
+                    {isSaved ? '✓ ULOŽENO VE SPISECH MATRIXU' : '💾 SYNCHRONIZOVAT SE SPISY'}
+                   </button>
+                </div>
+              )}
             </div>
           </div>
         ))}
-        {isLoading && <div className="flex justify-start"><div className="bg-black/5 px-6 py-3 rounded-full animate-pulse italic text-[11px] font-bold text-black/30">Zpracovávám dokumenty...</div></div>}
+        {isLoading && (
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-bounce"></div>
+            <div className="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-bounce [animation-delay:0.2s]"></div>
+            <div className="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-bounce [animation-delay:0.4s]"></div>
+            <span className="text-[9px] font-black uppercase text-black/20 tracking-widest italic">Judy analyzuje Matrix...</span>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-6 bg-[#FBFBFD] border-t border-black/5 shrink-0 pb-10">
-        <div className="flex items-center gap-4 max-w-3xl mx-auto w-full">
-          <button onClick={() => fileInputRef.current?.click()} className="w-14 h-14 bg-black/5 rounded-full flex items-center justify-center text-xl active:scale-90 transition-all">📎</button>
-          <input type="file" ref={fileInputRef} className="hidden" multiple onChange={handleFileChange} />
-          <input 
-            type="text" 
-            value={input} 
-            onChange={(e) => setInput(e.target.value)} 
-            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()} 
-            placeholder="Popište váš právní problém nebo nahrajte účtenku..." 
-            className="flex-1 bg-white border border-black/10 rounded-full px-8 py-5 focus:outline-none focus:ring-4 ring-black/5 text-base font-medium shadow-sm transition-all" 
-          />
-          <button onClick={handleSendMessage} disabled={isLoading} className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shrink-0 shadow-2xl active:scale-90 transition-all">↑</button>
+      <footer className="p-4 border-t border-black/5 bg-white pb-8 shrink-0 sticky bottom-0">
+        <div className="flex gap-2 max-w-3xl mx-auto w-full">
+           <div className="flex-1 bg-[#F2F2F7] rounded-full px-5 py-3 overflow-hidden flex items-center shadow-inner">
+             <input 
+              value={input} 
+              onChange={e => setInput(e.target.value)} 
+              onKeyDown={e => e.key === 'Enter' && handleSendMessage()} 
+              placeholder="Zadejte dotaz nebo popište spor..." 
+              className="w-full bg-transparent outline-none font-medium text-sm" 
+             />
+           </div>
+           <button 
+            onClick={handleSendMessage} 
+            disabled={!input.trim() || isLoading}
+            className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-all disabled:opacity-20"
+           >
+            <span className="text-xl">↑</span>
+           </button>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };

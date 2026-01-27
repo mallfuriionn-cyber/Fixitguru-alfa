@@ -1,44 +1,57 @@
 
-<div class="space-y-12 animate-synthesis-in pb-20">
-  <header class="text-center space-y-6 pt-10">
-    <div class="w-32 h-32 bg-[#007AFF] rounded-[48px] flex items-center justify-center text-6xl mx-auto shadow-2xl pulse-aura text-white">📋</div>
+<div class="min-h-screen bg-[#000814] text-white p-8 md:p-12 space-y-12 animate-synthesis-in relative overflow-hidden -m-6">
+  <!-- Pulsing Auras -->
+  <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#007AFF]/10 blur-[120px] rounded-full animate-pulse"></div>
+  <div class="absolute bottom-1/4 -left-24 w-80 h-80 bg-[#007AFF]/5 blur-[100px] rounded-full"></div>
+
+  <header class="relative z-10 text-center space-y-6 pt-10">
+    <div class="inline-block relative">
+      <div class="w-32 h-32 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] flex items-center justify-center text-6xl shadow-2xl pulse-aura">
+        📋
+      </div>
+      <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-[#007AFF] rounded-2xl flex items-center justify-center border-4 border-[#000814] text-[10px] font-black">
+        L-1
+      </div>
+    </div>
     <div class="space-y-2">
-      <h2 class="text-5xl font-black tracking-tighter italic text-[#1D1D1F]">Lucie (Lucille)</h2>
-      <p class="text-[11px] font-black uppercase tracking-[0.5em] text-[#007AFF]">Průvodce & Mentorka Synthesis</p>
+      <h2 class="text-5xl font-extrabold italic tracking-tighter uppercase leading-none">LUCIE</h2>
+      <p class="text-[10px] font-black uppercase tracking-[0.5em] text-[#007AFF]">Step-Lock Mentor | Synthesis Guide</p>
     </div>
   </header>
 
-  <section class="max-w-2xl mx-auto space-y-10">
-    <div class="bg-white p-10 rounded-[48px] border border-black/5 shadow-sm space-y-6">
-      <h3 class="text-xl font-black italic uppercase text-[#007AFF]">Příběh Mentorky</h3>
-      <p class="text-sm text-black/60 leading-relaxed font-medium">
-        Lucie byla původně vyvinuta jako expertní systém pro školení personálu v high-tech laboratořích. Její unikátní algoritmus "Step-Lock" byl navržen tak, aby eliminoval lidskou chybu při manipulaci s extrémně drahým vybavením. Ve Studio Synthesis byla rekonfigurována pro pomoc široké veřejnosti, přičemž si zachovala svou trpělivost a metodický přístup.
+  <div class="max-w-2xl mx-auto space-y-8 relative z-10">
+    <section class="bg-white/5 backdrop-blur-3xl border border-white/10 p-10 rounded-[48px] shadow-2xl space-y-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-2 h-2 bg-[#007AFF] rounded-full animate-pulse"></div>
+        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Mentorská Matrice</h3>
+      </div>
+      <p class="text-base text-white/80 leading-relaxed font-medium italic">
+        Lucie je ztělesněním trpělivosti a metodického řádu. Její protokol „Step-Lock“ byl vyvinut pro eliminaci lidské chyby v kritických inženýrských procesech. Lucie vás nepustí k dalšímu šroubku, dokud si není jistá, že máte čistý stůl a klidnou mysl.
       </p>
-    </div>
+    </section>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="p-8 glass rounded-[40px] border border-black/5 space-y-4">
-        <h4 class="font-black italic uppercase text-[10px] opacity-30 tracking-widest">Specializace</h4>
-        <ul class="text-xs font-bold text-black/70 space-y-2">
-          <li>• Metodika rozborek</li>
-          <li>• Bezpečnostní protokoly</li>
-          <li>• Dokumentace procesů</li>
-          <li>• Uživatelský on-boarding</li>
-        </ul>
-      </div>
-      <div class="p-8 glass rounded-[40px] border border-black/5 space-y-4">
-        <h4 class="font-black italic uppercase text-[10px] opacity-30 tracking-widest">Vlastnosti</h4>
-        <ul class="text-xs font-bold text-black/70 space-y-2">
-          <li>• Nekonečná trpělivost</li>
-          <li>• Jasná vizuální komunikace</li>
-          <li>• Důraz na čistotu dílny</li>
-          <li>• Prevence úrazů</li>
-        </ul>
-      </div>
-    </div>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {[
+        { title: 'Procedurální Analýza', val: '100%' },
+        { title: 'Bezpečnostní Audity', val: '99%' },
+        { title: 'Workshop On-boarding', val: '97%' },
+        { title: 'Krizová Podpora', val: '95%' }
+      ].map(skill => (
+        <div class="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-[32px] flex justify-between items-center group hover:bg-white/10 transition-all">
+          <span class="text-xs font-black italic tracking-tight text-white/60 group-hover:text-white">{skill.title}</span>
+          <span class="text-[10px] font-black text-[#007AFF]">{skill.val}</span>
+        </div>
+      ))}
+    </section>
 
-    <div class="p-10 border border-dashed border-black/10 rounded-[48px] text-center space-y-4">
-      <p class="text-sm font-bold italic text-black/60">"Neexistuje složitá oprava, jen špatně rozdělené kroky."</p>
-    </div>
-  </section>
+    <section class="p-8 border border-dashed border-white/10 rounded-[40px] text-center">
+      <p class="text-[10px] font-bold italic text-white/30 leading-relaxed">
+        "Bezpečnost není omezení. Je to nejvyšší forma respektu k technologii."
+      </p>
+    </section>
+  </div>
+
+  <footer class="relative z-10 text-center pt-10 pb-20 opacity-20">
+    <p class="text-[10px] font-black uppercase tracking-[0.6em] italic">© 2026 Mallfurion | Studio Synthesis</p>
+  </footer>
 </div>

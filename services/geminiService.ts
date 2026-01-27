@@ -1,69 +1,116 @@
 
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { Agent } from "../types.ts";
+import { Agent, Language } from "../types.ts";
 import { buildSystemInstruction } from "../utils/promptBuilder.ts";
 import { getSafetyWarning } from "../utils/safetyCheck.ts";
 
-export class GeminiService {
-  private ai: GoogleGenAI;
+export interface StreamChunk {
+  text?: string;
+  grounding?: any[];
+  activeModel?: string;
+  error?: string;
+}
 
-  constructor() {
-    // Initializing with process.env.API_KEY directly as per guidelines.
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const MODEL_LADDER = [
+  'gemini-3-pro-preview',
+  'gemini-3-flash-preview',
+  'gemini-flash-lite-latest'
+];
+
+export class GeminiService {
+  private isQuotaError(error: any): boolean {
+    const msg = error?.message?.toLowerCase() || "";
+    const code = error?.status || error?.error?.code || error?.code;
+    return code === 429 || msg.includes('429') || msg.includes('quota') || msg.includes('limit') || msg.includes('exhausted');
   }
 
   async *streamMessage(
     agent: Agent,
-    history: { role: 'user' | 'model'; parts: { text: string }[] }[],
-    message: string
-  ) {
-    const instruction = buildSystemInstruction(agent);
-    const safetyWarning = getSafetyWarning(message);
+    history: { role: 'user' | 'model'; parts: { text?: string; inlineData?: any }[] }[],
+    currentParts: { text?: string; inlineData?: any }[],
+    lang: Language,
+    tools?: any[]
+  ): AsyncGenerator<StreamChunk> {
+    const instruction = buildSystemInstruction(agent, lang);
+    const textContent = currentParts.map(p => p.text || '').join(' ');
+    const safetyWarning = getSafetyWarning(textContent);
 
     if (safetyWarning) {
-      yield safetyWarning + "\n\n";
+      yield { text: safetyWarning + "\n\n" };
     }
 
-    try {
-      const result = await this.ai.models.generateContentStream({
-        model: 'gemini-3-pro-preview',
-        contents: [...history, { role: 'user', parts: [{ text: message }] }],
-        config: {
-          systemInstruction: instruction,
-          temperature: 0.7,
-        },
-      });
+    let retryAttempt = 0;
+    
+    for (const modelName of MODEL_LADDER) {
+      try {
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const activeTools = modelName.includes('pro') ? tools : undefined;
 
-      for await (const chunk of result) {
-        // Correctly accessing the .text property from GenerateContentResponse.
-        const text = chunk.text;
-        if (text) {
-          yield text;
+        const result = await ai.models.generateContentStream({
+          model: modelName,
+          contents: [...history, { role: 'user', parts: currentParts }],
+          config: {
+            systemInstruction: instruction,
+            temperature: 0.7,
+            tools: activeTools
+          },
+        });
+
+        // Pokud jsme se dostali sem, model odpověděl (zatím aspoň zahájil stream)
+        yield { activeModel: modelName };
+
+        for await (const chunk of result) {
+          yield { 
+            text: chunk.text, 
+            grounding: chunk.candidates?.[0]?.groundingMetadata?.groundingChunks
+          };
         }
+        return; // Úspěšně dokončeno
+      } catch (error: any) {
+        console.error(`Kernel Error [${modelName}]:`, error);
+        
+        if (this.isQuotaError(error)) {
+          const fallbackMsg = lang === 'cs' 
+            ? `\n\n*⚠️ Jádro ${modelName.split('-')[1].toUpperCase()} dosáhlo limitu. Přepínám okruh...*\n\n`
+            : `\n\n*⚠️ Core ${modelName.split('-')[1].toUpperCase()} limit reached. Cascading to backup...*\n\n`;
+          yield { text: fallbackMsg };
+          continue; // Zkusíme další model v žebříčku
+        }
+        
+        // Pokud je to jiná chyba (např. 500), zkusíme to taky přes fallback, ale jen jednou
+        if (retryAttempt < 1) {
+          retryAttempt++;
+          continue;
+        }
+
+        yield { text: "\n\n❌ **Critical Synthesis Error**: Spojení s Jádrem bylo přerušeno. Zkuste to prosím později.", error: error.message };
+        return;
       }
-    } catch (error) {
-      console.error("Gemini Stream Error:", error);
-      yield "Došlo k chybě při streamování odpovědi. Zkontrolujte prosím připojení.";
     }
   }
 
-  // Původní metoda ponechána pro zpětnou kompatibilitu pokud by byla potřeba jinde
   async sendMessage(
     agent: Agent,
-    history: { role: 'user' | 'model'; parts: { text: string }[] }[],
-    message: string
-  ): Promise<string> {
-    const instruction = buildSystemInstruction(agent);
-    const response: GenerateContentResponse = await this.ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: [...history, { role: 'user', parts: [{ text: message }] }],
-      config: {
-        systemInstruction: instruction,
-        temperature: 0.7,
-      },
-    });
-    // Accessing .text property instead of a method.
-    return response.text || "";
+    history: any[],
+    currentParts: any[],
+    lang: Language
+  ): Promise<{ text: string; activeModel: string }> {
+    const instruction = buildSystemInstruction(agent, lang);
+    for (const modelName of MODEL_LADDER) {
+      try {
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const response = await ai.models.generateContent({
+          model: modelName,
+          contents: [...history, { role: 'user', parts: currentParts }],
+          config: { systemInstruction: instruction }
+        });
+        return { text: response.text || "", activeModel: modelName };
+      } catch (error) {
+        if (this.isQuotaError(error)) continue;
+        throw error;
+      }
+    }
+    return { text: "Error: No available core", activeModel: "none" };
   }
 }
 

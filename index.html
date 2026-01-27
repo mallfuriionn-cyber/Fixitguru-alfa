@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Synthesis OS v2.1 | FixIt Guru</title>
+    <title>FixIt Guru | Synthesis OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --synthesis-bg: #FBFBFD;
-            --synthesis-card: rgba(255, 255, 255, 0.8);
+            --synthesis-card: #FFFFFF;
             --synthesis-accent: #007AFF;
-            --synthesis-border: rgba(0, 0, 0, 0.06);
+            --synthesis-border: rgba(0, 0, 0, 0.05);
             --synthesis-text: #1D1D1F;
         }
         body {
@@ -21,126 +21,92 @@
             color: var(--synthesis-text);
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow-x: hidden;
             height: 100dvh;
             -webkit-font-smoothing: antialiased;
             touch-action: manipulation;
         }
-        #root {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+        #root { height: 100%; display: flex; flex-direction: column; position: relative; z-index: 10; }
+        
+        .grid-bg {
+            position: fixed; inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 122, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 122, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: 0; pointer-events: none;
         }
+
         .glass {
-            background: var(--synthesis-card);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             border: 1px solid var(--synthesis-border);
         }
+        
         .animate-synthesis-in {
-            animation: synthesisIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: synthesisIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         @keyframes synthesisIn {
-            from { opacity: 0; transform: scale(0.97) translateY(15px); }
+            from { opacity: 0; transform: scale(0.99) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .animate-slide-in-right {
-            animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes slideInRight {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-        .pulse-aura {
-            box-shadow: 0 0 50px rgba(0, 122, 255, 0.08);
-            animation: pulseAura 4s infinite ease-in-out;
-        }
-        @keyframes pulseAura {
-            0%, 100% { box-shadow: 0 0 40px rgba(0, 122, 255, 0.05); }
-            50% { box-shadow: 0 0 80px rgba(0, 122, 255, 0.12); }
-        }
+        
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         .bubble-user {
-            background-color: var(--synthesis-accent);
-            color: white;
+            background-color: var(--synthesis-accent); color: white;
             border-radius: 24px 24px 4px 24px;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.15);
         }
         .bubble-model {
-            background-color: white;
-            border: 1px solid var(--synthesis-border);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             color: var(--synthesis-text);
             border-radius: 24px 24px 24px 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        .prose-synthesis h2, .prose-synthesis h3, .prose-synthesis h4 {
-            color: #1D1D1F;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: -0.04em;
-        }
-        .prose-synthesis p {
-            color: rgba(29, 29, 31, 0.7);
-            line-height: 1.6;
-        }
+        /* --- PRINT PROTOCOL --- */
+        #print-portal { display: none; }
 
-        /* Biometric Animations */
-        .scanning-line {
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--synthesis-accent), transparent);
-            position: absolute;
-            top: 0;
-            left: 0;
-            animation: scanMove 2s infinite linear;
-            box-shadow: 0 0 15px var(--synthesis-accent);
-        }
-        @keyframes scanMove {
-            0% { top: 0; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-        
-        /* Fingerprint Progress Animation */
-        .fingerprint-svg path {
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            transition: stroke-dashoffset 2.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .scanning .fingerprint-svg path {
-            stroke-dashoffset: 0;
-        }
-        
-        .biometric-pulse {
-            animation: bioPulse 2.5s infinite ease-in-out;
-        }
-        @keyframes bioPulse {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-        }
-
-        /* Portal Transition */
-        .portal-dissolve {
-            animation: portalDissolve 1s forwards ease-in;
-        }
-        @keyframes portalDissolve {
-            to { opacity: 0; transform: scale(1.2); filter: blur(20px); }
+        @media print {
+            body * { visibility: hidden; }
+            #print-portal { 
+                display: block !important; 
+                visibility: visible !important; 
+                position: absolute;
+                left: 0; top: 0; width: 100%;
+                background: white;
+                color: black;
+                padding: 40px;
+            }
+            #print-portal * { visibility: visible !important; }
+            .grid-bg, header, footer, button, nav { display: none !important; }
+            
+            .legal-paper-preview {
+                font-family: 'Libre Baskerville', serif;
+                line-height: 1.6;
+                color: #000;
+            }
+            .synthesis-seal {
+                width: 100px; height: 100px;
+                border: 4px double #007AFF;
+                border-radius: 50%;
+                display: flex; flex-direction: column;
+                align-items: center; justify-content: center;
+                color: #007AFF;
+                transform: rotate(-15deg);
+                opacity: 0.8;
+                margin-top: 40px;
+            }
         }
     </style>
 <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.3",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
     "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
@@ -151,6 +117,8 @@
 </script>
 </head>
 <body class="safe-top overflow-hidden">
+    <div class="grid-bg"></div>
     <div id="root"></div>
+    <div id="print-portal"></div>
 </body>
 </html>

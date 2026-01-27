@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixIt Guru | Prezentace Projektu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #000814; color: white; overflow-x: hidden; }
+        .hero-gradient { background: radial-gradient(circle at 50% 50%, #007AFF20 0%, transparent 70%); }
+        .card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 40px; }
+        .accent-text { color: #007AFF; }
+        .glass-header {
+            background: rgba(0, 8, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-20">
+    <div class="fixed inset-0 hero-gradient -z-10"></div>
+    
+    <!-- Professional Header Bar -->
+    <nav class="fixed top-0 left-0 right-0 h-20 glass-header px-10 flex justify-between items-center z-[100]">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-white text-black font-black flex items-center justify-center rounded-2xl shadow-xl">S</div>
+            <div class="flex flex-col">
+                <span class="text-[8px] font-black uppercase tracking-[0.4em] text-[#007AFF] leading-none mb-0.5">Studio Synthesis</span>
+                <span class="font-black italic tracking-tighter text-xl leading-none">FixIt Guru</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-10">
+            <div class="hidden md:flex gap-8 text-[9px] font-black uppercase tracking-[0.3em] text-white/40">
+                <a href="#vision" class="hover:text-white transition-colors">Vize</a>
+                <a href="#agents" class="hover:text-white transition-colors">Agenti</a>
+                <a href="#tech" class="hover:text-white transition-colors">Technologie</a>
+            </div>
+            <a href="../index.html" class="h-10 px-6 bg-white text-black rounded-full flex items-center justify-center text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-transform active:scale-95 shadow-2xl">Spustit App</a>
+        </div>
+    </nav>
+
+    <header class="max-w-4xl space-y-8 mb-32 mt-20">
+        <p class="accent-text font-black uppercase tracking-[0.6em] text-xs">Synthesis Alpha Protocol</p>
+        <h1 class="text-7xl md:text-9xl font-black tracking-tighter italic leading-[0.9]">Budoucnost <br> opravena.</h1>
+        <p class="text-xl md:text-2xl text-white/40 font-medium leading-relaxed max-w-2xl">
+            FixIt Guru je inteligentní operační vrstva pro cirkulární ekonomiku. Propojujeme expertní AI s reálnou inženýrskou praxí.
+        </p>
+    </header>
+
+    <section id="vision" class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-32">
+        <div class="card p-12 space-y-6">
+            <h3 class="text-3xl font-black italic tracking-tighter">Proč FixIt Guru?</h3>
+            <p class="text-white/50 leading-relaxed">
+                Ročně vyprodukujeme miliony tun elektroodpadu. Většina věcí končí v koši jen proto, že neexistuje snadno dostupná cesta k jejich opravě. Studio Synthesis tento řetězec rozbíjí.
+            </p>
+        </div>
+        <div class="card p-12 space-y-6 border-blue-500/20">
+            <h3 class="text-3xl font-black italic tracking-tighter accent-text">Vize 2026</h3>
+            <p class="text-white/50 leading-relaxed">
+                Každé zařízení má své digitální dvojče a svého asistenta. Oprava není nutné zlo, ale tvůrčí akt technologické svobody.
+            </p>
+        </div>
+    </section>
+
+    <section id="agents" class="space-y-12 mb-32">
+        <h2 class="text-4xl font-black italic tracking-tighter">Naši Agenti</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="card p-8 text-center space-y-4">
+                <div class="text-5xl">⚡</div>
+                <h4 class="font-black italic">KAREL</h4>
+                <p class="text-[10px] text-white/30 uppercase font-black">Hardware God</p>
+            </div>
+            <div class="card p-8 text-center space-y-4">
+                <div class="text-5xl">📋</div>
+                <h4 class="font-black italic">LUCIE</h4>
+                <p class="text-[10px] text-white/30 uppercase font-black">Step Mentor</p>
+            </div>
+            <div class="card p-8 text-center space-y-4">
+                <div class="text-5xl">🌱</div>
+                <h4 class="font-black italic">DÁŠA</h4>
+                <p class="text-[10px] text-white/30 uppercase font-black">Eco Visionary</p>
+            </div>
+            <div class="card p-8 text-center space-y-4">
+                <div class="text-5xl">🔧</div>
+                <h4 class="font-black italic">FRANTIŠEK</h4>
+                <p class="text-[10px] text-white/30 uppercase font-black">Master Craft</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="tech" class="border-t border-white/5 pt-20 pb-40 flex flex-col md:flex-row justify-between items-center gap-10">
+        <div class="text-center md:text-left">
+            <p class="text-[10px] font-black uppercase tracking-[0.8em] opacity-20 italic">© 2026 Mallfurion | Studio Synthesis</p>
+        </div>
+        <div class="flex gap-10 opacity-40 text-xs font-bold uppercase tracking-widest">
+            <span>React 19</span>
+            <span>Gemini 3 Pro</span>
+            <span>Vision Core</span>
+        </div>
+    </footer>
+</body>
+</html>

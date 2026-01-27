@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -69,7 +70,6 @@ Máte právo na vrácení peněz nebo výměnu za nové kusy v těchto případe
         </p>
       </header>
 
-      {/* Tlačítko pro aktivaci asistenta */}
       <section className="bg-black text-white p-10 rounded-[48px] shadow-2xl space-y-6 relative overflow-hidden group hover:scale-[1.02] transition-transform">
         <div className="absolute top-0 right-0 w-48 h-48 bg-[#007AFF] blur-[100px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
@@ -77,7 +77,7 @@ Máte právo na vrácení peněz nebo výměnu za nové kusy v těchto případe
           <div className="space-y-4 text-center md:text-left flex-1">
             <h3 className="text-2xl font-black italic uppercase tracking-tight">JUDY: Advocacy Assistant</h3>
             <p className="text-sm text-white/60 leading-relaxed">
-              Potřebujete sepsat odvolání, analyzovat účtenku nebo poslat oficiální reakci prodejci? Judy je vaše digitální právní opora.
+              Potřebujete sepsat odvolání, analyzovat účtenku nebo poslat oficiální reakci prodejci? Judy je vaše digitální právní opora v Matrixu.
             </p>
             <button 
               onClick={onActivateAssistant}
@@ -111,10 +111,6 @@ Máte právo na vrácení peněz nebo výměnu za nové kusy v těchto případe
                 <div className="prose-synthesis pt-10 border-t border-black/5">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{topic.content}</ReactMarkdown>
                 </div>
-                <div className="mt-12 flex flex-col md:flex-row gap-4">
-                  <button className="flex-1 py-5 bg-black text-white rounded-[24px] font-black text-[11px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">Stáhnout Vzor Odvolání</button>
-                  <button className="flex-1 py-5 glass rounded-[24px] text-[11px] font-black uppercase tracking-widest border border-black/5 active:scale-95 transition-all">Generovat Předžalobní Výzvu</button>
-                </div>
               </div>
             )}
           </div>
@@ -125,7 +121,7 @@ Máte právo na vrácení peněz nebo výměnu za nové kusy v těchto případe
         <div className="absolute top-0 right-0 w-32 h-32 bg-[#007AFF] blur-[80px] opacity-10"></div>
         <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF]">Právní Handshake Synthesis</h3>
         <p className="text-sm font-bold italic text-black/60 leading-relaxed">
-          "Při jednání s prodejcem buďte věcní, citujte paragrafy a dejte najevo, že za vámi stojí komunita FixIt Guru. Většina sporů se vyřeší v momentě, kdy prodejce zjistí, že znáte svá práva."
+          "Při jednání s prodejcem buďte věcní a dejte najevo, že znáte svá práva. Funkce přímého exportu dokumentů do PDF byly v této verzi nahrazeny přímou asistencí JUDY."
         </p>
       </div>
 

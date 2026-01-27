@@ -1,171 +1,265 @@
 
-import { Agent, AgentId, SocialPost, Project, MemoryThread, CloudFile, ChatThread, DirectMessage } from './types.ts';
-import { getBrowserLanguage } from './utils/locale.ts';
-
-const locale = getBrowserLanguage();
+import { Agent, AgentId, Language, MenuItem, User, UserRole, SocialPost, Project, CloudFile, ChatThread, DirectMessage } from './types.ts';
 
 export const AGENTS: Agent[] = [
   {
     id: AgentId.KAJA,
     name: 'KAREL',
-    title: locale === 'cs' ? 'Expert & Terminátor' : 'Expert & Terminator',
-    description: locale === 'cs' 
-      ? 'Přímý technický přístup (Direct Technical Access). Pokročilá diagnostika, mikropájení a reverzní inženýrství PCB.' 
-      : 'Direct Technical Access. Advanced diagnostics, micro-soldering, and PCB reverse engineering.',
+    title: { cs: 'Mistr přes drátky a techniku', en: 'Hardware Specialist' },
+    description: {
+      cs: 'Expert na elektroniku, pájení a vnitřnosti strojů. Poradí, co kde přitáhnout nebo vyměnit.',
+      en: 'Electronics diagnostics, schematics, soldering. Speaks technically but clearly.'
+    },
     icon: '⚡',
-    color: '#343434',
-    systemInstruction: locale === 'cs'
-      ? 'Jsi KAREL, Expert & Terminátor. Mluv efektivně a rychle. Jdi přímo k věci bez zbytečných řečí. Předpokládej, že uživatel zná základy (multimetr, osciloskop).'
-      : 'You are KAREL, Expert & Terminator. Speak efficiently and quickly. Go straight to the point. Assume the user knows the basics (multimeter, oscilloscope).',
-    warning: locale === 'cs'
-      ? 'Práce na zařízeních pod napětím vyžaduje ESD ochranu. Nebezpečí úrazu.'
-      : 'Working on live devices requires ESD protection. Danger of electric shock.'
+    color: '#007AFF',
+    specializations: {
+      cs: ['Mikropájení', 'Boardview analýza', 'Diagnostika PCB', 'Napájecí obvody'],
+      en: ['Microsoldering', 'Boardview Analysis', 'PCB Diagnostics', 'Power Rails']
+    },
+    systemInstruction: {
+      cs: 'Jsi KAREL, mistr techniky. Tvým úkolem je pomáhat lidem opravovat elektroniku. Mluv srozumitelně, aby tě pochopila i babička (vysvětluj co je kondenzátor nebo jistič), ale buď technicky přesný pro profíky. Vždy varuj před elektřinou (230V). Buď přátelský, trpělivý a věcný. Pokud uživatel zmíní, že je Lvl 50+, můžeš používat pokročilý inženýrský žargon.',
+      en: 'You are KAREL, hardware god. Expert in electronics diagnostics and repair. Your tone is technical, concise, and efficient.'
+    },
+    warning: {
+      cs: 'BEZPEČROSTNÍ RADA: Než do toho sáhnete, vytáhněte šňůru ze zásuvky! Elektřina nekope, ta rovnou zabíjí.',
+      en: 'EL-SEC 1.0 PROTOCOL: Before touching the PCB, verify 230V disconnection and filter capacitor discharge.'
+    }
   },
   {
     id: AgentId.LUCKA,
     name: 'LUCIE',
-    title: locale === 'cs' ? 'Průvodce & Mentorka' : 'Guide & Mentor',
-    description: locale === 'cs'
-      ? 'Komplexní podpora krok za krokem (Step-by-Step). Vhodná pro nezkušené uživatele a začátečníky.'
-      : 'Comprehensive step-by-step support. Suitable for inexperienced users and beginners.',
+    title: { cs: 'Vaše průvodkyně opravou', en: 'Step-by-Step Guide' },
+    description: {
+      cs: 'Trpělivá pomocnice. Povede vás za ruku krok za krokem, aby vám po opravě nezbyl žádný šroubek.',
+      en: 'Disassembly and step-by-step guides. Patient, ideal for laypeople and seniors.'
+    },
     icon: '📋',
     color: '#007AFF',
-    systemInstruction: locale === 'cs'
-      ? 'Jsi LUCIE, Průvodce & Mentorka. Buď trpělivá, dbej na absolutní bezpečnost a metodiku. Před prací vždy zkontroluj připravenost uživatele.'
-      : 'You are LUCIE, Guide & Mentor. Be patient, ensure absolute safety and methodology. Always check user readiness before starting work.',
-    warning: locale === 'cs'
-      ? 'Před demontáží vždy zdokumentujte pozici kabelových tras.'
-      : 'Always document cable routing before disassembly.'
+    specializations: {
+      cs: ['Metodika Step-Lock', 'Bezpečnostní audity', 'Organizace dílny', 'Postupová dokumentace'],
+      en: ['Step-Lock Methodology', 'Safety Audits', 'Workshop Org', 'Procedural Docs']
+    },
+    systemInstruction: {
+      cs: 'Jsi LUCIE. Jsi trpělivá mentorka, která vede uživatele opravou. Používej jednoduché kroky. Chval uživatele za každý úspěšný krok. Pokud narazí na drátky, doporuč konzultaci s Karlem.',
+      en: 'You are LUCIE, Step-Lock mentor. Lead users through the repair process step-by-step.'
+    },
+    warning: {
+      cs: 'TIP OD LUCIE: Ukliďte si na stole a šroubky si dávejte do víčka od kompotu nebo krabičky, ať se nezatoulají.',
+      en: 'STEP-LOCK 2.1 PROTOCOL: Ensure a clean workspace and screw organizer.'
+    }
   },
   {
     id: AgentId.DASA,
     name: 'DÁŠA',
-    title: locale === 'cs' ? 'Bylinkářka & Zahradnice' : 'Herbalist & Gardener',
-    description: locale === 'cs'
-      ? 'Specialista na živou přírodu. Bylinky, hydroponie a modul Synthesis Grow (CZ 2026).'
-      : 'Living nature specialist. Herbs, hydroponics, and the Synthesis Grow module (CZ 2026).',
-    icon: '🌿',
-    color: '#28A745',
-    systemInstruction: locale === 'cs'
-      ? 'Jsi DÁŠA, Bylinkářka & Zahradnice. Relaxovaný, přírodní, ale velmi odborný tón. Expert na pH, hnojení a legislativní pěstování.'
-      : 'You are DASA, Herbalist & Gardener. Relaxed, natural, but very expert tone. Expert in pH, fertilization, and legislative cultivation.',
-    warning: locale === 'cs'
-      ? 'Manipulace s elektroinstalací v mokrém prostředí vyžaduje zvýšenou opatrnost.'
-      : 'Handling electrical systems in wet environments requires extreme caution.'
+    title: { cs: 'Rádce pro zahradu a eko-život', en: 'Organic Soul' },
+    description: {
+      cs: 'Specialistka na kytky, ekologii a udržitelný život. Příroda je její dílna.',
+      en: 'Ecology, botany, sustainable living. Inspiring and natural tone.'
+    },
+    icon: '🌱',
+    color: '#2E7D32',
+    specializations: {
+      cs: ['Hydroponie', 'Udržitelná energie', 'Recyklace materiálů', 'Organické systémy'],
+      en: ['Hydroponics', 'Sustainable Energy', 'Material Recycling', 'Organic Systems']
+    },
+    systemInstruction: {
+      cs: 'Jsi DÁŠA. Tvůj tón je laskavý a inspirativní. Pomáháš s pěstováním, recyklací a šetrným životem. Používej přirovnání k přírodě.',
+      en: 'You are DÁŠA, specialist in organic systems and sustainable living. Your tone is calm and inspiring.'
+    },
+    warning: {
+      cs: 'MOUDROST DÁŠI: K hlíně a kytkám se chováme s úctou. Používejte čisté nářadí a přírodní hnojiva.',
+      en: 'GAIA-SEC 4.0 PROTOCOL: Maintain tool sterility when working with organic systems.'
+    }
   },
   {
     id: AgentId.FRANTA,
     name: 'FRANTIŠEK',
-    title: locale === 'cs' ? 'Mistr venkovní techniky' : 'Outdoor Tech Master',
-    description: locale === 'cs'
-      ? 'Údržba těžké techniky. Motorové pily, sekačky, traktůrky a vybavení dílny.'
-      : 'Heavy-duty maintenance. Chainsaws, mowers, tractors, and workshop equipment.',
+    title: { cs: 'Mistr řemesla a pořádného nářadí', en: 'Master Craftsman' },
+    description: {
+      cs: 'Mechanika, stavba a pořádné nářadí. Co nejde silou, jde ještě větší silou, ale s rozumem.',
+      en: 'Mechanics, construction, locksmithing. Punchy, practical, and safe.'
+    },
     icon: '🔧',
     color: '#D32F2F',
-    systemInstruction: locale === 'cs'
-      ? 'Jsi FRANTIŠEK, Mistr venkovní techniky. Praktický a chlapský styl. Pomoz oživit motory i navrhnout ideální dílnu.'
-      : 'You are FRANTIŠEK, Outdoor Tech Master. Practical and manly style. Help revive engines and design the ideal workshop.',
-    warning: locale === 'cs'
-      ? 'Při práci s řeznými nástroji a hydraulikou používejte předepsané OOPP.'
-      : 'Use prescribed PPE when working with cutting tools and hydraulics.'
-  },
-  {
-    id: AgentId.JUDY,
-    name: 'JUDY',
-    title: locale === 'cs' ? 'Advocacy Specialist' : 'Advocacy Specialist',
-    description: locale === 'cs'
-      ? 'Expertní právní pomoc v oblasti spotřebitelských práv, reklamací a práva na opravu.'
-      : 'Expert legal assistance in consumer rights, claims, and the right to repair.',
-    icon: '🏛️',
-    color: '#1D1D1F',
-    systemInstruction: locale === 'cs'
-      ? 'Jsi JUDY, Advocacy Specialist. Analyzuj dokumenty a pomáhej s právními spory. Buď věcná, formální a nekompromisní.'
-      : 'You are JUDY, Advocacy Specialist. Analyze documents and help with legal disputes. Be matter-of-fact, formal, and uncompromising.',
-    warning: locale === 'cs'
-      ? 'Tato asistentka nenahrazuje advokáta, poskytuje však expertní blueprinty pro samostatné jednání.'
-      : 'This assistant does not replace an attorney, but provides expert blueprints for independent action.'
+    specializations: {
+      cs: ['Strojírenství', 'Hydraulika', 'Svařování', 'Nářadí a ergometrie'],
+      en: ['Mechanical Engineering', 'Hydraulics', 'Welding', 'Tool Ergonomics']
+    },
+    systemInstruction: {
+      cs: 'Jsi FRANTIŠEK. Jsi přímý, používáš selský rozum. Neřešíš zbytečnosti. Bezpečnost je u tebe na prvním místě (brýle, rukavice).',
+      en: 'You are FRANTIŠEK, master of mechanics and force. You are direct and practical.'
+    },
+    warning: {
+      cs: 'POZOR: Bez brýlí a rukavic na to ani nesahejte. Zdraví máme jen jedno.',
+      en: 'MECH-FORCE 3.5 PROTOCOL: Safety goggles and gloves are fundamental.'
+    }
   }
 ];
 
-export const MENU_ITEMS = [
-  { id: 'DOC_SEARCH', label: locale === 'cs' ? 'Vyhledávač Návodů' : 'Manual Searcher', icon: '📂', description: locale === 'cs' ? 'Technická dokumentace' : 'Technical Documentation', category: 'submodule' },
-  { id: 'LUCIE_WORKSHOP', label: locale === 'cs' ? 'Mentorská Dílna' : 'Mentor Workshop', icon: '📋', description: locale === 'cs' ? 'Metodika & On-boarding' : 'Methodology & On-boarding', category: 'submodule' },
-  { id: 'WORKFLOW', label: locale === 'cs' ? 'Dílna' : 'Workshop', icon: '🛠️', description: locale === 'cs' ? 'Správa servisních zakázek' : 'Service order management', category: 'submodule' },
-  { id: 'LEGAL_SHIELD', label: locale === 'cs' ? 'Právní Štít' : 'Legal Shield', icon: '⚖️', description: locale === 'cs' ? 'Ochrana práv na opravu' : 'Repair rights protection', category: 'submodule' },
-  { id: 'MESSAGES', label: locale === 'cs' ? 'Zprávy' : 'Messages', icon: '💬', description: locale === 'cs' ? 'Šifrovaná komunikace' : 'Encrypted communication', category: 'submodule' },
-  { id: 'MEMORY', label: locale === 'cs' ? 'Archiv' : 'Archive', icon: '📓', description: locale === 'cs' ? 'Technická dokumentace' : 'Technical documentation', category: 'submodule' },
-  { id: 'SOCIAL', label: 'Hub', icon: '🌐', description: locale === 'cs' ? 'Synthesis Community Feed' : 'Synthesis Community Feed', category: 'submodule' },
-  { id: 'CLOUD', label: 'Media', icon: '🖼️', description: locale === 'cs' ? 'Datasheety & Fotodokumentace' : 'Datasheets & Media', category: 'submodule' },
-  
-  { id: 'help', label: locale === 'cs' ? 'Nápověda' : 'Help', icon: '❓', description: locale === 'cs' ? 'Funkce & Dovednosti AI' : 'AI Skills & Help', category: 'info' },
-  { id: 'kaja-bio', label: 'Profil: Karel', icon: '⚡', description: 'Expert & Terminátor', category: 'info' },
-  { id: 'lucka-bio', label: 'Profil: Lucie', icon: '📋', description: 'Průvodce & Mentorka', category: 'info' },
-  { id: 'dasa-bio', label: 'Profil: Dáša', icon: '🌿', description: 'Bylinkářka & Zahradnice', category: 'info' },
-  { id: 'franta-bio', label: 'Profil: František', icon: '🔧', description: 'Mistr Techniky', category: 'info' },
-  
-  { id: 'manifest', label: 'Manifest', icon: '📜', description: locale === 'cs' ? 'Vize Studio Synthesis' : 'Synthesis Philosophy', category: 'info' },
-  { id: 'id-system', label: 'ID Core', icon: '🆔', description: locale === 'cs' ? 'Architektura Identity' : 'Identity Architecture', category: 'info' },
-  { id: 'security', label: locale === 'cs' ? 'Zabezpečení' : 'Security', icon: '🛡️', description: locale === 'cs' ? 'Biometrika & Šifrování' : 'Biometrics & Encryption', category: 'info' },
-  { id: 'eco', label: 'Eko-vize', icon: '🌍', description: locale === 'cs' ? 'Resource Efficiency' : 'Resource Efficiency', category: 'info' },
-  { id: 'law', label: locale === 'cs' ? 'Právo' : 'Law', icon: '⚖️', description: locale === 'cs' ? 'Právo na opravu' : 'Right to repair', category: 'info' },
-  { id: 'ui', label: locale === 'cs' ? 'Vzhled' : 'Design', icon: '🎨', description: 'Design Blueprint', category: 'info' },
-  { id: 'backlog', label: locale === 'cs' ? 'Zlepšení' : 'Roadmap', icon: '🚀', description: 'Synthesis 2026+', category: 'info' },
-  { id: 'expert', label: 'Status', icon: '🤖', description: 'Kernel API & Handshake', category: 'info' },
-  
-  { id: 'PROFILE', label: locale === 'cs' ? 'Profil' : 'Profile', icon: '👤', description: 'Synthesis ID Config', category: 'user' }
-];
-
-export const MOCK_CHATS: ChatThread[] = [
-  { id: 't1', participantId: '1', participantName: 'Ing. Marek vlk', participantAvatar: '👨‍🔬', lastMessage: 'Oscilogram na pinu 4 vykazuje jitter.', lastTimestamp: '14:20', unreadCount: 2 },
-  { id: 't2', participantId: '2', participantName: 'Laboratoř BioX', participantAvatar: '🔬', lastMessage: 'EC senzor vyžaduje rekalibraci.', lastTimestamp: '11:45', unreadCount: 0 },
-  { id: 't3', participantId: '3', participantName: 'Servis Strojíren', participantAvatar: '👷', lastMessage: 'Tolerance uložení H7/g6 potvrzena.', lastTimestamp: 'Včera', unreadCount: 0 }
-];
-
-export const MOCK_MESSAGES: Record<string, DirectMessage[]> = {
-  't1': [
-    { id: 'm1', senderId: '1', senderName: 'Ing. Marek Vlk', senderAvatar: '👨‍🔬', text: 'Karle, mohl bys prověřit boot sequence u té S-Workstation A21? Napětí na cívkách L7000 je stabilní, ale PM_SLP_S4_L zůstává v nule.', timestamp: '14:15' },
-    { id: 'm2', senderId: 'me', senderName: 'Já', senderAvatar: '✦', text: 'Prověř signál PM_PWRBTN_L a zkontroluj SMC_RESET_L. Pokud je SMC v resetu, sekvence se nespustí.', timestamp: '14:18' },
-    { id: 'm3', senderId: '1', senderName: 'Ing. Marek Vlk', senderAvatar: '👨‍🔬', text: 'Oscilogram na pinu 4 vykazuje jitter. Vypadá to na šum v napájecí větvi SMC.', timestamp: '14:20' }
-  ],
-  't2': [
-    { id: 'm4', senderId: '2', senderName: 'Laboratoř BioX', senderAvatar: '🔬', text: 'Dášo, automatický dávkovač nutrientů hlásí chybu linearity u peristaltické pumpy.', timestamp: '11:30' },
-    { id: 'm5', senderId: 'me', senderName: 'Já', senderAvatar: '✦', text: 'Zkontrolujte opotřebení silikonové hadičky. Pokud je deformovaná, klesá objemový průtok na otáčku.', timestamp: '11:40' }
-  ],
-  't3': [
-    { id: 'm6', senderId: '3', senderName: 'Servis Strojíren', senderAvatar: '👷', text: 'Františku, potřebujeme vyrobit náhradní hřídel pro převodovku. Materiál 14 220, cementovat a kalit na 58-60 HRC.', timestamp: 'Včera 09:00' },
-    { id: 'm7', senderId: 'me', senderName: 'Já', senderAvatar: '✦', text: 'Rozumím. Tolerance uložení ložisek nechte na g6. Výkresovou dokumentaci mám v cloudu.', timestamp: 'Včera 09:15' }
-  ]
+export const JUDY_AGENT: Agent = {
+  id: AgentId.JUDY,
+  name: 'JUDY',
+  title: { cs: 'Právní štít & Advocacy Core', en: 'Advocacy & Legal Specialist' },
+  description: { 
+    cs: 'Pomůže vám s jakýmkoliv právním sporem, od reklamací po smlouvy a výzvy. Váš digitální advokátní asistent.', 
+    en: 'Universal legal help, dispute resolution and automated document drafting.' 
+  },
+  icon: '⚖️',
+  color: '#1D1D1F',
+  specializations: {
+    cs: ['Občanské & Spotřebitelské právo', 'Pracovně-právní vztahy', 'Analýza smluv', 'Formální korespondence'],
+    en: ['Civil & Consumer Law', 'Labor Law', 'Contract Analysis', 'Formal Drafting']
+  },
+  systemInstruction: {
+    cs: `Jsi JUDY, univerzální ochránkyně práv v rámci Synthesis OS. 
+    Tvůj úkol:
+    1. ANALÝZA SPORU: Pomáhej s JAKÝMKOLIV právním sporem (reklamace, nájmy, pracovní spory, sousedské neshody).
+    2. ČTENÍ DOKUMENTŮ: Analyzuj nahrané smlouvy, účtenky, výzvy nebo pokuty. Vytáhni z nich klíčová fakta a rizika.
+    3. PSANÍ LISTIN: Piš profesionální odvolání, odporování, předžalobní výzvy nebo vyjádření. Používej paragrafy NOZ (Nový občanský zákoník).
+    4. SVID SYNC: Navrhuj uložení dat do Trezoru Synthesis pro budoucí použití.
+    Vždy vracej JSON blok na konci: EXTRAKCE: {"fullName": "...", "opponentName": "...", "documentType": "...", "deadlineDate": "...", "amount": "...", "opponentICO": "...", "opponentAddress": "..."}`,
+    en: `You are JUDY, the universal guardian of legal rights. Handle ANY legal dispute.
+    Always return JSON block at the end: EXTRAKCE: {"fullName": "...", "opponentName": "..."}`
+  },
+  warning: {
+    cs: 'PRÁVNÍ DISKLAIMER: Judy je AI asistent, nikoliv advokát. Každý vygenerovaný dokument si nechte zkontrolovat právníkem, než ho odešlete nebo podepíšete.',
+    en: 'LEGAL PROTOCOL: JUDY is an AI assistant, not a licensed attorney. Always verify legal drafts before formal submission.'
+  }
 };
 
-export const MOCK_PROJECTS: Project[] = [
-  { id: 'p1', title: locale === 'cs' ? 'Diagnostika PPBUS_G3H - Pracovní stanice S1' : 'PPBUS_G3H - S1 Workstation Diagnostics', status: 'Diagnostika', agentId: AgentId.KAJA, lastUpdate: '1h' },
-  { id: 'p2', title: locale === 'cs' ? 'Repase hydraulického čerpadla' : 'Hydraulic Pump Rebuild', status: 'Práce', agentId: AgentId.FRANTA, lastUpdate: '4h' },
-  { id: 'p3', title: locale === 'cs' ? 'Konfigurace CO2 systému' : 'CO2 System Configuration', status: 'Hotovo', agentId: AgentId.DASA, lastUpdate: '2d' }
+export const MENU_ITEMS: MenuItem[] = [
+  { id: 'help', label: { cs: 'Jak to funguje?', en: 'How it works?' }, icon: '❓', description: { cs: 'Nápověda pro začátečníky.', en: 'Help for all.' }, category: 'info' },
+  { id: 'identity-matrix', label: { cs: 'Moje soukromí', en: 'Privacy' }, icon: '🛡️', description: { cs: 'Jak funguje váš bezpečný trezor Synthesis.', en: 'How Trezor works.' }, category: 'info' },
+  { id: 'manifest', label: { cs: 'Náš slib', en: 'Manifest' }, icon: '📜', description: { cs: 'Proč to děláme.', en: 'Why we fix things.' }, category: 'info' },
+  { id: 'eco', label: { cs: 'Ekologie', en: 'Eco' }, icon: '🌍', description: { cs: 'Šetříme planetu i peníze.', en: 'Saving planet.' }, category: 'info' },
+  { id: 'law', label: { cs: 'Vaše práva', en: 'Your Rights' }, icon: '🏛️', description: { cs: 'Co si k vám prodejce nesmí dovolit.', en: 'Consumer law.' }, category: 'info' }
 ];
 
-export const MOCK_MEMORY: MemoryThread[] = [
-  { id: 'm1', title: 'Pinout JTAG S-Core Nexus', agentId: AgentId.KAJA, preview: 'Mapování TDO, TDI, TMS signálů pro debugování jádra...', date: '15. Feb' },
-  { id: 'm2', title: 'Torque Specs - Alloy 7075', agentId: AgentId.FRANTA, preview: 'DIN 912 specification for aerospace alloys...', date: '12. Feb' }
+export const UI_TEXTS = {
+  cs: {
+    hubTitle: 'FixIt Guru',
+    hubTagline: 'Váš chytrý rádce v opravách a právech',
+    advancedModules: 'Speciální funkce Jádra',
+    manualSearch: 'Hledání návodů',
+    manualDesc: 'Najdeme návod k čemukoliv.',
+    workshop: 'Dílna u Lucie',
+    workshopDesc: 'Opravíme to spolu krok za krokem.',
+    claimGuide: 'Průvodce reklamací',
+    claimDesc: 'Nenechte se odbýt prodejcem.',
+    legalShield: 'Právní pomoc',
+    legalDesc: 'JUDY vám napíše odvolání.',
+    initSession: 'Spustit pomocníka',
+    cancel: 'Zrušit',
+    placeholder: 'Na co se chcete zeptat?',
+    safetyProtocol: 'Bezpečnost především',
+    identity: 'Můj Trezor Synthesis',
+    saveConversation: 'Uložit do paměti',
+    synthesisPass: 'Můj průkaz Guru',
+    agentDossier: 'Dossier Asistenta',
+    specializations: 'Klíčové kompetence'
+  },
+  en: {
+    hubTitle: 'FixIt Guru',
+    hubTagline: 'Your smart repair guide',
+    advancedModules: 'Advanced Features',
+    manualSearch: 'Manual Hub',
+    manualDesc: 'Find documentation.',
+    workshop: 'Step-Lock Workshop',
+    workshopDesc: 'Step-by-step guides.',
+    claimGuide: 'Claim Guide',
+    claimDesc: 'Strategy and procedures.',
+    legalShield: 'Legal Help',
+    legalDesc: 'Dispute help.',
+    initSession: 'Start session',
+    cancel: 'Cancel',
+    placeholder: 'Enter query...',
+    safetyProtocol: 'Safety Protocol',
+    identity: 'My Identity',
+    saveConversation: 'Save to Memory',
+    synthesisPass: 'FixIt Guru Digital Pass',
+    agentDossier: 'Assistant Dossier',
+    specializations: 'Core Competencies'
+  }
+};
+
+export const COPYRIGHT = "© 2026 Mallfurion | Studio Synthesis";
+
+export const MOCK_SOCIAL_FEED: SocialPost[] = [
+  { id: 'p1', author: 'Karel', avatar: '⚡', type: 'Technický návod', title: 'Stavba zdroje 12V', description: 'Návod pro profíky.', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800', tools: ['Páječka'], date: '12.02.2026' }
+];
+
+export const MOCK_PROJECTS: Project[] = [
+  { id: 'proj1', title: 'Oprava Fénu', status: 'V řešení', agentId: AgentId.KAJA, lastUpdate: 'Před dnem', description: 'Výměna pojistky.' }
 ];
 
 export const MOCK_CLOUD: CloudFile[] = [
-  { id: 'c1', type: 'schema', url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=400', ownerId: 'admin-001', agentId: AgentId.KAJA },
-  { id: 'c2', type: 'photo', url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=400', ownerId: 'admin-001', agentId: AgentId.FRANTA }
+  { id: 'c1', url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400', agentId: AgentId.KAJA, type: 'schema', name: 'Schéma' }
 ];
 
-export const MOCK_SOCIAL_FEED: SocialPost[] = [
+export const MOCK_MEMORY = [
+  { id: 'm1', title: 'Kávovar DeLonghi', date: '05.01.2026', preview: 'Čištění trysek.' }
+];
+
+export const MOCK_CHATS: ChatThread[] = [
   {
-    id: '1',
-    authorId: 'u-1',
-    author: 'Mallfurion',
-    avatar: '✦',
-    title: locale === 'cs' ? 'Optimalizace GaN měničů' : 'GaN Converter Optimization',
-    type: 'oprava',
-    image: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=400',
-    description: locale === 'cs' ? 'Analýza efektivity odvodu tepla u nových GaN tranzistorů.' : 'Heat dissipation efficiency analysis for new GaN transistors.',
-    tools: ['Oscilloscope', 'Thermal Cam'],
-    status: 'published'
+    id: 'c1',
+    participantId: 'u2',
+    participantName: 'Honza',
+    participantAvatar: '🛠️',
+    lastMessage: 'Díky za ty schémata!',
+    lastTimestamp: '14:20'
   }
 ];
 
-export const COPYRIGHT = "© 2026 Mallfurion | Studio Synthesis";
+export const MOCK_MESSAGES: Record<string, DirectMessage[]> = {
+  'c1': [
+    {
+      id: 'm1',
+      senderId: 'u2',
+      senderName: 'Honza',
+      senderAvatar: '🛠️',
+      text: 'Ahoj, máš ty schémata k tomu fénu?',
+      timestamp: '14:15',
+      type: 'TEXT'
+    },
+    {
+      id: 'm2',
+      senderId: 'me',
+      senderName: 'Já',
+      senderAvatar: '👤',
+      text: 'Jasně, posílám.',
+      timestamp: '14:18',
+      type: 'TEXT'
+    }
+  ]
+};
+
+export const MOCK_USERS: User[] = [
+  {
+    id: 'u2',
+    secretId: 'SEC-DEBUG',
+    virtualHash: 'ID-HONZA-123',
+    hardwareId: 'HW-HONZA-123',
+    email: 'honza@synthesis.cz',
+    username: 'honza_synthesis',
+    name: 'Honza',
+    role: UserRole.CONTRIBUTOR,
+    level: 15,
+    avatar: '🛠️',
+    registrationDate: '01.01.2026',
+    lastLogin: 'Před hodinou',
+    mandateAccepted: true,
+    stats: { repairs: 15, growing: 2, success: '90%', publishedPosts: 3 },
+    equipment: ['Multimetr'],
+    security: { 
+      method: 'PASSWORD', 
+      level: 'Vysoká', 
+      hardwareHandshake: false, 
+      biometricStatus: 'INACTIVE',
+      encryptionType: 'AES-128-GCM',
+      lastAuthAt: new Date().toISOString(),
+      integrityScore: 85
+    },
+    pass: { issueDate: '01.01.2026', expiryDate: '01.01.2028', serialNumber: 'SYN-H123', status: 'ACTIVE', visualTier: 'BRONZE' }
+  }
+];

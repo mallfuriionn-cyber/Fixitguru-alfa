@@ -1,17 +1,19 @@
+
 {
   "project": "FixIt Guru v2.1",
   "version": "0.2.1-alpha-B2",
   "files": [
     { "path": "index.html", "description": "Apple-style HTML5 základ s adaptivním layoutem." },
-    { "path": "App.tsx", "description": "Core aplikace s logikou chatu, T&C a správou agentů." },
+    { "path": "App.tsx", "description": "Core aplikace s logikou chatu a správou agentů." },
     { "path": "constants.tsx", "description": "Definice agentů, menu a globálních textů." },
     { "path": "types.ts", "description": "TypeScript definice a rozhraní." },
-    { "path": "components/AgentCard.tsx", "description": "Dlaždice v mřížce 2x2 s dynamickým accentem." },
-    { "path": "components/Modal.tsx", "description": "Fullscreen modal pro Apple-like interakce." },
-    { "path": "components/VoiceControl.tsx", "description": "Vizuální indikátor Vocal Link." },
-    { "path": "components/TechnicalLog.tsx", "description": "Systémový prohlížeč logů a katalogu." },
-    { "path": "services/geminiService.ts", "description": "Implementace Gemini 3 Pro API." },
-    { "path": "utils/promptBuilder.ts", "description": "Skládání systémových instrukcí pro agenty." },
-    { "path": "technical-log.json", "description": "Historie změn a milníků projektu." }
+    { "path": "components/AdminPanel.tsx", "description": "Kernel Control v5.2 - administrace." },
+    { "path": "components/AgentCard.tsx", "description": "Dlaždice v mřížce 2x2." },
+    { "path": "components/Modal.tsx", "description": "Fullscreen modal." },
+    { "path": "core/rbacConfig.ts", "description": "Role-Based Access Control konfigurace." },
+    { "path": "services/geminiService.ts", "description": "Implementace Gemini 3 Pro API s kaskádou." },
+    { "path": "services/storageService.ts", "description": "CRUD a persistence dat." },
+    { "path": "utils/promptBuilder.ts", "description": "Skládání systémových instrukcí." },
+    { "path": "technical-log.json", "description": "Chronologický Journal projektu." }
   ]
 }

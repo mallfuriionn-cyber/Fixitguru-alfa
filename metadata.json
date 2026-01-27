@@ -1,8 +1,9 @@
 {
-  "name": "Synthesis OS v2.1",
+  "name": "Synthesis OS v2.1.2",
   "description": "FixIt Guru — Light & Modular Design System. Kvarteto asistentů Studio Synthesis.",
   "requestFramePermissions": [
     "microphone",
-    "camera"
+    "camera",
+    "geolocation"
   ]
 }

@@ -1,37 +1,24 @@
+
 [
   {
-    "id": 28,
-    "timestamp": "2026-02-12T22:00:00Z",
-    "userRequest": "Pod mřížku s asistenty dáme dělící linku s popisem ostatní funkce. Přidáme modul Právní Štít pro pomoc při reklamacích.",
-    "implementation": "V HUBu přidána dělící linka s popisem 'Specializovaná Podpora'. Implementován nový modul Právní Štít (LegalShieldModule) s interaktivními návody pro řešení reklamací, práva na opravu (EU) a vrácení peněz. Aktualizovány typy a menu.",
-    "filesChanged": ["types.ts", "constants.tsx", "App.tsx", "components/LegalShieldModule.tsx", "technical-log.json"]
+    "id": 1,
+    "timestamp": "2026-02-01T09:00:00Z",
+    "userRequest": "Inicializace projektu Fixit Guru.",
+    "implementation": "Vytvoření základní architektury Synthesis OS v2.0. Definice React 19 prostředí, Tailwind stylingu a základních typů.",
+    "filesChanged": ["index.html", "App.tsx", "types.ts", "metadata.json"]
   },
   {
-    "id": 29,
-    "timestamp": "2026-02-13T10:30:00Z",
-    "userRequest": "Do stránky Právní Štít přidat asistenta JUDY, který pomůže se sporem, sepisováním a analýzou dokumentů.",
-    "implementation": "Vytvořen nový agent JUDY (Advocacy Specialist) a modul LegalAssistantModule. Implementována podpora pro nahrávání a analýzu dokumentů (účtenky, protokoly). Judy pomáhá s právní argumentací a sepisováním oficiálních reakcí.",
-    "filesChanged": ["types.ts", "constants.tsx", "components/LegalShieldModule.tsx", "components/LegalAssistantModule.tsx", "App.tsx", "technical-log.json"]
+    "id": 45,
+    "timestamp": "2026-02-16T14:30:00Z",
+    "userRequest": "Oprava loginu a funkční zámky (Kernel Alpha v5.3).",
+    "implementation": "Sanace objektu User v registračním modulu. Implementace Model Cascading (fallback pro 429 chyby API). Přidání 'Functional Locks' umožňujících administrátorovi zakázat přístup k modulům.",
+    "filesChanged": ["components/RegistrationModule.tsx", "components/AdminPanel.tsx", "services/geminiService.ts", "types.ts", "App.tsx"]
   },
   {
-    "id": 30,
-    "timestamp": "2026-02-13T12:00:00Z",
-    "userRequest": "Nahoře v v logu FixIt Guru přidej název Studia drobným písmem",
-    "implementation": "V HUBu Hero Section přidán text 'Studio Synthesis' nad hlavní titulek FixIt Guru pro posílení brandingu v souladu s blueprint stylem.",
-    "filesChanged": ["App.tsx", "technical-log.json"]
-  },
-  {
-    "id": 31,
-    "timestamp": "2026-02-13T14:45:00Z",
-    "userRequest": "V profilu přidej sekci 'Moje reklamace' s historií chatů s JUDY, exportem PDF a sdílením s volbami soukromí.",
-    "implementation": "V ProfileModule implementována nová sekce 'Moje reklamace'. Umožňuje prohlížet historii sporů, doložené dokumenty a zápisy z analýz asistentky JUDY. Přidána funkce simulovaného PDF exportu a sdílecí modální okno s možnostmi filtrace osobních údajů.",
-    "filesChanged": ["types.ts", "components/ProfileModule.tsx", "technical-log.json"]
-  },
-  {
-    "id": 32,
-    "timestamp": "2026-02-13T16:30:00Z",
-    "userRequest": "Implementovat hardware otisk (WebAuthn / Passkeys) a zabezpečení Google.",
-    "implementation": "Implementována biometrická brána využívající WebAuthn API (Passkeys) pro nativní hardware handshake (TouchID/FaceID). Přidána integrace pro Google OAuth přihlášení. Uživatelský profil nyní zobrazuje úroveň zabezpečení 'Maximální' při použití hardware klíče. Aktualizovány služby authService a biometrické UI.",
-    "filesChanged": ["types.ts", "services/biometricService.ts", "components/RegistrationModule.tsx", "components/ProfileModule.tsx", "technical-log.json"]
+    "id": 52,
+    "timestamp": "2026-02-18T10:15:00Z",
+    "userRequest": "Restaurace registrace a stabilizace kaskády (Kernel Alpha v5.4).",
+    "implementation": "Oprava chybějícího registračního tlačítka. Vylepšená detekce Quota limitů v GeminiService. Sjednocení navigačních stavů pro rozpoznané subjekty.",
+    "filesChanged": ["components/RegistrationModule.tsx", "services/geminiService.ts", "App.tsx"]
   }
 ]

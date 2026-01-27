@@ -1,106 +1,75 @@
 
-<div class="space-y-12 animate-synthesis-in pb-20">
-  <header class="space-y-4 pt-6">
-    <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#007AFF]/10 rounded-full border border-[#007AFF]/20">
-      <span class="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-pulse"></span>
-      <span class="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">Synthesis System Manual</span>
+<div class="space-y-16 animate-synthesis-in pb-32 text-[#1D1D1F]">
+  <!-- Hero Section -->
+  <header class="relative p-12 bg-white border border-black/5 rounded-[56px] overflow-hidden shadow-sm">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-[#007AFF]/5 blur-[120px] rounded-full"></div>
+    <div class="relative z-10 space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#007AFF]/10 rounded-full border border-[#007AFF]/20">
+        <span class="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-pulse"></span>
+        <span class="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">Synthesis Knowledge Base v2.4</span>
+      </div>
+      <h2 class="text-6xl font-black tracking-tighter italic leading-none text-black">Operační Manuál</h2>
+      <p class="text-xl text-black/60 font-medium leading-relaxed max-w-2xl">
+        FixIt Guru v2.4 zavádí protokoly pro automatizovanou digitální advokacii a certifikované exporty dokumentů.
+      </p>
     </div>
-    <h2 class="text-4xl font-black tracking-tighter italic text-[#1D1D1F]">Funkce & Dovednosti</h2>
-    <p class="text-sm text-black/50 font-medium leading-relaxed max-w-xl">
-      FixIt Guru není jen chatbot. Je to distribuovaný operační systém pro inženýrství, udržitelnost a nezávislou opravu. Zde je rozbor našich schopností a specialistů.
-    </p>
   </header>
 
-  <section class="space-y-6">
-    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 px-2">Expertní Moduly: Kvarteto Synthesis</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      
-      <!-- Lucie -->
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 bg-[#007AFF] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">📋</div>
-          <div>
-            <h4 class="font-black italic text-lg">LUCIE (Průvodce)</h4>
-            <p class="text-[9px] font-bold text-[#007AFF] uppercase tracking-widest">Step-Lock Mentor</p>
-          </div>
-        </div>
-        <p class="text-xs font-medium text-black/60 leading-relaxed">
-          Komplexní podpora krok za krokem. Vhodná pro nezkušené uživatele. Trpělivá, dbá na absolutní bezpečnost a metodiku.
-        </p>
-        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'lucka-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-[#007AFF] hover:underline">Zobrazit detailní příběh →</button>
-      </div>
-
-      <!-- Karel -->
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 bg-[#343434] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">⚡</div>
-          <div>
-            <h4 class="font-black italic text-lg">KAREL (Terminátor)</h4>
-            <p class="text-[9px] font-bold text-[#343434] uppercase tracking-widest">Direct Technical Access</p>
-          </div>
-        </div>
-        <p class="text-xs font-medium text-black/60 leading-relaxed">
-          Pokročilá diagnostika, mikropájení a boardview. Efektivní a rychlý přístup pro experty. Jde přímo k věci.
-        </p>
-        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'kaja-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-black hover:underline">Zobrazit detailní příběh →</button>
-      </div>
-
-      <!-- Dáša -->
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 bg-[#28A745] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">🌿</div>
-          <div>
-            <h4 class="font-black italic text-lg">DÁŠA (Bylinkářka)</h4>
-            <p class="text-[9px] font-bold text-[#28A745] uppercase tracking-widest">Green Life Specialist</p>
-          </div>
-        </div>
-        <p class="text-xs font-medium text-black/60 leading-relaxed">
-          Venkovní dílna a zahrada. Specialista na hydroponii a Synthesis Grow (CZ 2026). Relaxovaný, přírodní tón.
-        </p>
-        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'dasa-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-[#28A745] hover:underline">Zobrazit detailní příběh →</button>
-      </div>
-
-      <!-- František -->
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm relative overflow-hidden group">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 bg-[#D32F2F] rounded-2xl flex items-center justify-center text-3xl shadow-sm text-white">🔧</div>
-          <div>
-            <h4 class="font-black italic text-lg">FRANTIŠEK (Mistr)</h4>
-            <p class="text-[9px] font-bold text-[#D32F2F] uppercase tracking-widest">Heavy-Duty Maintenance</p>
-          </div>
-        </div>
-        <p class="text-xs font-medium text-black/60 leading-relaxed">
-          Údržba těžké techniky (sekačky, pily, traktůrky). Praktický styl, pomůže s vybavením dílny i ostřením řetězů.
-        </p>
-        <button onclick="window.dispatchEvent(new CustomEvent('navigate', {detail: 'franta-bio'}))" class="text-[9px] font-black uppercase tracking-widest text-[#D32F2F] hover:underline">Zobrazit detailní příběh →</button>
-      </div>
-
+  <!-- Section: Digitální Advokacie & Integrity -->
+  <section class="space-y-10">
+    <div class="flex items-center gap-4 px-4">
+      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF] whitespace-nowrap">Identity Matrix & Ověřování</h3>
+      <div class="h-px bg-[#007AFF]/10 w-full"></div>
     </div>
-  </section>
 
-  <section class="space-y-6">
-    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 px-2">Vizuální & Hlasová Interakce</h3>
-    <div class="p-8 bg-black text-white rounded-[48px] shadow-2xl relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-64 h-64 bg-[#007AFF] blur-[120px] opacity-20"></div>
-      <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
-        <div class="text-5xl">🎙️</div>
-        <div class="space-y-2 text-center md:text-left">
-          <h4 class="text-xl font-black italic uppercase tracking-tight">Vocal Link Protocol</h4>
-          <p class="text-sm text-white/60 leading-relaxed">
-            Umožňuje ovládání instrukcí bez dotyku terminálu. Pokud máte ruce od oleje nebo pájecí pasty, používejte hlasové příkazy pro posun v návodu.
-          </p>
-          <div class="flex flex-wrap gap-2 pt-2 justify-center md:justify-start">
-            <code class="bg-white/10 px-3 py-1 rounded text-[#007AFF] text-[10px]">"Další krok"</code>
-            <code class="bg-white/10 px-3 py-1 rounded text-[#007AFF] text-[10px]">"Ukaž schéma"</code>
-            <code class="bg-white/10 px-3 py-1 rounded text-[#007AFF] text-[10px]">"Bezpečnostní rizika"</code>
-          </div>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-8 bg-black text-white rounded-[44px] space-y-6 shadow-xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-[#007AFF] blur-[80px] opacity-20"></div>
+        <div class="text-3xl relative z-10">🛡️</div>
+        <h4 class="text-xl font-black italic tracking-tighter relative z-10">Identity Matrix</h4>
+        <p class="text-xs text-white/50 leading-relaxed font-medium relative z-10">
+          Váš "Trezor" v profilu. Slouží k uložení osobních údajů, které systém používá k automatickému vyplňování právních listin.
+        </p>
+      </div>
+
+      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-6 shadow-sm hover:shadow-md transition-all">
+        <div class="text-3xl">🕵️‍♀️</div>
+        <h4 class="text-xl font-black italic tracking-tighter">Proaktivní OCR</h4>
+        <p class="text-xs text-black/50 leading-relaxed font-medium">
+          JUDY automaticky skenuje nahrané dokumenty. Pokud najde data, nabídne jejich synchronizaci s Matrixem.
+        </p>
+      </div>
+
+      <div class="p-8 bg-[#007AFF] text-white rounded-[44px] space-y-6 shadow-xl shadow-blue-500/20 relative overflow-hidden">
+        <div class="text-3xl">🔏</div>
+        <h4 class="text-xl font-black italic tracking-tighter">Digitální Razítko</h4>
+        <p class="text-xs text-white/80 leading-relaxed font-medium">
+          Všechny dokumenty vytvořené naší aplikací obsahují v patičce potvrzení o generování systémem Synthesis pro vyšší právní váhu.
+        </p>
       </div>
     </div>
   </section>
 
-  <footer class="p-10 border border-dashed border-black/10 rounded-[48px] text-center space-y-4">
-    <p class="text-sm font-bold italic text-black/60">"Vědění je jediný nástroj, který se používáním neopotřebovává."</p>
-    <p class="text-[10px] font-black uppercase tracking-[0.4em] opacity-30">Synthesis Manual v2.1 | Studio Synthesis</p>
+  <!-- Section: Exporty Detail -->
+  <section class="p-12 glass border border-black/5 rounded-[56px] space-y-8 shadow-sm">
+     <h4 class="text-2xl font-black italic tracking-tighter">Protokol Integrity Listin</h4>
+     <div class="grid md:grid-cols-2 gap-10">
+        <div class="space-y-4">
+           <h5 class="font-black italic uppercase text-[10px] text-[#007AFF]">Certifikace FixIt Guru</h5>
+           <p class="text-sm text-black/60 leading-relaxed font-medium">
+              Každé odvolání nebo výzva obsahuje v patě text: **"Vytvořeno aplikací FixIt Guru..."**. Tato patička slouží k identifikaci, že dokument byl sestaven na základě expertních algoritmů a v souladu s NOZ 2026.
+           </p>
+        </div>
+        <div class="space-y-4">
+           <h5 class="font-black italic uppercase text-[10px] text-[#007AFF]">Formáty s patičkou</h5>
+           <p class="text-sm text-black/60 leading-relaxed font-medium">
+              Razítko integrity je vloženo jak do souboru **Word (.doc)**, tak do finálního **PDF** výstupu při tisku. Doporučujeme patičku neodstraňovat, zvyšuje profesionální dojem při komunikaci s prodejci.
+           </p>
+        </div>
+     </div>
+  </section>
+
+  <footer class="pt-20 text-center opacity-30 border-t border-black/5">
+    <p class="text-[10px] font-black uppercase tracking-[0.8em] italic text-[#1D1D1F]">© 2026 Mallfurion | Studio Synthesis</p>
   </footer>
 </div>
