@@ -1,0 +1,25 @@
+<div class="space-y-10 animate-synthesis-in">
+  <header>
+    <h4 class="text-2xl font-black italic tracking-tighter text-black uppercase leading-none mb-3">Luxury Print Engine</h4>
+    <p class="text-base text-black/50 font-medium leading-relaxed italic">Typografické jádro pro generování oficiálních listin se Synthesis pečetí.</p>
+  </header>
+
+  <div class="p-10 bg-white border border-black/5 rounded-[56px] shadow-2xl relative overflow-hidden">
+    <div class="absolute inset-0 bg-[#007AFF]/[0.02] pointer-events-none"></div>
+    <div class="grid grid-cols-1 gap-6 relative z-10">
+      {[
+        { i: '✒️', t: 'Libre Baskerville', d: 'Použití klasické antikvy pro zvýšení autority dokumentu u protistrany.' },
+        { i: '📐', t: 'Optical Spacing', d: 'Automatické vyrovnání řádků a bloků pro dokonalou čitelnost na papíře.' },
+        { i: '🛡️', t: 'Synthesis Seal v9', d: 'Vložení kryptografické pečeti potvrzující integritu dat v okamžiku tisku.' }
+      ].map(item => (
+        <div key={item.t} className="flex gap-6 items-start">
+          <div className="text-3xl shrink-0">{item.i}</div>
+          <div className="space-y-1">
+            <p class="text-sm font-black italic uppercase tracking-tight">{item.t}</p>
+            <p class="text-[11px] text-black/40 leading-relaxed font-medium italic">{item.d}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

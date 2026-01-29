@@ -1,0 +1,11 @@
+
+{
+  "moduleName": "Admin Matrix Control",
+  "version": "0.2.2-alpha",
+  "author": "Mallfurion",
+  "enabled": true,
+  "category": "admin",
+  "permissions": ["ACCESS_KERNEL", "BYPASS_ENCRYPTION", "EXECUTE_CODE_UPDATE"],
+  "securityLevel": "CRITICAL",
+  "rollbackVersion": "5.9.0"
+}

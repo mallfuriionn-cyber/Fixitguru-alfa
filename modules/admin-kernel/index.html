@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="matrix-container">
+        <aside>
+            <div style="margin-bottom: 40px; padding: 0 20px;">
+                <h2 style="font-weight: 900; font-style: italic; letter-spacing: -1px;">ADMIN MATRIX</h2>
+                <p style="font-size: 8px; font-weight: 900; text-transform: uppercase; color: var(--admin-accent);">Synthesis OS v5.9.1</p>
+            </div>
+            <nav id="admin-nav">
+                <div class="nav-item active" data-page="dashboard">1. Matrix Control (SVID)</div>
+                <div class="nav-item" data-page="workshop">2. Dílna Lucie (Safety)</div>
+                <div class="nav-item" data-page="judy">3. Právní JUDY (Legal)</div>
+                <div class="nav-item" data-page="orchestrator">4. Multi-Kernel (LLM)</div>
+            </nav>
+            <div style="margin-top: 100px; padding: 20px;">
+                <div class="p-4 bg-white/5 rounded-2xl border border-white/5 mb-4">
+                    <p class="text-[7px] font-black uppercase opacity-40 mb-1">System Audit Status</p>
+                    <p class="text-[9px] text-green-400 font-bold">SNAPSHOT_SECURE</p>
+                </div>
+                <button class="rollback-btn" onclick="systemRollback()">Rollback to v5.9.0</button>
+            </div>
+        </aside>
+        
+        <main id="content-area">
+            <!-- Dynamicky načítaný obsah -->
+            <div class="animate-in">
+                <h1 style="font-size: 64px; font-weight: 900; font-style: italic; letter-spacing: -3px; margin-bottom: 20px;">Matrix Dashboard</h1>
+                <p style="opacity: 0.5; max-width: 600px; margin-bottom: 40px;">Vítejte v centrálním uzlu Synthesis OS. Zde spravujete identity, bezpečnostní protokoly a neurální kaskády.</p>
+                <div class="config-grid">
+                    <div class="config-card group cursor-pointer" onclick="loadPage('svid-settings')">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-2xl">🆔</span>
+                            <span class="help-dot">?</span>
+                        </div>
+                        <h4>SVID Identity</h4>
+                        <p>SEE-256 šifrování a správa úrovní oprávnění Architect/Guru/Subject.</p>
+                    </div>
+                    <div class="config-card group cursor-pointer" onclick="loadPage('audit-journal')">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-2xl">📝</span>
+                        </div>
+                        <h4>System Audit Log</h4>
+                        <p>Historie změn v Jádru s automatickými snapshoty před každým zápisem.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

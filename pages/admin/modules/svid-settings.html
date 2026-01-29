@@ -1,0 +1,64 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Kryptografické Srdce</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-[#007AFF]/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">PBKDF2 Iterations</p>
+          <button class="help-btn" onclick="openHelp('svid-iterations')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Počet průchodů algoritmu pro odvození klíče z vašeho SID. Čím vyšší, tím těžší pro útočníka, ale pomalejší start app.</p>
+      </div>
+      <select class="h-12 bg-white border border-black/10 rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none shadow-sm focus:ring-4 ring-blue-500/5 transition-all">
+        <option>Lite (10k)</option>
+        <option>Standard (100k)</option>
+        <option selected>Hardened (250k)</option>
+        <option>extreme (1M)</option>
+      </select>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-[#007AFF]/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Passkey Multi-Link</p>
+          <button class="help-btn" onclick="openHelp('svid-hardware')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Umožní propojit identitu s více hardwarovými klíči (YubiKey, Apple Passkey, Google Titan).</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Automatizace Soukromí</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-[#007AFF]/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Auto-Purge Session</p>
+          <button class="help-btn" onclick="openHelp('svid-anonym')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Po odhlášení okamžitě smaže dešifrované segmenty z paměti RAM a lokální cache prohlížeče.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-[#007AFF]/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Anonymity Proxy Mode</p>
+          <button class="help-btn" onclick="openHelp('svid-proxy')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Nahrazuje skutečná jména v dokumentech tagem [...] pro ruční dopsání mimo digitální stopu.</p>
+      </div>
+      <input type="checkbox" class="admin-toggle">
+    </div>
+  </section>
+</div>

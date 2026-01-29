@@ -1,0 +1,41 @@
+
+<div class="animate-in" style="max-width: 800px; margin: 0 auto;">
+    <header style="margin-bottom: 40px; border-left: 8px solid var(--admin-danger); padding-left: 30px;">
+        <p style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--admin-danger); letter-spacing: 5px; font-weight: 900; margin-bottom: 10px;">SECURITY_BREACH_PROTOCOL // V-LIMITS</p>
+        <h1 style="font-size: 48px; font-weight: 900; font-style: italic; letter-spacing: -2px; line-height: 1; margin: 0;">Rizika Snížení <br>Bezpečnostního Štítu</h1>
+    </header>
+    
+    <div class="danger-zone" style="margin-bottom: 40px; background: linear-gradient(135deg, rgba(255,59,48,0.1) 0%, transparent 100%);">
+        <div class="warning-header" style="font-size: 14px;">KRITICKÁ MODIFIKACE JÁDRA</div>
+        <p style="font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 20px; line-height: 1.4;">
+            Změna limitů napětí a metodiky Step-Lock může vést k fatálnímu poškození hardwaru nebo ohrožení zdraví uživatele.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+                <p style="color: var(--admin-danger); font-size: 10px; font-weight: 900; text-transform: uppercase; margin-bottom: 10px;">Dopad na Hardware</p>
+                <p style="font-size: 12px; opacity: 0.7; line-height: 1.6;">Snížení citlivosti varování o 230V kondenzátorech může způsobit elektrický oblouk při demontáži. Riziko zničení CPU a základní desky: <span style="color: var(--admin-danger);">VYSOKÉ</span>.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+                <p style="color: var(--admin-danger); font-size: 10px; font-weight: 900; text-transform: uppercase; margin-bottom: 10px;">Právní Status</p>
+                <p style="font-size: 12px; opacity: 0.7; line-height: 1.6;">Odsouhlasením této změny přebíráte plnou odpovědnost za integritu sezení. Studio Synthesis se zříká záruky za škody vzniklé ignorováním Step-Lock protokolu.</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="background: var(--admin-card); border: 1px solid var(--admin-border); padding: 40px; border-radius: 40px; space-y-6">
+        <h3 style="font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; opacity: 0.4; margin-bottom: 20px;">Technické Vysvětlení (Kernel Docs):</h3>
+        <p style="font-size: 14px; line-height: 1.8; opacity: 0.8; italic">
+            "Protokol Step-Lock v2.0 funguje jako vizuální validátor v reálném čase. Deaktivací vynucené fotodokumentace znemožňujete AI agentovi (LUCIE) detekovat zkraty na sběrnici dříve, než dojde k zapnutí zařízení. Tato změna je určena výhradně pro certifikované GURU subjekty s externím osciloskopem."
+        </p>
+    </div>
+
+    <div style="margin-top: 50px; display: flex; gap: 15px; align-items: center;">
+        <button class="rollback-btn" style="background: var(--admin-danger); color: white; padding: 20px 40px; border-radius: 20px;" onclick="parent.postMessage('confirm:risk', '*')">POTVRDIT RIZIKO A ZAPSAT DO JÁDRA</button>
+        <button class="rollback-btn" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--admin-border);" onclick="loadPage('workshop-settings')">ZRUŠIT A VRÁTIT SE</button>
+        <div style="margin-left: auto;">
+            <p style="font-size: 8px; font-weight: 900; text-transform: uppercase; opacity: 0.3; text-align: right;">Authorization Required</p>
+            <p style="font-size: 10px; font-weight: 900; color: var(--admin-accent); text-align: right;">LEVEL: ARCHITECT</p>
+        </div>
+    </div>
+</div>

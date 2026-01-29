@@ -1,75 +1,89 @@
-
-<div class="space-y-16 animate-synthesis-in pb-32 text-[#1D1D1F]">
-  <!-- Hero Section -->
+<div class="space-y-16 animate-synthesis-in pb-32 text-[#1D1D1F] max-w-4xl mx-auto">
+  <!-- System Identification Header -->
   <header class="relative p-12 bg-white border border-black/5 rounded-[56px] overflow-hidden shadow-sm">
     <div class="absolute top-0 right-0 w-96 h-96 bg-[#007AFF]/5 blur-[120px] rounded-full"></div>
     <div class="relative z-10 space-y-6">
-      <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#007AFF]/10 rounded-full border border-[#007AFF]/20">
-        <span class="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-pulse"></span>
-        <span class="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">Synthesis Knowledge Base v2.4</span>
+      <div class="flex justify-between items-start">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-black text-white rounded-full">
+          <span class="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">ID-10 / SYNTHESIS_MANUAL</span>
+        </div>
+        <div class="text-right">
+          <p class="text-[10px] font-bold font-mono opacity-30">REF_CODE: FX-GURU-ALPHA</p>
+          <p class="text-[10px] font-bold font-mono opacity-30">VER: 5.9.3-C (CORE 12.0)</p>
+        </div>
       </div>
-      <h2 class="text-6xl font-black tracking-tighter italic leading-none text-black">Operační Manuál</h2>
-      <p class="text-xl text-black/60 font-medium leading-relaxed max-w-2xl">
-        FixIt Guru v2.4 zavádí protokoly pro automatizovanou digitální advokacii a certifikované exporty dokumentů.
+      
+      <div class="space-y-2">
+        <h2 class="text-6xl font-black tracking-tighter italic leading-none text-black uppercase">Jak to <br/>opravit?</h2>
+        <p class="text-xs font-black uppercase tracking-[0.5em] text-[#007AFF]">Operační Příručka Synthesis Jádra</p>
+      </div>
+      <p class="text-xl text-black/60 font-medium leading-relaxed max-w-2xl italic">
+        FixIt Guru není jen aplikace, je to rozhraní mezi vaší šikovností a celosvětovou znalostní bází inženýrství.
       </p>
     </div>
   </header>
 
-  <!-- Section: Digitální Advokacie & Integrity -->
-  <section class="space-y-10">
+  <!-- Section 01: Core Architecture -->
+  <section class="space-y-8">
     <div class="flex items-center gap-4 px-4">
-      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF] whitespace-nowrap">Identity Matrix & Ověřování</h3>
+      <span class="font-mono text-[10px] font-bold opacity-20">01 /</span>
+      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF] whitespace-nowrap">Princip Kaskády</h3>
       <div class="h-px bg-[#007AFF]/10 w-full"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="p-8 bg-black text-white rounded-[44px] space-y-6 shadow-xl relative overflow-hidden group">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-[#007AFF] blur-[80px] opacity-20"></div>
-        <div class="text-3xl relative z-10">🛡️</div>
-        <h4 class="text-xl font-black italic tracking-tighter relative z-10">Identity Matrix</h4>
-        <p class="text-xs text-white/50 leading-relaxed font-medium relative z-10">
-          Váš "Trezor" v profilu. Slouží k uložení osobních údajů, které systém používá k automatickému vyplňování právních listin.
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="p-10 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm group hover:border-[#007AFF]/20 transition-all">
+        <div class="w-14 h-14 bg-black/5 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">⚡</div>
+        <h4 class="text-xl font-black italic tracking-tighter">Model Ladder</h4>
+        <p class="text-sm text-black/50 leading-relaxed font-medium">
+          Naše Jádro automaticky přepíná mezi modely (Pro, Flash, Lite) podle náročnosti úkolu. Pro komplexní schémata nastupuje Heavy Logic, pro rychlé dotazy Light Neural okruh.
         </p>
       </div>
 
-      <div class="p-8 bg-white border border-black/5 rounded-[44px] space-y-6 shadow-sm hover:shadow-md transition-all">
-        <div class="text-3xl">🕵️‍♀️</div>
-        <h4 class="text-xl font-black italic tracking-tighter">Proaktivní OCR</h4>
-        <p class="text-xs text-black/50 leading-relaxed font-medium">
-          JUDY automaticky skenuje nahrané dokumenty. Pokud najde data, nabídne jejich synchronizaci s Matrixem.
-        </p>
-      </div>
-
-      <div class="p-8 bg-[#007AFF] text-white rounded-[44px] space-y-6 shadow-xl shadow-blue-500/20 relative overflow-hidden">
-        <div class="text-3xl">🔏</div>
-        <h4 class="text-xl font-black italic tracking-tighter">Digitální Razítko</h4>
-        <p class="text-xs text-white/80 leading-relaxed font-medium">
-          Všechny dokumenty vytvořené naší aplikací obsahují v patičce potvrzení o generování systémem Synthesis pro vyšší právní váhu.
+      <div class="p-10 bg-white border border-black/5 rounded-[44px] space-y-4 shadow-sm group hover:border-[#007AFF]/20 transition-all">
+        <div class="w-14 h-14 bg-black/5 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">🔍</div>
+        <h4 class="text-xl font-black italic tracking-tighter">Vision Discovery</h4>
+        <p class="text-sm text-black/50 leading-relaxed font-medium">
+          Pokud nahrajete fotku štítku nebo rozloženého plošného spoje, Jádro provede OCR analýzu a identifikuje komponenty. Nemusíte znát název, stačí nám vizuální otisk.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Section: Exporty Detail -->
-  <section class="p-12 glass border border-black/5 rounded-[56px] space-y-8 shadow-sm">
-     <h4 class="text-2xl font-black italic tracking-tighter">Protokol Integrity Listin</h4>
-     <div class="grid md:grid-cols-2 gap-10">
-        <div class="space-y-4">
-           <h5 class="font-black italic uppercase text-[10px] text-[#007AFF]">Certifikace FixIt Guru</h5>
-           <p class="text-sm text-black/60 leading-relaxed font-medium">
-              Každé odvolání nebo výzva obsahuje v patě text: **"Vytvořeno aplikací FixIt Guru..."**. Tato patička slouží k identifikaci, že dokument byl sestaven na základě expertních algoritmů a v souladu s NOZ 2026.
-           </p>
-        </div>
-        <div class="space-y-4">
-           <h5 class="font-black italic uppercase text-[10px] text-[#007AFF]">Formáty s patičkou</h5>
-           <p class="text-sm text-black/60 leading-relaxed font-medium">
-              Razítko integrity je vloženo jak do souboru **Word (.doc)**, tak do finálního **PDF** výstupu při tisku. Doporučujeme patičku neodstraňovat, zvyšuje profesionální dojem při komunikaci s prodejci.
-           </p>
-        </div>
-     </div>
+  <!-- Section 02: Processing Standards -->
+  <section class="p-12 bg-black text-white rounded-[56px] space-y-10 shadow-2xl relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-[#007AFF]/20 blur-[100px] opacity-40"></div>
+    
+    <div class="space-y-4 relative z-10">
+      <h3 class="text-3xl font-black italic tracking-tighter uppercase">Zabezpečení SVID</h3>
+      <p class="text-white/40 text-sm font-medium leading-relaxed max-w-xl italic">
+        Synthesis OS využívá standard SEE-256. Vaše osobní údaje v cloudu neexistují, jsou rozdrobeny do kryptografických segmentů, které složíte jen vy svým hardwarem skrze Jádro.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 relative z-10 border-t border-white/10 pt-10">
+      <div class="space-y-2">
+        <p class="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">Šifrování</p>
+        <p class="text-sm font-bold italic font-mono uppercase">Local AES-GCM</p>
+      </div>
+      <div class="space-y-2">
+        <p class="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">Ověření</p>
+        <p class="text-sm font-bold italic font-mono">Biometric Sync</p>
+      </div>
+      <div class="space-y-2">
+        <p class="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">Integrita</p>
+        <p class="text-sm font-bold italic font-mono uppercase">Node Verified</p>
+      </div>
+    </div>
   </section>
 
-  <footer class="pt-20 text-center opacity-30 border-t border-black/5">
-    <p class="text-[10px] font-black uppercase tracking-[0.8em] italic text-[#1D1D1F]">© 2026 Mallfurion | Studio Synthesis</p>
+  <!-- Footer Specification -->
+  <footer class="pt-20 text-center space-y-4">
+    <div class="inline-flex gap-8 opacity-20 text-[8px] font-mono font-bold uppercase tracking-[0.3em]">
+      <span>DOC_REF: HELP-01-SYN</span>
+      <span>NODE: PRG-CENTER</span>
+      <span>TIMESTAMP: 2026-02-21</span>
+    </div>
+    <p class="text-[9px] font-black uppercase tracking-[0.8em] italic text-[#1D1D1F] opacity-10">© 2026 Studio Synthesis | Mallfurion Identity</p>
   </footer>
 </div>

@@ -1,0 +1,17 @@
+
+<div class="space-y-8 animate-in">
+  <header style="margin-bottom: 30px;">
+    <h3 style="font-size: 24px; font-weight: 900; font-style: italic; letter-spacing: -1px;">2. Dílna Lucie (Safety)</h3>
+    <p style="font-size: 10px; font-weight: 900; text-transform: uppercase; color: #34C759; letter-spacing: 2px;">Procedural Integrity Protocol</p>
+  </header>
+
+  <div class="config-card">
+    <h4>Step-Lock Rigidity</h4>
+    <p>Vynucuje fotodokumentaci před uvolněním dalšího kroku demontáže.</p>
+    <select onchange="if(this.value==='low') { loadPage('warning-explanation'); }" style="width: 100%; margin-top: 15px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--admin-border); padding: 10px; border-radius: 8px;">
+        <option value="extreme">Biometric Lock (Extreme)</option>
+        <option value="standard" selected>Visual Validation (Standard)</option>
+        <option value="low">Manual Confirmation (High Risk)</option>
+    </select>
+  </div>
+</div>

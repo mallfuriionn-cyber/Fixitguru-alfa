@@ -1,0 +1,17 @@
+
+<div class="space-y-6">
+  <h4 class="text-xl font-black italic tracking-tighter text-[#007AFF]">Event Bus Speed</h4>
+  <p class="font-medium text-black/60">
+    Tento parametr definuje latenci mezi odesláním události v jednom modulu (např. OCR identifikace v Manual Hubu) a jejím zachycením v ostatních částech systému (Dílna, JUDY).
+  </p>
+  <div class="space-y-4">
+    <div class="p-6 bg-[#FBFBFD] border border-black/5 rounded-[32px]">
+      <p class="text-[10px] font-black uppercase text-[#007AFF] mb-2">Real-time (0ms)</p>
+      <p class="text-xs text-black/40 italic">Maximální odezva systému. Vhodné pro výkonná zařízení. Může zvýšit zátěž procesoru při masivním linkování dat.</p>
+    </div>
+    <div class="p-6 bg-[#FBFBFD] border border-black/5 rounded-[32px]">
+      <p class="text-[10px] font-black uppercase text-[#007AFF] mb-2">Throttled (100ms)</p>
+      <p class="text-xs text-black/40 italic">Doporučené nastavení. Vyvažuje plynulost animací UI a rychlost synchronizace kontextu.</p>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { User, SocialPost } from '../types.ts';
 import { COPYRIGHT } from '../constants.tsx';
@@ -19,19 +18,7 @@ export const SocialModule: React.FC<SocialModuleProps> = ({ user, onBack }) => {
   }, []);
 
   return (
-    <div id="social-module" className="flex-1 overflow-y-auto px-6 py-12 space-y-12 animate-synthesis-in overscroll-contain bg-[#FBFBFD] no-scrollbar">
-      <header className="space-y-4 pt-10">
-        <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#007AFF]/10 rounded-full border border-[#007AFF]/20">
-            <span className="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-pulse"></span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-[#007AFF]">Synthesis Community Hub</span>
-          </div>
-          <button onClick={onBack} className="w-10 h-10 bg-black/5 rounded-full flex items-center justify-center text-sm active:scale-90">✕</button>
-        </div>
-        <h2 className="text-5xl font-black tracking-tighter italic text-[#1D1D1F]">The Feed</h2>
-        <p className="text-sm text-black/40 font-medium italic max-w-sm">Inspirace, blueprinty a inženýrské postupy od komunity Synthesis.</p>
-      </header>
-
+    <div id="social-module" className="p-6 md:p-12 space-y-12 animate-synthesis-in overscroll-contain no-scrollbar relative">
       <div className="space-y-10 pb-20 max-w-2xl mx-auto">
         {posts.map((post) => (
           <article key={post.id} className="bg-white border border-black/5 rounded-[56px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 group relative">

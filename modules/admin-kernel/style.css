@@ -1,0 +1,121 @@
+
+:root {
+  --admin-bg: #000814;
+  --admin-accent: #007AFF;
+  --admin-danger: #FF3B30;
+  --admin-card: rgba(255, 255, 255, 0.03);
+  --admin-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--admin-bg);
+  color: white;
+  overflow-x: hidden;
+}
+
+.matrix-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: 100vh;
+}
+
+aside {
+  border-right: 1px solid var(--admin-border);
+  padding: 40px 20px;
+  background: rgba(255,255,255,0.01);
+}
+
+.nav-item {
+  padding: 16px 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 8px;
+}
+
+.nav-item:hover { background: var(--admin-card); color: white; }
+.nav-item.active { background: var(--admin-accent); color: white; }
+
+main {
+  padding: 60px;
+  overflow-y: auto;
+}
+
+.danger-zone {
+  border: 2px dashed var(--admin-danger);
+  border-radius: 40px;
+  padding: 40px;
+  margin-top: 40px;
+  background: rgba(255, 59, 48, 0.05);
+  animation: pulse-danger 3s infinite;
+}
+
+@keyframes pulse-danger {
+  0% { border-color: rgba(255, 59, 48, 0.2); }
+  50% { border-color: rgba(255, 59, 48, 0.8); }
+  100% { border-color: rgba(255, 59, 48, 0.2); }
+}
+
+.warning-header {
+  color: var(--admin-danger);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.warning-header::before {
+  content: '⚠️';
+  font-size: 24px;
+}
+
+.rollback-btn {
+  background: white;
+  color: black;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.rollback-btn:active { transform: scale(0.95); }
+
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.config-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  padding: 30px;
+  border-radius: 32px;
+}
+
+.config-card h4 {
+  margin: 0 0 10px 0;
+  font-style: italic;
+}
+
+.config-card p {
+  font-size: 12px;
+  opacity: 0.5;
+  line-height: 1.6;
+}

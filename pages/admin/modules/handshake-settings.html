@@ -1,0 +1,28 @@
+
+<div class="space-y-8">
+  <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between">
+     <div className="space-y-1">
+        <div className="flex items-center gap-3">
+          <p className="text-base font-black italic">Protocol LP-05 Strictness</p>
+          <span className="help-dot" onclick="openHelp('protocol-strictness')">?</span>
+        </div>
+        <p className="text-[10px] text-black/30 font-medium italic">Vynucení souhlasu na každém uzlu.</p>
+     </div>
+     <select class="h-12 bg-white border border-black/5 rounded-xl px-4 font-bold text-xs outline-none">
+        <option>Loose (Register only)</option>
+        <option selected>Standard (Mandatory)</option>
+        <option>Extreme (Biometric sign)</option>
+     </select>
+  </div>
+
+  <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between">
+     <div className="space-y-1">
+        <div className="flex items-center gap-3">
+          <p className="text-base font-black italic">Bypass Architect Mode</p>
+          <span className="help-dot" onclick="openHelp('bypass-arch')">?</span>
+        </div>
+        <p className="text-[10px] text-black/30 font-medium italic">Architekti nemusí podepisovat mandát.</p>
+     </div>
+     <input type="checkbox" checked class="admin-toggle" />
+  </div>
+</div>

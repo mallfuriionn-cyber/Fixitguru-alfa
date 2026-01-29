@@ -12,7 +12,11 @@ export const Modal: React.FC<ModalProps> = ({ title, isOpen, onClose, children }
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-white animate-fluent-in">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-white animate-fluent-in relative">
+      <div className="fixed bottom-20 right-6 pointer-events-none z-[9999]">
+        <p className="text-[8px] font-mono opacity-[0.15] uppercase tracking-widest">PROTOCOL_VIEW // ID-11</p>
+      </div>
+
       {/* Header Modal */}
       <div className="px-6 pt-12 pb-4 flex justify-between items-center border-b border-black/5 bg-white/80 backdrop-blur-xl">
         <h2 className="text-xl font-bold tracking-tight text-black">{title}</h2>

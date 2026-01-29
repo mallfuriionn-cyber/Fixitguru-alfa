@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
-import { Agent, User, UserRole, AuditLog, TableName, SocialPost, Project, SavedManual, WorkshopReport } from '../types.ts';
-import { RBAC_CONFIG } from '../core/rbacConfig.ts';
+import { Agent, User, UserRole } from '../types.ts';
 import { db } from '../services/storageService.ts';
 import { hasPermission } from '../utils/permissionUtils.ts';
-import { fetchLogs, LogEntry } from '../services/logService.ts';
+import { fetchPageContent } from '../services/pageService.ts';
+import { ProjectMap } from './ProjectMap.tsx';
 
 interface AdminPanelProps {
   user: User | null;
@@ -13,349 +12,365 @@ interface AdminPanelProps {
   onBack: () => void;
 }
 
-type AdminTab = 'OVERVIEW' | 'MATRIX' | 'MODULES' | 'FS' | 'JOURNAL' | 'KERNEL';
+type AdminDomain = 'IDENTITY' | 'WORKSHOP' | 'LEGAL' | 'KERNEL' | 'LOGGING' | 'OTHER' | 'SYSTEM_MAP';
 
-export const AdminPanel: React.FC<AdminPanelProps> = ({ 
-  user,
-  agents, 
-  onUpdateAgents, 
-  onBack
-}) => {
-  const [activeTab, setActiveTab] = useState<AdminTab>('OVERVIEW');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [logs, setLogs] = useState<LogEntry[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [activeCrudTable, setActiveCrudTable] = useState<TableName>('posts');
-  
-  const [data, setData] = useState({
-    users: db.getAll('users'),
-    tasks: db.getAll('tasks'),
-    audit: db.getAll('globalAudit'),
-    posts: db.getAll('posts'),
-    projects: db.getAll('projects'),
-    manuals: db.getAll('manuals'),
-    reports: db.getAll('reports')
-  });
+interface SettingGroup {
+  id: string;
+  title: string;
+  desc: string;
+  icon: string;
+}
 
-  useEffect(() => {
-    fetchLogs().then(entries => setLogs(entries.sort((a, b) => b.id - a.id)));
-    const refresh = () => setData({
-      users: db.getAll('users'),
-      tasks: db.getAll('tasks'),
-      audit: db.getAll('globalAudit'),
-      posts: db.getAll('posts'),
-      projects: db.getAll('projects'),
-      manuals: db.getAll('manuals'),
-      reports: db.getAll('reports')
-    });
-    window.addEventListener('db-update', refresh);
-    return () => window.removeEventListener('db-update', refresh);
-  }, []);
+export const AdminPanel: React.FC<AdminPanelProps> = ({ user, agents, onUpdateAgents, onBack }) => {
+  const [activeDomain, setActiveDomain] = useState<AdminDomain>('IDENTITY');
+  const [selectedSettingGroup, setSelectedSettingGroup] = useState<string | null>(null);
+  const [showExplainer, setShowExplainer] = useState(false);
+  const [explainerContent, setExplainerContent] = useState('');
+  const [groupContent, setGroupContent] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const haptic = (p: number | number[] = 10) => { if ('vibrate' in navigator) navigator.vibrate(p); };
 
-  const handleUpdateUser = (updated: User) => {
-    db.update('users', updated.id, updated);
-    setSelectedUser(updated);
-    haptic(10);
-    logAction(`USER_UPDATE: ${updated.username}`);
-  };
+  useEffect(() => {
+    (window as any).openHelp = (slug: string) => {
+      const event = new CustomEvent('synthesis:admin-help', { detail: slug });
+      window.dispatchEvent(event);
+    };
 
-  const logAction = (action: string) => {
-    db.insert('globalAudit', {
-      id: `aud-${Date.now()}`,
-      timestamp: new Date().toLocaleString(),
-      action,
-      actorId: user?.id || 'sys',
-      actorName: user?.username,
-      category: 'SYSTEM',
-      severity: 'LOW'
-    });
-  };
+    const handler = (e: any) => handleOpenHelp(e.detail);
+    window.addEventListener('synthesis:admin-help', handler);
+    
+    return () => {
+      window.removeEventListener('synthesis:admin-help', handler);
+    };
+  }, []);
 
-  const handleDeleteItem = (table: TableName, id: string) => {
-    if (confirm(`Opravdu chcete odstranit záznam z tabulky ${table}?`)) {
-      db.delete(table, id);
-      haptic([20, 50]);
-      logAction(`DELETE_ITEM: ${table} -> ${id}`);
+  useEffect(() => {
+    if (selectedSettingGroup) {
+      loadGroupSettings(selectedSettingGroup);
     }
+  }, [selectedSettingGroup]);
+
+  const loadGroupSettings = async (groupId: string) => {
+    setGroupContent('<div class="p-20 text-center animate-pulse font-black text-[10px] uppercase tracking-widest text-black/20">Dekryptuji parametry Jádra...</div>');
+    const content = await fetchPageContent(`admin/modules/${groupId}-settings`);
+    setGroupContent(content);
+  };
+
+  const handleOpenHelp = async (slug: string) => {
+    haptic(5);
+    setExplainerContent('<div class="p-10 text-center animate-pulse text-[10px] font-black uppercase tracking-widest opacity-20">Navazuji spojení s Kernel Docs...</div>');
+    setShowExplainer(true);
+    const content = await fetchPageContent(`admin/explainers/${slug}`);
+    setExplainerContent(content);
+  };
+
+  const handleSave = () => {
+    haptic([20, 10, 20]);
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+      setSelectedSettingGroup(null);
+    }, 1200);
   };
 
   if (!user || !hasPermission(user, 'ACCESS_KERNEL')) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-[#000814] p-10 text-center h-full">
-        <h2 className="text-white font-black italic text-2xl uppercase tracking-tighter">Access Denied</h2>
-        <button onClick={onBack} className="mt-8 px-10 py-4 bg-white text-black rounded-full font-black text-[10px] uppercase tracking-widest">Return</button>
+      <div className="h-full flex flex-col items-center justify-center bg-black text-white p-10 space-y-6 relative">
+        <div className="fixed bottom-20 right-6 pointer-events-none z-[9999]">
+          <p className="text-[8px] font-mono opacity-[0.15] uppercase tracking-widest">KERNEL_ADMIN // ID-07</p>
+        </div>
+        <div className="w-20 h-20 border-4 border-red-500 rounded-full flex items-center justify-center text-4xl animate-pulse">🔒</div>
+        <h2 className="text-xl font-black italic uppercase tracking-widest text-center">Access Denied // Kernel Auth Required</h2>
+        <button onClick={onBack} className="px-8 py-3 bg-white text-black rounded-full font-black text-[10px] uppercase tracking-widest">Návrat k terminálu</button>
       </div>
     );
   }
 
+  const domainConfig: Record<AdminDomain, { label: string; icon: string; groups: SettingGroup[] }> = {
+    IDENTITY: {
+      label: 'SVID & Identita',
+      icon: '🆔',
+      groups: [
+        { id: 'svid', title: 'SEE-256 Encryption', desc: 'Správa šifrovacích iterací a síly klíčů pro SVID.', icon: '🔐' },
+        { id: 'handshake', title: 'Hardware Handshake', desc: 'Konfigurace fyzického ověřování pomocí Passkeys.', icon: '🤝' },
+        { id: 'privacy', title: 'Privacy Logic', desc: 'Pravidla pro anonymizaci a automatické mazání dat.', icon: '🛡️' }
+      ]
+    },
+    WORKSHOP: {
+      label: 'Dílna & Bezpečnost',
+      icon: '🛠️',
+      groups: [
+        { id: 'workshop', title: 'Step-Lock Protocol', desc: 'Nastavení rigidity a vizuální verifikace opravy.', icon: '🚦' },
+        { id: 'voltage', title: 'Safety Thresholds', desc: 'Limity pro detekci nebezpečného napětí v obvodech.', icon: '⚡' },
+        { id: 'vision', title: 'Neural Vision', desc: 'Konfigurace OCR analýzy a identifikace komponent.', icon: '👁️' }
+      ]
+    },
+    LEGAL: {
+      label: 'JUDY Advocacy',
+      icon: '⚖️',
+      groups: [
+        { id: 'judy', title: 'Legislative Engine', desc: 'Verze NOZ a datasetů pro právní analýzu.', icon: '📖' },
+        { id: 'search', title: 'Grounding Depth', desc: 'Hloubka ověřování faktů skrze Google Search.', icon: '🔍' },
+        { id: 'templates', title: 'Luxury Printing', desc: 'Správa šablon a pečetí integrity na dokumentech.', icon: '📄' }
+      ]
+    },
+    KERNEL: {
+      label: 'Systémové Jádro',
+      icon: '🧠',
+      groups: [
+        { id: 'orchestrator', title: 'Model Cascade', desc: 'Pravidla pro přepínání Gemini Pro/Flash/Lite.', icon: '📈' },
+        { id: 'bus', title: 'Neural Bus Control', desc: 'Synchronizace kontextu mezi agenty.', icon: '🧬' },
+        { id: 'rbac', title: 'Permission Structure', desc: 'Globální správa rolí Architect/Guru/Subject.', icon: '👤' }
+      ]
+    },
+    LOGGING: {
+      label: 'Audit & Telemetrie',
+      icon: '📝',
+      groups: [
+        { id: 'audit', title: 'Global Audit', desc: 'Záznamy o každém systémovém Handshaku.', icon: '📋' },
+        { id: 'telemetry', title: 'Node Health', desc: 'Sledování latence a výkonu síťových uzlů.', icon: '📡' }
+      ]
+    },
+    OTHER: {
+      label: 'Ostatní',
+      icon: '📁',
+      groups: [
+        { id: 'other', title: 'Externí Zdroje', desc: 'Prezentace projektu a doplňkové vizualizace.', icon: '🚀' }
+      ]
+    },
+    SYSTEM_MAP: { label: 'Blueprint', icon: '🗺️', groups: [] }
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FBFBFD] animate-synthesis-in font-sans relative">
-      
-      {/* USER EDITOR OVERLAY */}
-      {selectedUser && (
-        <div className="fixed inset-0 z-[1000] bg-white animate-fluent-in flex flex-col overflow-y-auto no-scrollbar pb-40">
-           <header className="px-6 h-20 border-b border-black/5 flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur-xl z-50">
-              <div className="flex items-center gap-4">
-                 <span className="text-3xl">{selectedUser.avatar}</span>
+    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FBFBFD] animate-synthesis-in relative font-sans">
+      <div className="fixed bottom-20 right-6 pointer-events-none z-[9999]">
+        <p className="text-[8px] font-mono opacity-[0.15] uppercase tracking-widest">KERNEL_ADMIN // ID-07</p>
+      </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .admin-toggle {
+          appearance: none;
+          width: 44px; height: 24px;
+          background: #E5E5EA;
+          border-radius: 100px;
+          position: relative;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .admin-toggle:checked { background: #007AFF; }
+        .admin-toggle::after {
+          content: '';
+          position: absolute; top: 2px; left: 2px;
+          width: 20px; height: 20px;
+          background: white; border-radius: 50%;
+          transition: all 0.3s;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .admin-toggle:checked::after { transform: translateX(20px); }
+        
+        .help-btn {
+          width: 24px; height: 24px;
+          background: rgba(0, 122, 255, 0.08);
+          color: #007AFF;
+          border-radius: 50%;
+          display: inline-flex; items-center; justify-center;
+          font-size: 11px; font-weight: 900;
+          cursor: pointer; transition: all 0.2s;
+          border: 1px solid rgba(0, 122, 255, 0.1);
+          vertical-align: middle;
+          margin-left: 8px;
+        }
+        .help-btn:hover { background: #007AFF; color: white; transform: scale(1.15) rotate(15deg); }
+        
+        .admin-sidebar-item {
+          width: 100%; padding: 16px; border-radius: 20px;
+          display: flex; items-center; gap: 16px;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .admin-sidebar-item.active {
+          background: black; color: white;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+          transform: translateX(8px);
+        }
+
+        .mobile-domain-btn {
+          padding: 12px 20px;
+          border-radius: 16px;
+          font-size: 9px;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          white-space: nowrap;
+          transition: all 0.3s;
+        }
+        .mobile-domain-btn.active {
+          background: black;
+          color: white;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+      `}} />
+
+      {activeDomain === 'SYSTEM_MAP' && (
+        <ProjectMap onBack={() => setActiveDomain('KERNEL')} />
+      )}
+
+      {showExplainer && (
+        <div className="fixed inset-0 z-[11000] bg-black/40 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 animate-fluent-in">
+           <div className="max-w-xl w-full bg-white rounded-[40px] sm:rounded-[56px] shadow-2xl border border-black/5 overflow-hidden flex flex-col max-h-[85vh]">
+              <header className="p-8 sm:p-10 border-b border-black/5 flex justify-between items-center bg-white/80">
                  <div>
-                   <h3 className="text-sm font-black italic uppercase leading-none">{selectedUser.name}</h3>
-                   <p className="text-[7px] font-black uppercase text-[#007AFF] mt-1.5 tracking-widest">Role: {selectedUser.role}</p>
+                    <p className="text-[8px] font-black uppercase tracking-[0.5em] text-[#007AFF]">Kernel Documentation</p>
+                    <h3 className="text-xl sm:text-2xl font-black italic tracking-tighter uppercase mt-1">Explainer Protokolu</h3>
                  </div>
+                 <button onClick={() => { setShowExplainer(false); haptic(2); }} className="w-10 h-10 sm:w-12 sm:h-12 bg-black/5 rounded-full flex items-center justify-center font-black active:scale-90 transition-transform">✕</button>
+              </header>
+              <div className="flex-1 overflow-y-auto p-8 sm:p-12 no-scrollbar bg-[#FBFBFD]">
+                 <div className="prose-synthesis" dangerouslySetInnerHTML={{ __html: explainerContent }} />
               </div>
-              <button onClick={() => setSelectedUser(null)} className="w-10 h-10 bg-black/5 rounded-full flex items-center justify-center">✕</button>
-           </header>
-
-           <div className="p-6 space-y-10 max-w-xl mx-auto w-full">
-              <section className="space-y-4">
-                <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-black/30 px-2">Role Management</h4>
-                <div className="grid grid-cols-1 gap-2">
-                   {Object.values(RBAC_CONFIG).filter(r => r.role !== UserRole.HOST).map(role => (
-                     <button 
-                       key={role.role}
-                       onClick={() => handleUpdateUser({...selectedUser, role: role.role})}
-                       className={`p-5 rounded-3xl border flex justify-between items-center transition-all ${selectedUser.role === role.role ? 'bg-black text-white shadow-xl' : 'bg-[#FBFBFD] border-black/5 text-black/40 hover:bg-black/5'}`}
-                     >
-                        <div className="flex items-center gap-4">
-                           <span className="text-xl">{role.icon}</span>
-                           <div className="text-left">
-                             <p className="text-[10px] font-black uppercase tracking-widest">{role.label}</p>
-                             <p className="text-[7px] font-bold opacity-50 uppercase mt-0.5">{role.description}</p>
-                           </div>
-                        </div>
-                        {selectedUser.role === role.role && <span className="text-[10px]">✓</span>}
-                     </button>
-                   ))}
-                </div>
-              </section>
-
-              <section className="space-y-4">
-                <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-black/30 px-2">Bezpečnostní Status</h4>
-                <div className="p-8 bg-black text-white rounded-[40px] space-y-6">
-                   <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-white/40">Integrity Score</p>
-                      <p className="text-2xl font-black italic text-[#007AFF]">{selectedUser.security.integrityScore}%</p>
-                   </div>
-                   <div className="flex justify-between items-center">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-white/40">Hardware Binding</p>
-                      <p className="text-[10px] font-bold text-green-400">AKTIVNÍ</p>
-                   </div>
-                </div>
-              </section>
-
-              <footer className="pt-10 flex gap-4">
-                 <button onClick={() => { if(confirm('Smazat uživatele?')) { db.delete('users', selectedUser.id); setSelectedUser(null); logAction(`USER_DELETE: ${selectedUser.username}`); } }} className="flex-1 h-14 bg-red-600 text-white rounded-3xl text-[9px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">Smazat Subjekt</button>
-                 <button onClick={() => setSelectedUser(null)} className="flex-1 h-14 bg-black/5 text-black/40 rounded-3xl text-[9px] font-black uppercase tracking-widest active:scale-95 transition-all">Zavřít</button>
+              <footer className="p-6 sm:p-8 border-t border-black/5 bg-white text-center">
+                 <p className="text-[9px] font-black uppercase tracking-widest text-black/20 italic">Studio Synthesis | Mallfurion Identity</p>
               </footer>
            </div>
         </div>
       )}
 
-      {/* ADMIN HEADER */}
-      <header className="px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-black/[0.03] flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-black text-white rounded-lg flex items-center justify-center font-black">S</div>
-          <div>
-            <h2 className="text-xs font-black italic uppercase tracking-tighter">{activeTab}</h2>
-            <p className="text-[7px] font-black text-[#007AFF] uppercase tracking-widest mt-0.5">Kernel Master v5.8</p>
-          </div>
-        </div>
-        <button onClick={onBack} className="w-9 h-9 bg-black/5 rounded-full flex items-center justify-center text-sm hover:bg-black hover:text-white transition-all">✕</button>
-      </header>
-
-      {/* MAIN SURFACE */}
-      <main className="flex-1 overflow-y-auto no-scrollbar pb-40">
-        <div className="p-6 space-y-10 max-w-4xl mx-auto w-full">
+      <div className="flex h-full flex-col md:flex-row">
+        <aside className="hidden md:flex w-[320px] bg-white border-r border-black/[0.04] flex-col shrink-0 z-[100] relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#007AFF]/[0.02] to-transparent pointer-events-none"></div>
+          <header className="p-10 pb-6 relative z-10">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-12 h-12 bg-black text-white rounded-[14px] flex items-center justify-center font-black italic text-xl shadow-xl">S</div>
+              <div>
+                <h2 className="text-sm font-black uppercase tracking-widest leading-none">Core Control</h2>
+                <p className="text-[8px] font-black text-[#007AFF] uppercase mt-2 tracking-[0.2em]">Synthesis OS v5.9.3</p>
+              </div>
+            </div>
+            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-black/20 mb-8 px-4">Domény Jádra</p>
+          </header>
           
-          {activeTab === 'OVERVIEW' && (
-            <div className="space-y-10 animate-synthesis-in">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                 {[
-                   { l: 'Uživatelé', v: data.users.length, i: '👥' },
-                   { l: 'Projekty', v: data.projects.length, i: '📁' },
-                   { l: 'Feed Posts', v: data.posts.length, i: '📱' },
-                   { l: 'Audit Log', v: data.audit.length, i: '📝' }
-                 ].map(s => (
-                   <div key={s.l} className="p-6 bg-white border border-black/5 rounded-[32px] h-36 flex flex-col justify-between shadow-sm group hover:shadow-xl transition-all">
-                     <div className="text-2xl opacity-40 group-hover:scale-110 transition-transform">{s.i}</div>
-                     <div>
-                       <p className="text-[8px] font-black uppercase text-black/20 tracking-widest">{s.l}</p>
-                       <p className="text-3xl font-black italic leading-none mt-1">{s.v}</p>
-                     </div>
-                   </div>
-                 ))}
-              </div>
-
-              <section className="space-y-4">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30 px-2 italic">Aktivní Úkoly Jádra</h3>
-                <div className="bg-white border border-black/5 rounded-[40px] overflow-hidden">
-                   {data.tasks.slice(0, 5).map((task: any) => (
-                     <div key={task.id} className="p-6 border-b border-black/[0.03] last:border-0 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                           <div className={`w-2 h-2 rounded-full ${task.status === 'COMPLETED' ? 'bg-green-500' : 'bg-[#007AFF] animate-pulse'}`}></div>
-                           <span className="text-[10px] font-black italic">{task.type}</span>
-                        </div>
-                        <span className="text-[8px] font-black uppercase text-black/20 tracking-widest">{task.createdAt}</span>
-                     </div>
-                   ))}
-                </div>
-              </section>
+          <nav className="flex-1 px-4 space-y-2 overflow-y-auto no-scrollbar relative z-10">
+            {(Object.keys(domainConfig) as AdminDomain[]).map(domain => {
+               if (domain === 'SYSTEM_MAP') return null;
+               return (
+                <button 
+                  key={domain}
+                  onClick={() => { setActiveDomain(domain); setSelectedSettingGroup(null); haptic(5); }}
+                  className={`admin-sidebar-item group ${activeDomain === domain ? 'active' : 'text-black/30 hover:bg-black/5 hover:text-black'}`}
+                >
+                  <span className="text-2xl group-hover:scale-125 transition-transform">{domainConfig[domain].icon}</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-left">{domainConfig[domain].label}</span>
+                </button>
+               );
+            })}
+            <div className="pt-6 border-t border-black/5 mt-6 mx-4">
+              <button 
+                onClick={() => { setActiveDomain('SYSTEM_MAP'); haptic(15); }}
+                className="admin-sidebar-item text-blue-600 bg-blue-50 border border-blue-100 hover:bg-blue-100"
+              >
+                <span className="text-2xl">🗺️</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-left">System Blueprint</span>
+              </button>
             </div>
-          )}
+          </nav>
+          <footer className="p-10 border-t border-black/5 relative z-10 bg-white">
+            <button 
+              onClick={onBack} 
+              className="w-full h-14 bg-red-50 text-red-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-sm"
+            >
+              Ukončit Sezení
+            </button>
+          </footer>
+        </aside>
 
-          {activeTab === 'MATRIX' && (
-            <div className="space-y-6 animate-synthesis-in">
-              <div className="relative">
-                <input 
-                  placeholder="Hledat identifier v Matrixu..." 
-                  className="w-full h-16 bg-white border border-black/5 rounded-3xl px-8 outline-none font-bold text-base shadow-sm focus:ring-4 ring-[#007AFF]/5 transition-all"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                />
-                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-2xl opacity-20">🔍</span>
-              </div>
-              <div className="grid gap-3">
-                {data.users.filter(u => u.name.toLowerCase().includes(searchQuery.toLowerCase()) || u.username.toLowerCase().includes(searchQuery.toLowerCase())).map(u => (
-                  <button key={u.id} onClick={() => setSelectedUser(u)} className="p-6 bg-white border border-black/5 rounded-[36px] flex items-center justify-between text-left group hover:shadow-xl hover:translate-y-[-2px] transition-all">
-                    <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 bg-[#F2F2F7] rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-black/5">
-                        {u.avatar}
-                      </div>
-                      <div>
-                        <p className="text-base font-black italic leading-none">{u.name}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                           <span className="text-[8px] font-black uppercase text-[#007AFF] tracking-widest">{u.role}</span>
-                           <span className="text-[8px] font-black text-black/20 tracking-widest">• Lvl {u.level}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <span className="text-black/10 group-hover:text-black transition-colors font-black text-xs uppercase tracking-widest">Editovat →</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+        <nav className="md:hidden flex items-center gap-2 overflow-x-auto no-scrollbar p-4 bg-white border-b border-black/[0.04] shrink-0 sticky top-0 z-[110]">
+          {(Object.keys(domainConfig) as AdminDomain[]).map(domain => {
+            if (domain === 'SYSTEM_MAP') return null;
+            return (
+              <button
+                key={domain}
+                onClick={() => { setActiveDomain(domain); setSelectedSettingGroup(null); haptic(5); }}
+                className={`mobile-domain-btn ${activeDomain === domain ? 'active' : 'bg-black/5 text-black/40'}`}
+              >
+                {domainConfig[domain].label}
+              </button>
+            );
+          })}
+          <button 
+            onClick={() => { setActiveDomain('SYSTEM_MAP'); haptic(15); }}
+            className="mobile-domain-btn bg-blue-50 text-blue-600 border border-blue-100"
+          >
+            Blueprint 🗺️
+          </button>
+        </nav>
 
-          {activeTab === 'MODULES' && (
-            <div className="space-y-8 animate-synthesis-in">
-               <nav className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-                  {[
-                    { id: 'posts', label: 'Feed' },
-                    { id: 'projects', label: 'Projekty' },
-                    { id: 'manuals', label: 'Návody' },
-                    { id: 'reports', label: 'Protokoly' }
-                  ].map(t => (
+        <main className="flex-1 overflow-y-auto no-scrollbar relative bg-[#FBFBFD] pb-32">
+          <div className="max-w-4xl mx-auto p-6 sm:p-12 md:p-20 space-y-12 sm:space-y-16">
+            {!selectedSettingGroup ? (
+              <div className="space-y-12 sm:space-y-16 animate-synthesis-in">
+                <header className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-[#007AFF] rounded-full animate-pulse"></div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[#007AFF]">Administrace // {activeDomain}</p>
+                  </div>
+                  <h1 className="text-4xl sm:text-6xl font-black italic tracking-tighter uppercase leading-[0.8]">{domainConfig[activeDomain].label}</h1>
+                  <p className="text-base sm:text-lg text-black/40 font-medium italic max-w-lg">Vyberte funkční blok pro hloubkovou modifikaci parametrů.</p>
+                </header>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
+                  {domainConfig[activeDomain].groups.map(group => (
                     <button 
-                      key={t.id} 
-                      onClick={() => { setActiveCrudTable(t.id as TableName); haptic(5); }}
-                      className={`px-6 h-12 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeCrudTable === t.id ? 'bg-black text-white shadow-lg' : 'bg-black/5 text-black/40 hover:bg-black/10'}`}
+                      key={group.id}
+                      onClick={() => { setSelectedSettingGroup(group.id); haptic(10); }}
+                      className="p-8 sm:p-10 bg-white border border-black/5 rounded-[40px] sm:rounded-[48px] text-left group hover:shadow-2xl hover:-translate-y-2 transition-all shadow-sm flex flex-col justify-between min-h-[240px] sm:min-h-[280px]"
                     >
-                      {t.label}
+                      <div className="space-y-6">
+                        <div className="flex justify-between items-start">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-black/5 rounded-[20px] sm:rounded-[22px] flex items-center justify-center text-2xl sm:text-3xl group-hover:scale-110 group-hover:rotate-3 transition-transform">{group.icon}</div>
+                          <span className="px-3 sm:px-4 py-1 sm:py-1.5 bg-green-50 text-green-600 rounded-full text-[7px] sm:text-[8px] font-black uppercase tracking-widest border border-green-100">Synchronní</span>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="text-xl sm:text-2xl font-black italic tracking-tight uppercase leading-none">{group.title}</h4>
+                          <p className="text-11px sm:text-[12px] font-medium text-black/40 leading-relaxed italic line-clamp-2 sm:line-clamp-none">{group.desc}</p>
+                        </div>
+                      </div>
+                      <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-black/5 flex justify-between items-center opacity-30 group-hover:opacity-100 transition-opacity">
+                         <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">Detailní nastavení Jádra</span>
+                         <span className="text-xl">→</span>
+                      </div>
                     </button>
                   ))}
-               </nav>
-
-               <div className="space-y-3">
-                  {(data[activeCrudTable] as any[]).map((item: any) => (
-                    <div key={item.id} className="p-6 bg-white border border-black/5 rounded-[32px] flex items-center justify-between shadow-sm group hover:border-[#007AFF]/20 transition-all">
-                       <div className="flex-1 overflow-hidden pr-4">
-                          <h4 className="font-black italic text-sm truncate leading-none">{item.title || item.deviceName || item.author}</h4>
-                          <p className="text-[9px] font-bold text-black/20 uppercase tracking-widest mt-1.5">{item.date || item.lastUpdate || 'Permanent'}</p>
-                       </div>
-                       <div className="flex gap-2 shrink-0">
-                          <button onClick={() => alert('Detailní editace modulu připravována v v5.9')} className="w-10 h-10 bg-black/5 rounded-xl flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black hover:text-white">✎</button>
-                          <button onClick={() => handleDeleteItem(activeCrudTable, item.id)} className="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white">✕</button>
-                       </div>
-                    </div>
-                  ))}
-                  {(data[activeCrudTable] as any[]).length === 0 && (
-                    <div className="p-20 text-center border-2 border-dashed border-black/5 rounded-[48px] text-[10px] font-black uppercase text-black/10 tracking-[0.4em]">Tabulka prázdná</div>
-                  )}
-               </div>
-            </div>
-          )}
-
-          {activeTab === 'JOURNAL' && (
-            <div className="space-y-6 animate-synthesis-in">
-               <header className="flex justify-between items-center px-2">
-                  <h3 className="text-2xl font-black italic tracking-tighter">Audit Log</h3>
-                  <button onClick={() => { db.importRaw(JSON.stringify({...data, audit: []})); logAction('AUDIT_LOG_CLEAR'); }} className="text-[9px] font-black uppercase tracking-widest text-red-500 hover:underline">Smazat historii</button>
-               </header>
-               <div className="relative pl-10 space-y-8 before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-black/[0.05]">
-                {data.audit.map((log: AuditLog) => (
-                  <div key={log.id} className="relative group">
-                    <div className={`absolute -left-[27px] top-1 w-4 h-4 rounded-full border-4 border-[#FBFBFD] shadow-md z-10 transition-all group-hover:scale-125 ${log.severity === 'HIGH' ? 'bg-red-500' : 'bg-[#007AFF]'}`}></div>
-                    <div className="bg-white border border-black/5 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-xl transition-all">
-                        <div className="flex justify-between items-start">
-                          <p className="text-[8px] font-black text-[#007AFF] uppercase tracking-widest">{log.category} • {log.timestamp}</p>
-                          <span className={`px-2 py-0.5 rounded-full text-[6px] font-black uppercase ${log.severity === 'HIGH' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>{log.severity}</span>
-                        </div>
-                        <h4 className="text-sm font-black italic leading-tight text-black/80">{log.action}</h4>
-                        <p className="text-[10px] text-black/40 font-bold uppercase tracking-widest italic">Actor: {log.actorName || 'System Kernel'}</p>
-                    </div>
-                  </div>
-                ))}
+                </div>
+                <div className="md:hidden pt-10">
+                  <button onClick={onBack} className="w-full h-14 bg-red-50 text-red-500 rounded-2xl text-[9px] font-black uppercase tracking-widest shadow-sm active:scale-95">Ukončit Sezení Administrace</button>
+                </div>
               </div>
-            </div>
-          )}
-
-          {activeTab === 'KERNEL' && (
-            <div className="space-y-8 animate-synthesis-in max-w-2xl mx-auto">
-               <div className="p-12 bg-black text-white rounded-[56px] space-y-8 shadow-2xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#007AFF]/20 blur-[100px]"></div>
-                  <div className="space-y-2 relative z-10">
-                     <h3 className="text-4xl font-black italic tracking-tighter">Kernel Config</h3>
-                     <p className="text-sm text-white/40 uppercase tracking-widest font-black">Synthesis Alpha v5.8.2-B</p>
-                  </div>
-                  
-                  <div className="grid gap-4 relative z-10">
-                     {[
-                       { id: 'MAINTENANCE', label: 'Maintenance Mode', status: 'INACTIVE' },
-                       { id: 'PUBLIC_REG', label: 'Public Registration', status: 'ACTIVE' },
-                       { id: 'OCR_CORE', label: 'Advanced OCR Neural', status: 'ACTIVE' },
-                       { id: 'DEBUG_LOGS', label: 'Verbose Debugging', status: 'INACTIVE' }
-                     ].map(cfg => (
-                       <button key={cfg.id} className="w-full p-6 bg-white/5 border border-white/10 rounded-3xl flex justify-between items-center group hover:bg-white/10 transition-all">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors">{cfg.label}</span>
-                          <span className={`text-[8px] font-black uppercase px-3 py-1 rounded-full ${cfg.status === 'ACTIVE' ? 'bg-green-500/20 text-green-400' : 'bg-white/10 text-white/30'}`}>{cfg.status}</span>
-                       </button>
-                     ))}
-                  </div>
-               </div>
-               
-               <div className="p-10 border-2 border-dashed border-black/5 rounded-[48px] bg-amber-50/30 text-center space-y-4">
-                  <p className="text-[10px] font-black text-amber-700/60 uppercase tracking-widest italic leading-relaxed">
-                    Změny v Kernelu vyžadují restart Jádra skrze Synthesis Architect Handshake.
-                  </p>
-               </div>
-            </div>
-          )}
-        </div>
-      </main>
-
-      {/* DOCK NAVIGATION */}
-      <nav className="fixed bottom-8 left-6 right-6 h-20 bg-black/95 backdrop-blur-3xl rounded-[36px] border border-white/10 flex items-center justify-around px-4 shadow-2xl z-[1200]">
-        {[
-          { id: 'OVERVIEW', i: '📊' },
-          { id: 'MATRIX', i: '👥' },
-          { id: 'MODULES', i: '📦' },
-          { id: 'FS', i: '📂' },
-          { id: 'JOURNAL', i: '📝' },
-          { id: 'KERNEL', i: '⚙️' }
-        ].map(t => (
-          <button 
-            key={t.id}
-            onClick={() => { setActiveTab(t.id as AdminTab); haptic(5); }}
-            className={`w-11 h-11 rounded-2xl transition-all relative flex items-center justify-center ${activeTab === t.id ? 'bg-white text-black scale-110 shadow-xl' : 'text-white/20 hover:text-white/50'}`}
-          >
-            <span className="text-xl">{t.i}</span>
-            {activeTab === t.id && (
-              <div className="absolute -bottom-2 w-1 h-1 bg-white rounded-full"></div>
+            ) : (
+              <div className="space-y-8 sm:space-y-10 animate-synthesis-in max-w-3xl">
+                <button onClick={() => setSelectedSettingGroup(null)} className="flex items-center gap-3 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black transition-all hover:translate-x-[-4px]">
+                  <span className="text-lg">←</span> Zpět na přehled domény
+                </button>
+                <div className="p-8 sm:p-12 bg-white border border-black/5 rounded-[48px] sm:rounded-[64px] shadow-2xl space-y-10 sm:space-y-12 relative overflow-hidden">
+                   <div className="absolute top-0 right-0 w-64 sm:w-96 h-64 sm:h-96 bg-[#007AFF]/5 blur-[120px] -z-0"></div>
+                   <header className="space-y-4 relative z-10 border-b border-black/5 pb-8 sm:pb-10">
+                      <div className="flex items-center gap-4">
+                         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-black text-white rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl shadow-lg">⚙️</div>
+                         <h2 className="text-2xl sm:text-4xl font-black italic tracking-tighter uppercase">{domainConfig[activeDomain].groups.find(g => g.id === selectedSettingGroup)?.title}</h2>
+                      </div>
+                      <p className="text-sm sm:text-base text-black/40 font-medium italic pl-1">Inženýrská konfigurace parametrů pro {selectedSettingGroup.toUpperCase()}.</p>
+                   </header>
+                   <div className="space-y-8 sm:space-y-10 relative z-10">
+                      <div className="admin-settings-container" dangerouslySetInnerHTML={{ __html: groupContent }} />
+                   </div>
+                   <div className="pt-8 sm:pt-10 border-t border-black/5 flex flex-col sm:flex-row gap-4 relative z-10">
+                      <button onClick={handleSave} disabled={isSaving} className="flex-1 h-14 sm:h-16 bg-black text-white rounded-[20px] sm:rounded-[24px] font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all disabled:opacity-30">{isSaving ? 'Zapisuji do Jádra...' : 'Zapsat změny do Jádra'}</button>
+                      <button onClick={() => setSelectedSettingGroup(null)} className="h-14 sm:h-16 px-10 bg-black/5 text-black rounded-[20px] sm:rounded-[24px] font-black text-[10px] sm:text-xs uppercase tracking-widest hover:bg-black/10 transition-colors">Zrušit</button>
+                   </div>
+                </div>
+              </div>
             )}
-          </button>
-        ))}
-      </nav>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,18 @@
+<div class="space-y-6">
+  <h4 class="text-2xl font-black italic text-black uppercase tracking-tighter">Verbose System Logging</h4>
+  <p class="text-base text-black/60 font-medium leading-relaxed">
+    Tento režim slouží k hloubkovému ladění (debuggingu) Jádra Synthesis. Pokud je aktivní, systém zaznamenává:
+  </p>
+  <ul class="space-y-4">
+    <li class="flex items-center gap-4 text-xs font-bold italic text-black/70">
+       <span class="w-1.5 h-1.5 bg-black rounded-full"></span> Surové neuronové prompty odesílané do Jádra.
+    </li>
+    <li class="flex items-center gap-4 text-xs font-bold italic text-black/70">
+       <span class="w-1.5 h-1.5 bg-black rounded-full"></span> Odpovědi API včetně metadat o latenci.
+    </li>
+    <li class="flex items-center gap-4 text-xs font-bold italic text-black/70">
+       <span class="w-1.5 h-1.5 bg-black rounded-full"></span> Každý pohyb na Event Busu mezi moduly.
+    </li>
+  </ul>
+  <p class="text-xs font-bold text-red-500 italic">⚠️ POZOR: Zapnutí tohoto režimu může způsobit rychlé zaplnění localStorage prohlížeče (Matrix DB Limit).</p>
+</div>

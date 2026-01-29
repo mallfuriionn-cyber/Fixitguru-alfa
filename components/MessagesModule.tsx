@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MOCK_CHATS, MOCK_MESSAGES, MOCK_USERS, MOCK_PROJECTS } from '../constants.tsx';
 import { ChatThread, DirectMessage, User, InteractionType, Project } from '../types.ts';
@@ -126,18 +125,7 @@ export const MessagesModule: React.FC<MessagesModuleProps> = ({ onBack, onKudos 
 
       {view === 'LIST' && (
         <div className="flex-1 flex flex-col overflow-hidden max-w-2xl mx-auto w-full">
-          <header className="px-6 pt-12 pb-6 flex justify-between items-end bg-[#FBFBFD]/80 backdrop-blur-xl shrink-0">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#007AFF] mb-1">Community Messenger</p>
-              <h2 className="text-4xl font-black tracking-tighter italic">Zprávy</h2>
-            </div>
-            <div className="flex items-center gap-3 mb-1">
-              <button onClick={() => { haptic(5); setView('NEW_CHAT'); }} className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center text-lg shadow-lg active:scale-90">＋</button>
-              <button onClick={onBack} className="w-10 h-10 bg-black/5 text-black rounded-full flex items-center justify-center text-sm active:scale-90 transition-transform">✕</button>
-            </div>
-          </header>
-
-          <div className="flex-1 overflow-y-auto px-4 py-2 space-y-2 no-scrollbar pb-32">
+          <div className="flex-1 overflow-y-auto px-4 py-8 space-y-2 no-scrollbar pb-32">
             {threads.map(thread => (
               <button 
                 key={thread.id}

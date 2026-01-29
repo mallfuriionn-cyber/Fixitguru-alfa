@@ -1,0 +1,30 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-red-500/30 whitespace-nowrap italic">Bezpečnostní Limity (V-LIMIT)</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-white border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-red-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Capacitor Discharge Guard</p>
+          <button class="help-btn" onclick="openHelp('voltage-guard')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Vynucená čekací lhůta po detekci napájecích kondenzátorů (SMPS).</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <input type="range" min="1" max="15" step="1" class="w-32 accent-red-500">
+        <span class="text-[11px] font-black font-mono bg-red-50 text-red-600 px-3 py-1 rounded-lg">5 min</span>
+      </div>
+    </div>
+
+    <div class="p-8 bg-red-50 border border-red-100 rounded-[40px] flex items-center justify-between shadow-sm">
+      <div class="space-y-2">
+        <p class="text-lg font-black italic uppercase tracking-tight text-red-700">Strict Safety Abort</p>
+        <p class="text-[11px] text-red-900/40 font-medium italic max-w-sm">Okamžité zablokování sezení při rozpoznání vysokonapěťových stop bez izolace.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+</div>

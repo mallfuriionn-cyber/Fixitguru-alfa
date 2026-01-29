@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -56,20 +55,7 @@ Máte právo na vrácení peněz nebo výměnu za nové kusy v těchto případe
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-12 space-y-12 animate-synthesis-in bg-[#FBFBFD] no-scrollbar">
-      <header className="space-y-6">
-        <div className="flex items-center gap-6">
-          <div className="w-20 h-20 bg-[#007AFF] rounded-[32px] flex items-center justify-center text-white text-4xl shadow-2xl shadow-blue-500/20">⚖️</div>
-          <div>
-            <h2 className="text-4xl font-black tracking-tighter italic leading-none">Právní Štít</h2>
-            <p className="text-[10px] font-black uppercase tracking-[0.6em] text-[#007AFF] mt-2">Synthesis Advocacy Core</p>
-          </div>
-        </div>
-        <p className="text-sm text-black/50 font-medium leading-relaxed max-w-xl italic">
-          FixIt Guru není jen o šroubcích. Je o moci nad vlastním majetkem. Použijte naše právní blueprinty k boji proti nekalým praktikám.
-        </p>
-      </header>
-
+    <div className="p-6 md:p-12 space-y-12 animate-synthesis-in no-scrollbar">
       <section className="bg-black text-white p-10 rounded-[48px] shadow-2xl space-y-6 relative overflow-hidden group hover:scale-[1.02] transition-transform">
         <div className="absolute top-0 right-0 w-48 h-48 bg-[#007AFF] blur-[100px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
@@ -125,10 +111,6 @@ Máte právo na vrácení peněz nebo výměnu za nové kusy v těchto případe
         </p>
       </div>
 
-      <button onClick={onBack} className="w-full py-8 glass rounded-[36px] font-black text-xs uppercase tracking-[0.3em] text-black/20 hover:text-black transition-all active:scale-95 shadow-sm">
-        Zpět k Terminálu
-      </button>
-      
       <div className="pt-10 text-center pb-20 opacity-10">
         <p className="text-[9px] font-black uppercase tracking-[0.5em] italic text-black">{COPYRIGHT}</p>
       </div>

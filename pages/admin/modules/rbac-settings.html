@@ -1,0 +1,29 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Permission Matrix</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="p-8 bg-white border border-black/5 rounded-[40px] space-y-4 shadow-sm">
+        <p class="text-[10px] font-black uppercase text-purple-600 tracking-widest">Architect Override</p>
+        <p class="text-xs text-black/40 font-medium leading-relaxed italic">Umožňuje uživatelům s rolí ARCHITECT měnit vnitřní algoritmy Jádra bez revizního cyklu.</p>
+        <input type="checkbox" checked class="admin-toggle">
+      </div>
+      <div class="p-8 bg-white border border-black/5 rounded-[40px] space-y-4 shadow-sm">
+        <p class="text-[10px] font-black uppercase text-blue-600 tracking-widest">Strict Role Validation</p>
+        <p class="text-xs text-black/40 font-medium leading-relaxed italic">Vynucovat kontrolu oprávnění na každém uzlu navigace (Doporučeno).</p>
+        <input type="checkbox" checked class="admin-toggle">
+      </div>
+    </div>
+
+    <div class="p-8 bg-black text-white rounded-[40px] flex items-center justify-between shadow-2xl">
+      <div class="space-y-1">
+        <h4 class="text-xl font-black italic tracking-tighter uppercase">Hierarchy Lockdown</h4>
+        <p class="text-[11px] text-white/40 italic">Zablokovat povyšování uživatelů bez Hardware Handshaku.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+</div>

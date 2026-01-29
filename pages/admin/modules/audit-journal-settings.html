@@ -1,0 +1,34 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Auditní Integrita</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-black/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Verbose System Logging</p>
+          <button class="help-btn" onclick="openHelp('audit-verbose')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Zapisuje každý vnitřní proces, API volání a změnu stavu do Journalu. Zvyšuje nároky na lokální paměť.</p>
+      </div>
+      <input type="checkbox" class="admin-toggle">
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-black/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Audit Snapshot Interval</p>
+          <button class="help-btn" onclick="openHelp('audit-snapshot')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Jak často se provádí záloha systémových matric a uživatelského postupu.</p>
+      </div>
+      <select class="h-12 bg-white border border-black/10 rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none shadow-sm">
+        <option>Každá změna (Realtime)</option>
+        <option selected>Po každém kroku (Step-Lock)</option>
+        <option>Při odhlášení (Manual)</option>
+      </select>
+    </div>
+  </section>
+</div>

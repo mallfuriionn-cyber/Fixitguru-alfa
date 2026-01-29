@@ -26,7 +26,7 @@ export interface RoleConfig {
 export const RBAC_CONFIG: Record<UserRole, RoleConfig> = {
   [UserRole.ARCHITECT]: {
     role: UserRole.ARCHITECT,
-    label: 'Architekt',
+    label: 'Architekt Jádra',
     icon: '∞',
     color: 'from-purple-600 to-indigo-600',
     minLevel: 99,
@@ -36,7 +36,7 @@ export const RBAC_CONFIG: Record<UserRole, RoleConfig> = {
       'BYPASS_ENCRYPTION', 'EDIT_ALL_MATRICES', 'EDIT_OWN_MATRIX', 
       'START_LEGAL_PROCESS', 'VIEW_AUDIT_LOGS', 'EXECUTE_CODE_UPDATE'
     ],
-    description: 'Nejvyšší autorita. Plná kontrola nad Jádrem a Matrixem.'
+    description: 'Nejvyšší autorita (Mallfurion). Plná kontrola nad Jádrem.'
   },
   [UserRole.GURU]: {
     role: UserRole.GURU,
@@ -49,7 +49,7 @@ export const RBAC_CONFIG: Record<UserRole, RoleConfig> = {
       'ACCESS_KERNEL', 'EDIT_SYSTEM_CONFIG', 'EDIT_ALL_MATRICES', 
       'EDIT_OWN_MATRIX', 'START_LEGAL_PROCESS', 'VIEW_AUDIT_LOGS'
     ],
-    description: 'Systémový expert. Správa procesů a validace dat v Matrixu.'
+    description: 'Systémový expert. Správa procesů a validace dat.'
   },
   [UserRole.OPERATOR]: {
     role: UserRole.OPERATOR,
@@ -61,7 +61,7 @@ export const RBAC_CONFIG: Record<UserRole, RoleConfig> = {
     permissions: [
       'EDIT_OWN_MATRIX', 'START_LEGAL_PROCESS', 'VIEW_AUDIT_LOGS'
     ],
-    description: 'Procesor dat. Provádí rutinní úkony a kontrolu kvality.'
+    description: 'Zpracovatel dat. Provádí rutinní úkony a podporu.'
   },
   [UserRole.SUBJECT]: {
     role: UserRole.SUBJECT,
@@ -73,17 +73,17 @@ export const RBAC_CONFIG: Record<UserRole, RoleConfig> = {
     permissions: [
       'EDIT_OWN_MATRIX', 'START_LEGAL_PROCESS'
     ],
-    description: 'Standardní uživatel systému Synthesis OS.'
+    description: 'Standardní uživatel s plným přístupem k osobnímu trezoru.'
   },
   [UserRole.HOST]: {
     role: UserRole.HOST,
-    label: 'Host',
+    label: 'Host (Návštěvník)',
     icon: '👀',
     color: 'from-gray-300 to-gray-400',
     minLevel: 0,
     maxLevel: 0,
     permissions: [],
-    description: 'Pozorovatel. Omezený přístup k veřejným modulům.'
+    description: 'Anonymní pozorovatel s omezeným přístupem.'
   },
   /* Zpětná kompatibilita */
   [UserRole.ADMINISTRATOR]: {
@@ -98,7 +98,7 @@ export const RBAC_CONFIG: Record<UserRole, RoleConfig> = {
   },
   [UserRole.SUBSCRIBER]: {
     role: UserRole.SUBSCRIBER,
-    label: 'Uživatel',
+    label: 'Subscriber',
     icon: '👤',
     color: 'from-slate-500 to-slate-600',
     minLevel: 1,

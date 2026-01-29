@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <p class="label">Synthesis OS // Core Node</p>
+        <h1>Budoucnost <br>je opravena.</h1>
+        <p class="tagline">Vítejte v Jádru Fixit Guru. Vyberte modul pro zahájení asistence.</p>
+    </header>
+
+    <div class="grid">
+        <div class="card" onclick="parent.postMessage('open:manuals', '*')">
+            <span class="card-icon">📂</span>
+            <h3>Manual Hub</h3>
+            <p>Neurální vyhledávání a digitalizace technických schémat z celého světa.</p>
+        </div>
+        <div class="card" onclick="parent.postMessage('open:workshop', '*')">
+            <span class="card-icon">🛠️</span>
+            <h3>Dílna Lucie</h3>
+            <p>Metodika Step-Lock. Řízený postup demontáže bez rizika ztráty šroubků.</p>
+        </div>
+        <div class="card" onclick="parent.postMessage('open:legal', '*')">
+            <span class="card-icon">⚖️</span>
+            <h3>Právní Štít</h3>
+            <p>JUDY Advocacy. Ochrana práv spotřebitele a generování precizních listin.</p>
+        </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>

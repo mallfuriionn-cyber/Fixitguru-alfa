@@ -1,0 +1,14 @@
+
+{
+  "moduleName": "System Blueprint & Manifest",
+  "version": "7.0.0-alpha",
+  "author": "Mallfurion",
+  "enabled": true,
+  "category": "admin",
+  "features": [
+    "Neural Architecture Query",
+    "Luxury PDF Export",
+    "UTF-8 Technical TXT Manifest",
+    "Mobile Responsive Viewport"
+  ]
+}

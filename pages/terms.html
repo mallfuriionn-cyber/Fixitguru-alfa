@@ -1,59 +1,172 @@
 
-<div class="space-y-12 animate-synthesis-in pb-32 text-[#1D1D1F]">
-  <!-- Header -->
+<div class="space-y-16 animate-synthesis-in pb-32 text-[#1D1D1F] max-w-4xl mx-auto">
+  <!-- Protocol Identification Header -->
   <header class="relative p-12 bg-black text-white rounded-[56px] overflow-hidden shadow-2xl">
     <div class="absolute top-0 right-0 w-96 h-96 bg-[#007AFF]/20 blur-[120px] rounded-full"></div>
-    <div class="relative z-10 space-y-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/20">
-        <span class="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-pulse"></span>
-        <span class="text-[9px] font-black uppercase tracking-widest text-white/60">Synthesis Legal Protocol v5.7</span>
+    <div class="relative z-10 space-y-6">
+      <div class="flex justify-between items-start">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/20">
+          <span class="w-1.5 h-1.5 bg-[#007AFF] rounded-full animate-pulse"></span>
+          <span class="text-[9px] font-black uppercase tracking-widest text-white/60">LEGAL_PROTOCOL / SYN-LP-05</span>
+        </div>
+        <div class="text-right">
+          <p class="text-[10px] font-bold font-mono text-white/30">STATUS: MANDATORY_READ</p>
+          <p class="text-[10px] font-bold font-mono text-white/30">REV: 2026.02.19-ALPHA</p>
+        </div>
       </div>
-      <h2 class="text-5xl font-black tracking-tighter italic leading-none">Právní Ujednání</h2>
-      <p class="text-sm text-white/40 font-medium uppercase tracking-[0.2em]">Před vstupem do Jádra FixIt Guru</p>
+      
+      <div class="space-y-2">
+        <h2 class="text-6xl font-black tracking-tighter italic leading-none">Právní <br/>Ujednání</h2>
+        <p class="text-xs font-black uppercase tracking-[0.5em] text-[#007AFF] opacity-80">Hloubkový Protokol Jádra FixIt Guru</p>
+      </div>
     </div>
   </header>
 
-  <!-- Content Sections -->
-  <div class="max-w-3xl mx-auto space-y-10 px-4">
-    
-    <section class="space-y-4">
-      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF]">1. Akceptace Rizika Opravy</h3>
-      <div class="p-8 bg-white border border-black/5 rounded-[40px] shadow-sm space-y-4 leading-relaxed text-sm font-medium text-black/70">
-        <p>FixIt Guru je asistenční nástroj. Veškeré úkony prováděné na hardwaru (elektronika, mechanika, zahrada) provádí uživatel na **vlastní nebezpečí**. Studio Synthesis ani entita Mallfurion nenesou odpovědnost za:</p>
-        <ul class="list-disc pl-5 space-y-2">
-          <li>Zkraty, požáry nebo poškození majetku vzniklé nesprávným postupem.</li>
-          <li>Ztrátu záruky u výrobce zařízení v důsledku neautorizovaného zásahu.</li>
-          <li>Úrazy elektrickým proudem (vždy dodržujte bezpečnostní pokyny Káji a Lucie).</li>
-        </ul>
-      </div>
-    </section>
+  <!-- Navigation anchors for the terms -->
+  <nav class="flex flex-wrap gap-3 px-4">
+    {['Obecné zásady', 'Protokol SVID', 'Dílna & Bezpečnost', 'Asistence JUDY', 'Ochrana Dat'].map(t => (
+      <span class="px-4 py-2 bg-black/5 rounded-full text-[9px] font-black uppercase tracking-widest text-black/40 border border-black/5"># {t}</span>
+    ))}
+  </nav>
 
-    <section class="space-y-4">
-      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF]">2. SVID & Správa Identity</h3>
-      <div class="p-8 bg-white border border-black/5 rounded-[40px] shadow-sm space-y-4 leading-relaxed text-sm font-medium text-black/70">
-        <p>Využitím **Synthesis Virtual ID (SVID)** souhlasíte s tím, že vaše data jsou šifrována lokálně (SEE-256). Systém JUDY používá tyto údaje k automatizaci právních dokumentů.</p>
-        <p>V případě zvolení "Odkladu pro Judy" (Anonymní režim) bere uživatel na vědomí, že dokumenty nemusí splňovat formální náležitosti pro právní spory bez jejich ručního doplnění.</p>
-      </div>
-    </section>
-
-    <section class="space-y-4">
-      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF]">3. Duševní Vlastnictví Mallfurion</h3>
-      <div class="p-8 bg-white border border-black/5 rounded-[40px] shadow-sm space-y-4 leading-relaxed text-sm font-medium text-black/70">
-        <p>Všechny algoritmy Jádra, metodiky Step-Lock a vizuální rozhraní Synthesis OS jsou majetkem Studio Synthesis. Uživatel získává nevýhradní právo využívat tyto nástroje pro osobní i komunitní účely oprav.</p>
-      </div>
-    </section>
-
-    <section class="p-10 border-2 border-dashed border-red-200 rounded-[48px] bg-red-50/30 text-center space-y-4">
-      <div class="text-3xl">⚠️</div>
-      <h4 class="text-lg font-black text-red-700 italic tracking-tight uppercase">Varování Jádra</h4>
-      <p class="text-xs font-bold text-red-900/60 leading-relaxed max-w-md mx-auto">
-        Práce na zařízeních pod napětím 230V může být smrtelná. Pokud nejste kvalifikovaný elektrotechnik, používejte FixIt Guru pouze jako teoretického rádce a fyzickou práci svěřte odborníkovi.
-      </p>
-    </section>
-
-    <div class="pt-12 text-center space-y-4 border-t border-black/5">
-      <p class="text-[10px] font-black uppercase tracking-[0.6em] italic text-black/20">Datum poslední revize: 18. Února 2026</p>
-      <p class="text-[10px] font-black uppercase tracking-[0.8em] italic text-[#1D1D1F]">© Studio Synthesis | Mallfurion Identity</p>
+  <!-- Section 01: Core Principles -->
+  <section class="space-y-8">
+    <div class="flex items-center gap-4 px-4">
+      <span class="font-mono text-[10px] font-bold opacity-20">01 /</span>
+      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF] whitespace-nowrap">Obecné zásady</h3>
+      <div class="h-px bg-[#007AFF]/10 w-full"></div>
     </div>
-  </div>
+
+    <div class="p-10 bg-white border border-black/5 rounded-[48px] shadow-sm space-y-6">
+      <div class="prose-synthesis">
+        <p class="text-base font-bold italic leading-relaxed text-black/80">
+          FixIt Guru je asistenční vrstva Synthesis OS. Tato platforma neposkytuje akreditované právní ani elektrotechnické služby v komerčním smyslu, ale expertní AI vedení.
+        </p>
+        <div class="grid gap-4 mt-8">
+          <div class="flex gap-4 items-start p-6 bg-[#FBFBFD] rounded-[32px] border border-black/5">
+            <span class="w-6 h-6 bg-black text-white rounded-lg flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5 italic">A</span>
+            <div class="space-y-1">
+              <p class="text-sm font-black italic">Vlastní Nebezpečí</p>
+              <p class="text-xs text-black/50 leading-relaxed">Uživatel nese plnou odpovědnost za integritu rozebíraného hardwaru a případné zkraty.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start p-6 bg-[#FBFBFD] rounded-[32px] border border-black/5">
+            <span class="w-6 h-6 bg-black text-white rounded-lg flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5 italic">B</span>
+            <div class="space-y-1">
+              <p class="text-sm font-black italic">Ztráta Záruky</p>
+              <p class="text-xs text-black/50 leading-relaxed">Berte na vědomí, že narušení pečetí výrobce vede k okamžitému zániku smluvní záruky.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 02: SVID & Identity Protocol -->
+  <section class="space-y-8">
+    <div class="flex items-center gap-4 px-4">
+      <span class="font-mono text-[10px] font-bold opacity-20">02 /</span>
+      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF] whitespace-nowrap">Protokol SVID & Identita</h3>
+      <div class="h-px bg-[#007AFF]/10 w-full"></div>
+    </div>
+
+    <div class="p-10 bg-white border border-black/5 rounded-[48px] shadow-sm space-y-8">
+      <p class="text-sm font-medium leading-relaxed text-black/70 italic">
+        Využitím <span class="font-black italic text-black">Synthesis Virtual ID (SVID)</span> vstupujete do decentralizovaného režimu správy identity.
+      </p>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-6 bg-blue-50/50 rounded-3xl border border-blue-100 space-y-3">
+          <h5 class="text-xs font-black uppercase tracking-widest text-blue-700">Šifrování SEE-256</h5>
+          <p class="text-[11px] text-blue-900/60 leading-relaxed font-medium">Vaše naskenované doklady jsou transformovány do nečitelné matice přímo v prohlížeči. Nikdy nevidíme vaše rodné číslo v surové podobě.</p>
+        </div>
+        <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200 space-y-3">
+          <h5 class="text-xs font-black uppercase tracking-widest text-slate-700">Anonymní Proxy</h5>
+          <p class="text-[11px] text-slate-900/60 leading-relaxed font-medium">V režimu anonymity JUDY nahradí vaše jméno v dokumentech tagem `[...]`. Odpovědnost za ruční doplnění nese uživatel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 03: Workshop Safety (LUCIE/KAJA) -->
+  <section class="p-12 bg-red-50 border border-red-100 rounded-[56px] space-y-10 relative overflow-hidden shadow-sm">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-red-500/5 blur-[100px]"></div>
+    
+    <div class="flex items-center gap-6 relative z-10">
+      <div class="w-16 h-16 bg-red-100 rounded-[24px] flex items-center justify-center text-3xl shadow-inner border border-red-200">⚠️</div>
+      <h4 class="text-3xl font-black italic tracking-tighter text-red-700 uppercase leading-none">Bezpečnostní <br/>Mandát Dílny</h4>
+    </div>
+
+    <div class="space-y-6 relative z-10">
+      <p class="text-base font-bold text-red-900/60 leading-relaxed max-w-2xl">
+        Interakce s agenty LUCIE (metodika) a KAREL (technika) podléhá těmto striktním pravidlům:
+      </p>
+      <ul class="list-none space-y-4 p-0">
+        <li class="flex gap-4 items-start">
+          <span class="w-5 h-5 bg-red-600 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0 mt-1">1</span>
+          <p class="text-sm font-bold text-red-800">Práce na SMPS (napájecí zdroje) pod 230V je zakázána bez příslušné vyhlášky 50 (nyní NV 194/2022).</p>
+        </li>
+        <li class="flex gap-4 items-start">
+          <span class="w-5 h-5 bg-red-600 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0 mt-1">2</span>
+          <p class="text-sm font-bold text-red-800">Agenti slouží jako teoretická příručka. Nejedná se o certifikované revizní techniky.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section 04: JUDY Advocacy Engine -->
+  <section class="space-y-8">
+    <div class="flex items-center gap-4 px-4">
+      <span class="font-mono text-[10px] font-bold opacity-20">03 /</span>
+      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF] whitespace-nowrap">Asistence JUDY</h3>
+      <div class="h-px bg-[#007AFF]/10 w-full"></div>
+    </div>
+
+    <div class="p-10 bg-white border border-black/5 rounded-[48px] shadow-sm space-y-6">
+      <div class="prose-synthesis">
+        <p class="text-sm font-medium leading-relaxed text-black/60">
+          JUDY generuje právní listiny na základě neurální analýzy českého právního řádu (NOZ).
+        </p>
+        <div class="bg-black text-white p-8 rounded-[36px] space-y-4 shadow-xl">
+           <h5 class="text-xs font-black uppercase tracking-widest text-[#007AFF]">Právní disklaimer:</h5>
+           <p class="text-[11px] text-white/50 leading-relaxed italic">
+             "JUDY není advokát ani koncipient. Výstupy jsou pracovní koncepty. Před odesláním protistraně nebo soudu si dokument nechte zkontrolovat osobou s právní způsobilostí. Studio Synthesis neodpovídá za prohrané spory vyvolané nesprávnou interpretací zákonů AI jádrem."
+           </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 05: Data Persistence -->
+  <section class="space-y-8">
+    <div class="flex items-center gap-4 px-4">
+      <span class="font-mono text-[10px] font-bold opacity-20">04 /</span>
+      <h3 class="text-[11px] font-black uppercase tracking-[0.4em] text-[#007AFF] whitespace-nowrap">Ukládání & Mazání</h3>
+      <div class="h-px bg-[#007AFF]/10 w-full"></div>
+    </div>
+
+    <div class="p-10 bg-[#FBFBFD] border border-black/5 rounded-[48px] space-y-6">
+      <p class="text-sm font-bold text-black/40 uppercase tracking-widest text-center">Princip Synthesis Core:</p>
+      <div class="grid md:grid-cols-2 gap-8 pt-4">
+        <div class="space-y-2">
+          <p class="text-xs font-black italic">Trvalý zápis</p>
+          <p class="text-[11px] text-black/50 leading-relaxed">Pouze pokud uživatel explicitně klikne na "Uložit do Jádra". Tato data jsou v šifrovaném Trezoru.</p>
+        </div>
+        <div class="space-y-2">
+          <p class="text-xs font-black italic">Sezónní paměť</p>
+          <p class="text-[11px] text-black/50 leading-relaxed">Běžné chaty jsou po 24 hodinách od poslední aktivity anonymizovány v globálním neuronovém datasetu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Specification -->
+  <footer class="pt-20 text-center space-y-6">
+    <div class="inline-flex gap-8 opacity-20 text-[8px] font-mono font-bold uppercase tracking-[0.3em]">
+      <span>DOC_ID: TERMS-SYN-2026-ALPHA</span>
+      <span>NODE: SYN-PRG-LEGAL-01</span>
+      <span>JURISDICTION: EU_GLOBAL</span>
+    </div>
+    <p class="text-[9px] font-black uppercase tracking-[0.8em] italic text-[#1D1D1F] opacity-10">© 2026 Studio Synthesis | Mallfurion Identity</p>
+  </footer>
 </div>

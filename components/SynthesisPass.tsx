@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { User, Language } from '../types.ts';
 import { UI_TEXTS } from '../constants.tsx';
@@ -30,7 +29,7 @@ export const SynthesisPass: React.FC<SynthesisPassProps> = ({ user, lang, onClos
         <div className="flex justify-between items-start mb-8 relative z-10">
           <div className="w-12 h-12 bg-black text-white rounded-xl flex items-center justify-center text-xl font-black shadow-lg">S</div>
           <div className="text-right">
-            <p className="text-[7px] font-black uppercase tracking-[0.3em] text-[#007AFF]">{ui.synthesisPass}</p>
+            <p className="text-[7px] font-black uppercase tracking-[0.3em] text-[#007AFF]">Synthesis ID Card</p>
             <p className="text-[10px] font-black italic text-[#1D1D1F] tracking-tighter">Verified Identity</p>
           </div>
         </div>

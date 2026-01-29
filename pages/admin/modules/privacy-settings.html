@@ -1,0 +1,33 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Logika Anonymizace</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-white border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-blue-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Auto-Purge Delay</p>
+          <button class="help-btn" onclick="openHelp('privacy-purge')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Časový interval po kterém dojde k automatickému smazání kontextu relace z Jádra.</p>
+      </div>
+      <select class="h-12 bg-black/5 border-none rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none">
+        <option>Okamžitě</option>
+        <option selected>24 Hodin</option>
+        <option>7 Dní</option>
+      </select>
+    </div>
+
+    <div class="p-8 bg-white border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-blue-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Zero-Knowledge Vault</p>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Vynutit dešifrování dat výhradně na klientské straně pomocí Hardware Handshaku.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+</div>

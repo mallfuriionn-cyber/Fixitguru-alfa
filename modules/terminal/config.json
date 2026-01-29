@@ -1,0 +1,9 @@
+
+{
+  "id": "terminal",
+  "name": "Guru Terminal",
+  "version": "1.0.0",
+  "category": "core",
+  "enabled": true,
+  "permissions": ["all"]
+}

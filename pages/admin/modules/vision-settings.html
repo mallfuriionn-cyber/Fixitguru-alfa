@@ -1,0 +1,33 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Neural Vision Engine</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-white border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-emerald-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">OCR Sensitivity</p>
+          <button class="help-btn" onclick="openHelp('vision-ocr')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Úroveň důslednosti při čtení rozmazaných nebo poškozených výrobních štítků.</p>
+      </div>
+      <select class="h-12 bg-black/5 border-none rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none">
+        <option>Fast (Low Res)</option>
+        <option selected>Standard (Balanced)</option>
+        <option>Ultra (Multi-pass)</option>
+      </select>
+    </div>
+
+    <div class="p-8 bg-white border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-emerald-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Boardview Analysis</p>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Automaticky se pokusit identifikovat komponenty na PCB z pořízené fotografie.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+</div>

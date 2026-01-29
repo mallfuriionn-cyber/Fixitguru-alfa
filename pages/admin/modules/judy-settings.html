@@ -1,0 +1,55 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Legislativní Mozek</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-blue-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Law Dataset Version</p>
+          <button class="help-btn" onclick="openHelp('judy-dataset')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Verze neuronového modelu vycvičeného na právních normách a judikatuře.</p>
+      </div>
+      <select class="h-12 bg-white border border-black/10 rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none shadow-sm">
+        <option>NOZ 2025 (Stable)</option>
+        <option selected>NOZ 2026 (Repair-Right Alpha)</option>
+        <option>EU General Regulation</option>
+      </select>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-blue-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Search Grounding Depth</p>
+          <button class="help-btn" onclick="openHelp('judy-search')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Určuje hloubku a čas vyhledávání aktuálních informací přes Google Search (ceny, termíny, pobočky).</p>
+      </div>
+      <select class="h-12 bg-white border border-black/10 rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none shadow-sm">
+        <option>Rychlý (TOP 3)</option>
+        <option selected>Hloubkový (Důsledná rešerše)</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Vizuální Mandát</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-blue-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Synthesis Seal v9</p>
+          <button class="help-btn" onclick="openHelp('judy-seal')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Automaticky vkládat modrou pečeť verifikace na generované PDF dokumenty.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+</div>

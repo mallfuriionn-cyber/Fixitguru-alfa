@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface NavItem {
@@ -16,8 +15,8 @@ interface BottomNavProps {
 export const BottomNav: React.FC<BottomNavProps> = ({ activeId, onSelect, onHome }) => {
   const items: NavItem[] = [
     { id: 'HUB', label: 'Domů', icon: '🏠' },
-    { id: 'SOCIAL', label: 'Hub', icon: '🌐' },
-    { id: 'WORKFLOW', label: 'Dílna', icon: '🛠️' },
+    { id: 'CLAIM_GUIDE', label: 'Reklamace', icon: '📋' },
+    { id: 'LUCIE_WORKSHOP', label: 'Dílna', icon: '🛠️' },
     { id: 'MESSAGES', label: 'Zprávy', icon: '💬' },
     { id: 'PROFILE', label: 'Profil', icon: '👤' }
   ];

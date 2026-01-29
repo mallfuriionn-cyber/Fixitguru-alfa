@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { User, UserRole, SynthesisPassData } from '../types.ts';
 import { db } from '../services/storageService.ts';
 import { cookies } from '../utils/cookieManager.ts';
 import { SynthesisPass } from './SynthesisPass.tsx';
 import { COPYRIGHT } from '../constants.tsx';
+import { networkService } from '../services/networkService.ts';
 
 interface RegistrationModuleProps {
   onLogin: (user: User | null) => void;
@@ -33,21 +33,31 @@ export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin,
   const [password, setPassword] = useState('');
   const [storedUser, setStoredUser] = useState<User | null>(null);
   const [isRecognized, setIsRecognized] = useState(false);
+  const [isSilentHandshake, setIsSilentHandshake] = useState(false);
 
   useEffect(() => {
-    const lastUserStr = localStorage.getItem('synthesis_last_user');
-    if (lastUserStr) {
-      try {
-        const u = JSON.parse(lastUserStr);
-        const dbUser = db.getById('users', u.id);
-        if (dbUser) { 
-          setStoredUser(dbUser); 
-          setIsRecognized(true); 
-        }
-      } catch (e) { 
-        console.error("Stored user parse error"); 
+    const checkSilentHandshake = async () => {
+      const lastUserStr = localStorage.getItem('synthesis_last_user');
+      if (lastUserStr) {
+        try {
+          const u = JSON.parse(lastUserStr);
+          const dbUser = db.getById('users', u.id);
+          if (dbUser) { 
+            setStoredUser(dbUser); 
+            setIsRecognized(true); 
+            
+            const isHome = await networkService.isTrustedEnvironment(dbUser);
+            if (isHome) {
+              setIsSilentHandshake(true);
+              setTimeout(() => {
+                onLogin(dbUser);
+              }, 1500);
+            }
+          }
+        } catch (e) { console.error("Handshake fail"); }
       }
-    }
+    };
+    checkSilentHandshake();
   }, []);
 
   const haptic = (pattern: number | number[] = 10) => {
@@ -57,20 +67,15 @@ export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin,
   const handleFastPass = () => {
     haptic([10, 60]);
     setIsProcessing(true);
-    
-    // Priorita 1: Poslední přihlášený uživatel
     if (storedUser) {
       setTimeout(() => onLogin(storedUser), 400);
       return;
     }
-
-    // Priorita 2: Hardcoded Architect (Mallfurion)
     const architect = db.getById('users', 'u-mallfurion');
     if (architect) {
       setTimeout(() => onLogin(architect), 400);
       return;
     }
-
     setIsRecognized(false);
     setIsProcessing(false);
   };
@@ -112,45 +117,42 @@ export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin,
   const handleSynthesisLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginInput.trim() || !password.trim()) return;
-    
     haptic([10, 30]);
     setIsProcessing(true);
-    
     cookies.set(REMEMBER_EMAIL_KEY, loginInput, 90);
-    
-    const isOwner = loginInput.toLowerCase() === 'sarji@seznam.cz' || 
-                    loginInput.toLowerCase() === 'mallfuriionn@gmail.com' ||
-                    loginInput.toLowerCase() === 'mallfurion';
-
+    const isOwner = loginInput.toLowerCase() === 'sarji@seznam.cz' || loginInput.toLowerCase() === 'mallfuriionn@gmail.com' || loginInput.toLowerCase() === 'mallfurion';
     setTimeout(() => {
       const allUsers = db.getAll('users');
-      const existingUser = allUsers.find(u => 
-        u.email?.toLowerCase() === loginInput.toLowerCase() || 
-        u.username?.toLowerCase() === loginInput.toLowerCase() ||
-        u.secretId?.toLowerCase() === loginInput.toLowerCase() ||
-        u.virtualHash?.toLowerCase() === loginInput.toLowerCase()
-      );
-
+      const existingUser = allUsers.find(u => u.email?.toLowerCase() === loginInput.toLowerCase() || u.username?.toLowerCase() === loginInput.toLowerCase() || u.secretId?.toLowerCase() === loginInput.toLowerCase() || u.virtualHash?.toLowerCase() === loginInput.toLowerCase());
       if (existingUser) {
-        if (isOwner) {
-            existingUser.role = UserRole.ARCHITECT;
-            existingUser.level = 999;
-            db.update('users', existingUser.id, existingUser);
-        }
+        if (isOwner) { existingUser.role = UserRole.ARCHITECT; existingUser.level = 999; db.update('users', existingUser.id, existingUser); }
         localStorage.setItem('synthesis_last_user', JSON.stringify(existingUser));
         onLogin(existingUser);
         return;
       }
-
-      if (isOwner) {
-        const arch = db.getById('users', 'u-mallfurion');
-        if (arch) { onLogin(arch); return; }
-      }
-
+      if (isOwner) { const arch = db.getById('users', 'u-mallfurion'); if (arch) { onLogin(arch); return; } }
       setIsProcessing(false);
       alert("Identita nenalezena. Prosím registrujte se.");
     }, 1200);
   };
+
+  if (isSilentHandshake && storedUser) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center p-10 animate-synthesis-in bg-[#FBFBFD]">
+        <div className="text-center space-y-8 w-full max-w-sm">
+           <div className="w-24 h-24 bg-blue-50 text-[#007AFF] rounded-[40px] flex items-center justify-center text-5xl mx-auto shadow-xl animate-bounce">🏠</div>
+           <div className="space-y-2">
+             <h1 className="text-3xl font-black italic tracking-tighter">Safe Network Detected</h1>
+             <p className="text-[10px] font-black uppercase text-[#007AFF] tracking-widest">Inicializuji důvěryhodné spojení...</p>
+           </div>
+           <div className="w-full h-1 bg-black/5 rounded-full overflow-hidden">
+             <div className="h-full bg-[#007AFF] animate-[loading_1.5s_ease-in-out]"></div>
+           </div>
+           <p className="text-xs text-black/40 font-bold italic">Vítejte doma, {storedUser.name}.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (isRecognized && storedUser) {
     return (
@@ -161,11 +163,9 @@ export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin,
              <h1 className="text-4xl font-black italic tracking-tighter text-[#1D1D1F]">Vítejte zpět, {storedUser.name}</h1>
              <p className="text-[10px] font-black uppercase text-black/20 tracking-widest leading-relaxed">Synthesis Identity Recovery Protokol aktivní.</p>
           </div>
-          
           <div className="cursor-pointer active:scale-95 transition-transform" onClick={() => { haptic(5); onLogin(storedUser); }}>
             <SynthesisPass user={storedUser} lang="cs" />
           </div>
-          
           <div className="space-y-3">
             <button onClick={() => onLogin(storedUser)} className="w-full h-16 bg-black text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all">Vstoupit do Jádra</button>
             <button onClick={() => { haptic(5); localStorage.removeItem('synthesis_last_user'); setIsRecognized(false); setStoredUser(null); }} className="w-full h-12 text-[9px] font-black uppercase text-black/30 hover:text-black transition-colors">Použít jinou Identitu</button>
@@ -177,25 +177,18 @@ export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin,
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-8 animate-synthesis-in bg-[#FBFBFD] overflow-y-auto no-scrollbar relative">
-      <button 
-        onClick={handleFastPass}
-        className="fixed top-8 right-8 w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center text-lg shadow-xl active:scale-90 transition-all z-[100] group"
-        title="Synthesis FastPass"
-      >
+      <button onClick={handleFastPass} className="fixed top-8 right-8 w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center text-lg shadow-xl active:scale-90 transition-all z-[100] group" title="Synthesis FastPass">
         <span className="group-hover:animate-pulse">✦</span>
       </button>
-
       <div className="flex flex-col items-center space-y-10 w-full max-w-sm">
         <div className="relative group">
           <div className="absolute inset-0 bg-[#007AFF]/20 blur-2xl rounded-full scale-150 group-hover:bg-[#007AFF]/40 transition-all duration-700"></div>
           <div className="w-20 h-20 bg-black text-white rounded-[28px] flex items-center justify-center text-5xl shadow-2xl border border-black/5 italic relative z-10 font-black">S</div>
         </div>
-
         <div className="text-center space-y-2">
           <h1 className="text-5xl font-black italic tracking-tighter text-[#1D1D1F]">FixIt Guru</h1>
           <p className="text-[9px] font-black uppercase tracking-[0.5em] text-[#007AFF]">Synthesis OS v5.8 Alpha</p>
         </div>
-
         <form onSubmit={handleSynthesisLogin} className="space-y-6 w-full">
           <div className="space-y-4">
             <div className="space-y-2">
@@ -205,54 +198,28 @@ export const RegistrationModule: React.FC<RegistrationModuleProps> = ({ onLogin,
                   <span className="text-[7px] font-black uppercase text-[#007AFF] animate-pulse">Architect Detected</span>
                 )}
               </div>
-              <input 
-                type="text" 
-                autoFocus
-                value={loginInput} 
-                onChange={e => setLoginInput(e.target.value)} 
-                placeholder="E-mail / SID-XXXXXX" 
-                className="w-full h-14 bg-white border border-black/5 rounded-2xl px-6 outline-none font-bold text-sm shadow-sm focus:ring-4 ring-[#007AFF]/5 transition-all" 
-              />
+              <input type="text" autoFocus value={loginInput} onChange={e => setLoginInput(e.target.value)} placeholder="E-mail / SID-XXXXXX" className="w-full h-14 bg-white border border-black/5 rounded-2xl px-6 outline-none font-bold text-sm shadow-sm focus:ring-4 ring-[#007AFF]/5 transition-all" />
             </div>
-
             <div className="space-y-2">
               <div className="flex justify-between items-end px-4">
                 <label className="text-[8px] font-black uppercase tracking-widest text-black/20">Bezpečnostní Klíč</label>
               </div>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={e => setPassword(e.target.value)} 
-                placeholder="••••••••••••" 
-                className="w-full h-14 bg-white border border-black/5 rounded-2xl px-6 outline-none font-bold text-sm shadow-sm focus:ring-4 ring-[#007AFF]/5 transition-all" 
-              />
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••••••" className="w-full h-14 bg-white border border-black/5 rounded-2xl px-6 outline-none font-bold text-sm shadow-sm focus:ring-4 ring-[#007AFF]/5 transition-all" />
             </div>
           </div>
-          
           <div className="space-y-3">
-            <button 
-              type="submit" 
-              disabled={isProcessing || !loginInput || !password} 
-              className="w-full h-16 bg-black text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all disabled:opacity-20"
-            >
-              {isProcessing ? 'Verifikace v Matrixu...' : 'Ověřit Identitu'}
+            <button type="submit" disabled={isProcessing || !loginInput || !password} className="w-full h-16 bg-black text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all disabled:opacity-20">
+              {isProcessing ? 'Verifikace v Jádru...' : 'Ověřit Identitu'}
             </button>
-            <button 
-              type="button"
-              onClick={handleGuestLogin}
-              disabled={isProcessing}
-              className="w-full h-14 bg-white border border-black/5 text-black/60 rounded-full font-black text-[9px] uppercase tracking-widest shadow-sm active:scale-95 transition-all hover:bg-black/5"
-            >
+            <button type="button" onClick={handleGuestLogin} disabled={isProcessing} className="w-full h-14 bg-white border border-black/5 text-black/60 rounded-full font-black text-[9px] uppercase tracking-widest shadow-sm active:scale-95 transition-all hover:bg-black/5">
               Vstoupit jako Host (Anonym)
             </button>
           </div>
         </form>
-
         <div className="flex flex-col gap-4 w-full pt-8 border-t border-black/5">
            <button onClick={() => { haptic(5); onRegisterClick(); }} className="w-full h-14 bg-white border border-black/10 text-black rounded-full font-black text-[10px] uppercase tracking-widest shadow-sm hover:bg-black hover:text-white transition-all">Nová Registrace SVID</button>
            <button onClick={() => { haptic(5); onShowTerms(); }} className="text-[9px] font-black uppercase tracking-widest text-[#007AFF] hover:underline mx-auto">Podmínky služby</button>
         </div>
-
         <footer className="pt-8 space-y-4 text-center">
           <p className="text-[7px] font-black uppercase tracking-[0.4em] italic text-black/10">{COPYRIGHT}</p>
         </footer>

@@ -1,0 +1,46 @@
+<div class="space-y-12 animate-synthesis-in">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Externí Zdroje & Prezentace</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-10 bg-black text-white rounded-[56px] shadow-2xl relative overflow-hidden group">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 blur-[120px] pointer-events-none"></div>
+      
+      <div class="relative z-10 flex flex-col items-center text-center space-y-8">
+        <div class="w-24 h-24 bg-white/5 backdrop-blur-2xl rounded-[32px] flex items-center justify-center text-6xl shadow-inner border border-white/10 group-hover:scale-110 transition-transform duration-700">🚀</div>
+        
+        <div class="space-y-3">
+          <h3 class="text-4xl font-black italic tracking-tighter uppercase leading-none">Prezentace <br/>Fixit Guru</h3>
+          <p class="text-base text-white/50 font-medium leading-relaxed max-w-md italic mx-auto">
+            Hloubkový vhled do architektury Synthesis OS, představení neurálních asistentů a budoucí roadmapa projektu 2026+.
+          </p>
+        </div>
+
+        <div class="pt-4 w-full max-w-sm">
+          <button 
+            type="button"
+            onclick="if(window.synthesis && window.synthesis.openPresentation) { window.synthesis.openPresentation(event); } else { console.error('Synthesis Bridge Offline'); }" 
+            class="w-full h-16 bg-[#007AFF] text-white rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl hover:bg-white hover:text-black transition-all active:scale-95 group/btn"
+          >
+            <span>Spustit Prezentaci</span>
+            <span class="text-xl group-hover/btn:translate-x-2 transition-transform">↗</span>
+          </button>
+          <p class="text-[9px] font-bold uppercase tracking-widest text-white/20 mt-6 italic">Spouští se nativní Vision Modul Jádra</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div class="p-8 bg-white border border-black/5 rounded-[40px] space-y-4 shadow-sm opacity-40 grayscale">
+          <h5 class="text-sm font-black italic uppercase">System Whitepaper</h5>
+          <p class="text-[10px] leading-relaxed">Technická specifikace SEE-256 standardu (Připravujeme).</p>
+       </div>
+       <div class="p-8 bg-white border border-black/5 rounded-[40px] space-y-4 shadow-sm opacity-40 grayscale">
+          <h5 class="text-sm font-black italic uppercase">API Docs</h5>
+          <p class="text-[10px] leading-relaxed">Dokumentace pro integraci externích senzorů (Připravujeme).</p>
+       </div>
+    </div>
+  </section>
+</div>

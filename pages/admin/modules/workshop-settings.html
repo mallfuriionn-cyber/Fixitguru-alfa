@@ -1,0 +1,52 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Integrita Postupu</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-emerald-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Step-Lock Validation</p>
+          <button class="help-btn" onclick="openHelp('workshop-steplock')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Určuje, jak přísně musí Lucie ověřit dokončení kroku před uvolněním dalšího.</p>
+      </div>
+      <select class="h-12 bg-white border border-black/10 rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none shadow-sm">
+        <option>Volný (Bez potvrzení)</option>
+        <option selected>Standard (Foto OCR)</option>
+        <option>Extreme (Video audit)</option>
+      </select>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-emerald-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Safety Auto-Abort</p>
+          <button class="help-btn" onclick="openHelp('workshop-safety')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Okamžité zastavení sezení při detekci vysokonapěťových kondenzátorů bez ochrany.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Publikační Engine</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-emerald-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Auto-Blueprint Create</p>
+          <button class="help-btn" onclick="openHelp('workshop-blueprint')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Po každé úspěšné opravě automaticky vygenerovat koncept veřejného návodu.</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+</div>

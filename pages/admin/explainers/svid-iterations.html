@@ -1,0 +1,18 @@
+<div class="space-y-10 animate-synthesis-in">
+  <header>
+    <h4 class="text-2xl font-black italic tracking-tighter text-[#007AFF] uppercase leading-none mb-3">PBKDF2 Strength</h4>
+    <p class="text-base text-black/50 font-medium leading-relaxed italic">Počet kryptografických průchodů pro odvození šifrovacího klíče z vašeho SID.</p>
+  </header>
+
+  <div class="p-10 bg-white border border-black/5 rounded-[48px] shadow-sm space-y-6">
+    <div class="flex items-center justify-between">
+      <p class="text-xs font-black uppercase tracking-[0.2em] text-black/30">Standard: 250,000 iterací</p>
+      <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+    </div>
+    <p class="text-sm text-black/70 leading-relaxed font-medium">Vyšší počet iterací exponenciálně ztěžuje dešifrování dat hrubou silou (Brute-Force), ale vyžaduje vyšší výpočetní výkon při inicializaci aplikace.</p>
+    <div class="p-6 bg-amber-50 border border-amber-100 rounded-3xl">
+      <p class="text-[10px] font-black uppercase text-amber-700 mb-1">Doporučení:</p>
+      <p class="text-[11px] text-amber-900/60 italic leading-tight">Pro mobilní zařízení nepoužívejte nastavení nad 500k iterací z důvodu latence startu systému.</p>
+    </div>
+  </div>
+</div>

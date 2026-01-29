@@ -1,0 +1,54 @@
+<div class="space-y-12">
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Model Ladder Strategy</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+    
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-purple-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Primary Engine</p>
+          <button class="help-btn" onclick="openHelp('model-ladder')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Hlavní jádro pro multimodální analýzu schémat a právních textů.</p>
+      </div>
+      <select class="h-12 bg-white border border-black/10 rounded-xl px-4 font-black text-[11px] uppercase tracking-widest outline-none shadow-sm">
+        <option selected>Gemini 3 Pro (Heavy)</option>
+        <option>Gemini 3 Flash (Fast)</option>
+      </select>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-purple-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Cascade Threshold</p>
+          <button class="help-btn" onclick="openHelp('cascade-threshold')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Časový limit v milisekundách, po kterém se dotaz přepne na rychlejší záložní jádro.</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <input type="range" min="500" max="5000" step="100" class="w-32 accent-black">
+        <span class="text-[11px] font-black font-mono bg-black text-white px-3 py-1 rounded-lg">1500ms</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-8">
+    <div class="flex items-center gap-4">
+       <h4 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 whitespace-nowrap italic">Synchronizace Sběrnice</h4>
+       <div class="h-px bg-black/5 w-full"></div>
+    </div>
+
+    <div class="p-8 bg-[#FBFBFD] border border-black/5 rounded-[40px] flex items-center justify-between group hover:border-purple-500/20 transition-all shadow-sm">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <p class="text-lg font-black italic uppercase tracking-tight">Cross-Module Tracing</p>
+          <button class="help-btn" onclick="openHelp('bus-tracing')">?</button>
+        </div>
+        <p class="text-[11px] text-black/40 font-medium leading-relaxed italic max-w-sm">Povolit logování přenosů neuronových otisků mezi jednotlivými moduly (např. Dílna -> JUDY).</p>
+      </div>
+      <input type="checkbox" checked class="admin-toggle">
+    </div>
+  </section>
+</div>

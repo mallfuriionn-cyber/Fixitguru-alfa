@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Agent, Language } from '../types.ts';
 
@@ -12,39 +11,32 @@ export const AgentCard: React.FC<AgentCardProps> = ({ agent, lang, onClick }) =>
   return (
     <button
       onClick={onClick}
-      className="group relative flex flex-col justify-between min-h-[160px] p-6 text-left transition-all duration-700 active:scale-[0.97] rounded-[32px] bg-white border border-black/[0.04] shadow-sm hover:shadow-xl hover:translate-y-[-3px] overflow-hidden"
+      className="group relative flex flex-col items-center justify-center p-8 text-center transition-all duration-300 active:scale-[0.97] rounded-[48px] bg-white border border-black/[0.03] shadow-sm hover:shadow-xl overflow-hidden aspect-[0.9/1]"
     >
-      <div 
-        className="absolute -top-12 -right-12 w-48 h-48 blur-[60px] opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-1000 pointer-events-none rounded-full"
-        style={{ backgroundColor: agent.color }}
-      />
-      
-      <div className="relative z-10 space-y-3">
-        <div className="w-12 h-12 bg-[#FBFBFD] rounded-[18px] flex items-center justify-center text-3xl shadow-inner border border-black/5 transition-all duration-700 group-hover:scale-105">
-           <span>{agent.icon}</span>
+      <div className="relative z-10 flex flex-col items-center gap-6">
+        {/* Icon Square Container */}
+        <div className="w-20 h-20 bg-white rounded-[24px] flex items-center justify-center text-4xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.05),0_10px_20px_rgba(0,0,0,0.02)] border border-black/[0.02] transition-transform duration-500 group-hover:scale-110">
+           <span style={{ color: agent.color }}>{agent.icon}</span>
         </div>
 
-        <div className="space-y-1">
-           <h3 className="text-lg font-black tracking-tighter text-[#1D1D1F] leading-tight italic">
+        <div className="space-y-1.5">
+           <h3 className="text-xl md:text-2xl font-black italic tracking-tighter text-black leading-none uppercase">
              {agent.name}
            </h3>
-           <p className="text-[7px] font-black uppercase tracking-[0.1em] opacity-40 group-hover:opacity-100 transition-opacity" style={{ color: agent.color }}>
+           <p 
+             className="text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-none"
+             style={{ color: agent.color }}
+           >
              {agent.title[lang]}
            </p>
         </div>
       </div>
       
-      <div className="relative z-10 mt-auto pt-2">
-        <p className="text-[10px] text-black/40 font-bold leading-tight line-clamp-2 group-hover:text-black/70 transition-colors italic">
-          {agent.description[lang]}
-        </p>
-      </div>
-
-      <div className="absolute bottom-6 right-6 translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-700">
-         <div className="w-8 h-8 rounded-full flex items-center justify-center bg-black text-white shadow-lg">
-            <span className="text-xs">→</span>
-         </div>
-      </div>
+      {/* Subtle Background Glow */}
+      <div 
+        className="absolute top-0 left-0 w-full h-full opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700 pointer-events-none"
+        style={{ backgroundColor: agent.color }}
+      />
     </button>
   );
 };

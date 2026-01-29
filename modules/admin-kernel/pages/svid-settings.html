@@ -1,0 +1,28 @@
+
+<div class="space-y-8 animate-in">
+  <header style="margin-bottom: 30px;">
+    <h3 style="font-size: 24px; font-weight: 900; font-style: italic; letter-spacing: -1px;">1. Matrix Control (SVID)</h3>
+    <p style="font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--admin-accent); letter-spacing: 2px;">Identity & Encryption Shield</p>
+  </header>
+
+  <div class="config-grid">
+    <div class="config-card">
+        <h4>SEE-256 Iterations</h4>
+        <p>Síla šifrování pro dešifrování SVID dokladů. Hardened (250k) je doporučeno pro Alfa verzi.</p>
+        <select style="width: 100%; margin-top: 15px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--admin-border); padding: 10px; border-radius: 8px;">
+            <option>Standard (100k)</option>
+            <option selected>Hardened (250k)</option>
+            <option>Extreme (1M)</option>
+        </select>
+    </div>
+    
+    <div class="config-card">
+        <h4>Biometric Protocol</h4>
+        <p>Vynucení Hardware Handshake při vstupu do Dílny.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+            <span style="font-size: 10px; font-weight: 900; opacity: 0.5;">STATUS: ACTIVE</span>
+            <input type="checkbox" checked style="width: 20px; height: 20px;">
+        </div>
+    </div>
+  </div>
+</div>

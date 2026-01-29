@@ -1,10 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { GoogleGenAI, Type } from "@google/genai";
 import { COPYRIGHT } from '../constants.tsx';
 import { SavedManual } from '../types.ts';
+import { db } from '../services/storageService.ts';
 import { getBrowserLanguage, getFullLanguageName } from '../utils/locale.ts';
 
 interface SearchResult {
@@ -20,6 +20,26 @@ interface DocSearchModuleProps {
 
 type SearchTab = 'SEARCH' | 'ARCHIVE';
 
+const SynthesisStamp = () => {
+  const handleOpenInfo = () => {
+    if ('vibrate' in navigator) navigator.vibrate(10);
+    window.dispatchEvent(new CustomEvent('synthesis:open-info', { detail: 'verification-info' }));
+  };
+
+  return (
+    <button 
+      onClick={handleOpenInfo}
+      className="synthesis-stamp-ui flex items-center gap-3 py-6 mt-8 border-t border-black/5 opacity-40 select-none scale-90 origin-left hover:opacity-100 transition-all group text-left cursor-pointer"
+    >
+      <div className="w-8 h-8 bg-black text-white rounded-xl flex items-center justify-center font-black italic text-sm shadow-lg group-hover:scale-110 transition-transform">S</div>
+      <div className="flex flex-col">
+         <span className="text-[10px] font-black uppercase tracking-[0.2em] leading-none">Verified Logic</span>
+         <span className="text-[7px] font-bold uppercase tracking-widest text-[#007AFF] mt-1">Synthesis Workshop Core v2.6 // Info</span>
+      </div>
+    </button>
+  );
+};
+
 export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState<SearchTab>('SEARCH');
   const [query, setQuery] = useState('');
@@ -29,17 +49,16 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
   const [translationData, setTranslationData] = useState<{ translated: string; original: string; brand?: string; model?: string; category?: string; url?: string } | null>(null);
   const [viewMode, setViewMode] = useState<'translated' | 'original'>('translated');
   const [isTranslating, setIsTranslating] = useState(false);
-  const [savedManuals, setSavedManuals] = useState<SavedManual[]>([]);
+  const [savedManuals, setSavedManuals] = useState<SavedManual[]>(db.getAll('manuals'));
   const [selectedArchiveManual, setSelectedArchiveManual] = useState<SavedManual | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const locale = getBrowserLanguage();
 
   useEffect(() => {
-    const stored = localStorage.getItem('synthesis_manual_archive');
-    if (stored) {
-      setSavedManuals(JSON.parse(stored));
-    }
+    const handleUpdate = () => setSavedManuals(db.getAll('manuals'));
+    window.addEventListener('db-update', handleUpdate);
+    return () => window.removeEventListener('db-update', handleUpdate);
   }, []);
 
   const haptic = (pattern: number | number[] = 10) => {
@@ -69,6 +88,10 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
         });
         finalQuery = response.text || query;
         setQuery(finalQuery);
+        
+        window.dispatchEvent(new CustomEvent('synthesis:CONTEXT_UPDATE', { 
+          detail: { activeDeviceName: finalQuery, activeDeviceId: 'dev-' + Date.now() } 
+        }));
       }
 
       const langHint = locale === 'cs' ? 'český návod, příručka, manual CZ' : 'manual, user guide';
@@ -125,7 +148,7 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
       - "category": Kategorie (např. Zahradní technika, Elektronika, Domácí spotřebiče, Audio/Video, Ostatní)
       - "original": Technický souhrn v původním jazyce dokumentu.
       - "translated": Přesný překlad do češtiny.
-      Obě textové verze musí být IDENTICKY formátované pomocí markdownu (nadpisy, odrážky, tučné písmo).`;
+      Obě textové verze musí být IDENTICKY formátované pomocí markdownu.`;
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -170,12 +193,10 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
       originalText: translationData.original,
       translatedText: translationData.translated,
       sourceUrl: translationData.url || '',
-      dateAdded: new Date().toLocaleDateString()
+      dateAdded: new Date().toLocaleDateString('cs-CZ')
     };
 
-    const updated = [newManual, ...savedManuals];
-    setSavedManuals(updated);
-    localStorage.setItem('synthesis_manual_archive', JSON.stringify(updated));
+    db.insert('manuals', newManual);
     setTranslationData(null);
     setActiveTab('ARCHIVE');
   };
@@ -183,13 +204,11 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
   const handleDeleteFromArchive = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!confirm("Opravdu chcete tento manuál odstranit z archivu?")) return;
-    const updated = savedManuals.filter(m => m.id !== id);
-    setSavedManuals(updated);
-    localStorage.setItem('synthesis_manual_archive', JSON.stringify(updated));
+    db.delete('manuals', id);
     if (selectedArchiveManual?.id === id) setSelectedArchiveManual(null);
+    haptic(20);
   };
 
-  // FIX: Seskupování s explicitním typováním pro zamezení chyb při renderování
   const getGroupedManuals = (): Record<string, SavedManual[]> => {
     const groups: Record<string, SavedManual[]> = {};
     savedManuals.forEach(m => {
@@ -214,18 +233,7 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#FBFBFD] overflow-hidden">
-      <div className="flex-1 overflow-y-auto px-6 py-12 space-y-10 animate-synthesis-in no-scrollbar">
-        <header className="space-y-6">
-          <div className="flex items-center gap-6">
-            <div className="w-20 h-20 bg-black text-white rounded-[32px] flex items-center justify-center text-4xl shadow-2xl">📂</div>
-            <div className="flex-1">
-              <h2 className="text-4xl font-black tracking-tighter italic leading-none text-[#1D1D1F]">Manual Hub</h2>
-              <p className="text-[10px] font-black uppercase tracking-[0.6em] text-[#007AFF] mt-2">Synthesis OS Intelligence</p>
-            </div>
-          </div>
-        </header>
-
+    <div className="p-6 md:p-12 space-y-10 animate-synthesis-in no-scrollbar">
         <nav className="flex bg-black/5 p-1 rounded-3xl w-full">
           <button 
             onClick={() => { setActiveTab('SEARCH'); setSelectedArchiveManual(null); }}
@@ -351,23 +359,32 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
                  <div className="p-10 bg-white border border-black/5 rounded-[56px] space-y-8 shadow-sm relative overflow-hidden">
                     <header className="space-y-4 relative z-10 border-b border-black/5 pb-8">
                        <div className="flex items-center justify-between">
-                          <span className="px-4 py-1.5 bg-black/5 rounded-full text-[8px] font-black uppercase tracking-widest text-black/40">{selectedArchiveManual.category}</span>
+                          <span className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest ${selectedArchiveManual.brand === 'Vlastní' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-black/5 text-black/40'}`}>
+                             {selectedArchiveManual.category}
+                          </span>
                           <div className="flex bg-black/5 p-1 rounded-2xl">
                              <button onClick={() => setViewMode('translated')} className={`px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${viewMode === 'translated' ? 'bg-[#007AFF] text-white shadow-md' : 'text-black/30'}`}>CZ</button>
                              <button onClick={() => setViewMode('original')} className={`px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${viewMode === 'original' ? 'bg-black text-white shadow-md' : 'text-black/30'}`}>ORIG</button>
                           </div>
                        </div>
-                       <h3 className="text-3xl font-black italic tracking-tighter">{selectedArchiveManual.brand} {selectedArchiveManual.model}</h3>
+                       <h3 className="text-3xl font-black italic tracking-tighter">
+                          {selectedArchiveManual.brand !== 'Vlastní' && selectedArchiveManual.brand} {selectedArchiveManual.model}
+                       </h3>
                     </header>
 
                     <div className="prose-synthesis relative z-10 text-sm leading-relaxed max-h-[60vh] overflow-y-auto no-scrollbar">
                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
                           {viewMode === 'translated' ? selectedArchiveManual.translatedText : selectedArchiveManual.originalText}
                        </ReactMarkdown>
+                       {selectedArchiveManual.brand === 'Vlastní' && <SynthesisStamp />}
                     </div>
 
                     <footer className="pt-8 border-t border-black/5 relative z-10 flex justify-between items-center">
-                       <a href={selectedArchiveManual.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[9px] font-black uppercase tracking-widest text-[#007AFF] hover:underline">Původní zdroj ↗</a>
+                       {selectedArchiveManual.sourceUrl !== 'Synthesis Workshop' ? (
+                          <a href={selectedArchiveManual.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[9px] font-black uppercase tracking-widest text-[#007AFF] hover:underline">Původní zdroj ↗</a>
+                       ) : (
+                          <p className="text-[9px] font-black uppercase tracking-widest text-emerald-600 italic">Vytováno v Synthesis Workshop</p>
+                       )}
                        <button onClick={(e) => handleDeleteFromArchive(selectedArchiveManual.id, e)} className="text-[9px] font-black uppercase tracking-widest text-red-500/40 hover:text-red-500">Smazat</button>
                     </footer>
                  </div>
@@ -392,11 +409,16 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
                             <button 
                               key={manual.id}
                               onClick={() => setSelectedArchiveManual(manual)}
-                              className="p-8 bg-white border border-black/5 rounded-[44px] text-left hover:shadow-xl hover:border-black/20 transition-all group flex flex-col justify-between h-48 relative shadow-sm"
+                              className={`p-8 bg-white border rounded-[44px] text-left hover:shadow-xl transition-all group flex flex-col justify-between h-48 relative shadow-sm ${manual.brand === 'Vlastní' ? 'border-emerald-500/20' : 'border-black/5'}`}
                             >
+                              {manual.brand === 'Vlastní' && (
+                                <div className="absolute top-0 right-0 p-6">
+                                   <span className="text-[7px] font-black uppercase tracking-widest bg-emerald-500 text-white px-2 py-1 rounded">Vlastní postup</span>
+                                </div>
+                              )}
                               <div className="space-y-1">
                                 <p className="text-[8px] font-black uppercase tracking-widest text-black/20">{manual.brand}</p>
-                                <h5 className="text-xl font-black italic tracking-tighter group-hover:text-[#007AFF]">{manual.model}</h5>
+                                <h5 className={`text-xl font-black italic tracking-tighter ${manual.brand === 'Vlastní' ? 'text-emerald-700' : 'group-hover:text-[#007AFF]'}`}>{manual.model}</h5>
                               </div>
                               <div className="flex justify-between items-center">
                                 <span className="text-[9px] font-bold text-black/30 uppercase">{manual.dateAdded}</span>
@@ -404,7 +426,7 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
                               </div>
                               <button 
                                 onClick={(e) => handleDeleteFromArchive(manual.id, e)}
-                                className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-red-500/30 hover:text-red-500"
+                                className="absolute bottom-6 right-8 w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-red-500/30 hover:text-red-500"
                               >✕</button>
                             </button>
                           ))}
@@ -418,14 +440,9 @@ export const DocSearchModule: React.FC<DocSearchModuleProps> = ({ onBack }) => {
           </section>
         )}
 
-        <button onClick={onBack} className="w-full py-8 glass rounded-[36px] font-black text-xs uppercase tracking-[0.3em] text-black/20 hover:text-black transition-all active:scale-95 shadow-sm">
-          Zpět k Terminálu
-        </button>
-
         <footer className="pt-12 text-center pb-20 opacity-10">
           <p className="text-[9px] font-black uppercase tracking-[0.6em] italic text-black">{COPYRIGHT}</p>
         </footer>
-      </div>
     </div>
   );
 };

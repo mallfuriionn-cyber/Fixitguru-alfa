@@ -1,0 +1,16 @@
+
+{
+  "moduleName": "Legal Handshake Protocol",
+  "version": "1.2.0-v5.9.1",
+  "author": "Studio Synthesis",
+  "enabled": true,
+  "requiredForRoles": ["host", "subject"],
+  "bypassForRoles": ["architekt", "guru"],
+  "legalContext": "NOZ_2026_ALPHA",
+  "features": [
+    "Pre-session legal validation",
+    "Dynamic consent UI",
+    "Luxury Print Matrice Engine",
+    "Extracted Data Persistence"
+  ]
+}

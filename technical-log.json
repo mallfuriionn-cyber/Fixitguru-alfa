@@ -8,17 +8,24 @@
     "filesChanged": ["index.html", "App.tsx", "types.ts", "metadata.json"]
   },
   {
-    "id": 45,
-    "timestamp": "2026-02-16T14:30:00Z",
-    "userRequest": "Oprava loginu a funkční zámky (Kernel Alpha v5.3).",
-    "implementation": "Sanace objektu User v registračním modulu. Implementace Model Cascading (fallback pro 429 chyby API). Přidání 'Functional Locks' umožňujících administrátorovi zakázat přístup k modulům.",
-    "filesChanged": ["components/RegistrationModule.tsx", "components/AdminPanel.tsx", "services/geminiService.ts", "types.ts", "App.tsx"]
+    "id": 5,
+    "timestamp": "2026-02-21T21:45:00Z",
+    "userRequest": "Záloha stavu Hub V2.2 - Baseline.",
+    "implementation": "Stabilizace vizuálního stylu Hub V2.2 (čisté bílé karty, matice 2x2, Synthesis Toolbox). Plná integrace Legal Handshake modulu s varovným podbarvením amber-50 a funkčním potvrzením Mandátu Integrity. Fixace barevného kódování asistentů (Karel-Modrá, Lucie-Žlutá, Dáša-Zelená, František-Oranžová, Eda-Fialová).",
+    "filesChanged": ["App.tsx", "constants.tsx", "components/AgentCard.tsx", "components/LegalHandshakeModal.tsx"]
   },
   {
-    "id": 52,
-    "timestamp": "2026-02-18T10:15:00Z",
-    "userRequest": "Restaurace registrace a stabilizace kaskády (Kernel Alpha v5.4).",
-    "implementation": "Oprava chybějícího registračního tlačítka. Vylepšená detekce Quota limitů v GeminiService. Sjednocení navigačních stavů pro rozpoznané subjekty.",
-    "filesChanged": ["components/RegistrationModule.tsx", "services/geminiService.ts", "App.tsx"]
+    "id": 6,
+    "timestamp": "2026-02-21T22:30:00Z",
+    "userRequest": "Ulož všechno jako záloha id #6",
+    "implementation": "Systémový snapshot ID #6. Konsolidace architektury Unified ViewShell, sjednocení hlaviček všech modulů a info stránek. Implementace globálního Master Close Buttonu a potlačení matice asistentů v hloubkových pohledech. Verze Jádra 5.9.3-Alpha stabilizována.",
+    "filesChanged": ["App.tsx", "id-registry.json", "technical-log.json", "components/ProfileModule.tsx", "components/SocialModule.tsx", "components/DocSearchModule.tsx", "components/LucieWorkshopModule.tsx", "components/LegalShieldModule.tsx", "components/ClaimGuideModule.tsx", "components/UserGuidesModule.tsx", "components/DocumentVerifierModule.tsx", "components/GeneralChatModule.tsx", "components/LegalAssistantModule.tsx", "components/MessagesModule.tsx"]
+  },
+  {
+    "id": 7,
+    "timestamp": "2026-02-22T20:25:00Z",
+    "userRequest": "Oprava kódování exportu a stabilizace manifestu.",
+    "implementation": "Implementace UTF-8 BOM (\ufeff) do exportu TXT pro odstranění mojibake diakritiky na mobilních zařízeních. Oprava TS typů pro haptickou odezvu. Finalizace rejstříku Jádra v7.6.",
+    "filesChanged": ["components/ProjectMap.tsx", "technical-log.json"]
   }
 ]

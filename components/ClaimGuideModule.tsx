@@ -1,16 +1,136 @@
-
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { COPYRIGHT } from '../constants.tsx';
 
 interface ClaimGuideModuleProps {
   onBack: () => void;
+  onActivateWithContext?: (template: string) => void;
 }
 
 type GuideTab = 'STRATEGY' | 'PREPARATION' | 'DOCS' | 'LEGISLATION';
 
-export const ClaimGuideModule: React.FC<ClaimGuideModuleProps> = ({ onBack }) => {
+interface LegalTemplate {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  content: string;
+}
+
+const TEMPLATES: LegalTemplate[] = [
+  {
+    id: 'claim_form',
+    title: 'Reklamační list',
+    icon: '📦',
+    description: 'Základní formulář pro uplatnění vady v záruční lhůtě.',
+    content: `**Adresát:** [JMÉNO PRODEJCE], [ADRESA PRODEJCE]
+
+**Věc: Uplatnění práv z vadného plnění (reklamace)**
+
+Dne [DATUM NÁKUPU] jsem ve Vaší provozovně / e-shopu zakoupil(a) zboží [NÁZEV PRODUKTU], č. objednávky [ČÍSLO].
+
+U zboží se projevila následující vada: [POPIS VADY].
+
+Vzhledem k výše uvedenému uplatňuji právo z vadného plnění a v souladu s § 2169 občanského zákoníku požaduji:
+*   [ ] Opravu věci
+*   [ ] Výměnu za novou věc
+*   [ ] Odstoupení od smlouvy a vrácení peněz (v případě podstatného porušení)
+
+Zboží předávám k posouzení. Žádám o vyřízení reklamace v zákonné lhůtě 30 dnů a vydání potvrzení o datu uplatnění.
+
+V [MÍSTO] dne [AKTUÁLNÍ DATUM]
+
+__________________________
+[VAŠE JMÉNO]`
+  },
+  {
+    id: 'withdrawal_14',
+    title: 'Odstoupení do 14 dnů',
+    icon: '↩️',
+    description: 'Pro nákupy na e-shopech bez udání důvodu.',
+    content: `**Adresát:** [JMÉNO PRODEJCE], [ADRESA PRODEJCE]
+
+**Věc: Oznámení o odstoupení od kupní smlouvy**
+
+Oznamuji, že tímto odstupuji od smlouvy o nákupu tohoto zboží: [NÁZEV ZBOŽÍ], objednaného dne [DATUM] a obdrženého dne [DATUM].
+
+Právo na odstoupení uplatňuji v zákonné lhůtě 14 dnů v souladu s § 1829 odst. 1 občanského zákoníku.
+
+Kupní cenu ve výši [ČÁSTKA] Kč včetně poštovného žádám vrátit na můj bankovní účet č. [ČÍSLO ÚČTU] nejpozději do 14 dnů od doručení tohoto oznámení.
+
+V [MÍSTO] dne [AKTUÁLNÍ DATUM]
+
+__________________________
+[VAŠE JMÉNO]`
+  },
+  {
+    id: 'pre_litigation',
+    title: 'Předžalobní výzva',
+    icon: '⚖️',
+    description: 'Poslední varování prodejci před podáním žaloby.',
+    content: `**VÝZVA K PLNĚNÍ POVINNOSTI (PŘEDŽALOBNÍ VÝZVA)**
+dle § 142a občanského soudního řádu
+
+**Vyzývající:** [VAŠE JMÉNO], [ADRESA]
+**Vyzvaný:** [JMÉNO PRODEJCE], [ADRESA/IČO]
+
+Vzhledem k tomu, že jste ani přes opakované urgence nevyřídili reklamaci č. [ČÍSLO] / nevrátili kupní cenu za zboží [PRODUKT], vyzývám Vás tímto k nápravě.
+
+Požadované plnění: [NAPŘ. VRÁCENÍ ČÁSTKY XXX KČ]
+Termín plnění: **do 7 dnů** od doručení této výzvy.
+
+Pokud nebude v uvedené lhůtě povinnost splněna, jsem připraven(a) věc řešit soudní cestou. V takovém případě budu nucen(a) požadovat rovněž náhradu nákladů řízení a úrok z prodlení.
+
+V [MÍSTO] dne [AKTUÁLNÍ DATUM]
+
+__________________________
+[VAŠE JMÉNO]`
+  },
+  {
+    id: 'cost_reimbursement',
+    title: 'Náhrada nákladů',
+    icon: '💰',
+    description: 'Žádost o proplacení poštovného za uznanou reklamaci.',
+    content: `**Adresát:** [JMÉNO PRODEJCE], [ADRESA PRODEJCE]
+
+**Věc: Žádost o náhradu účelně vynaložených nákladů spojených s reklamací**
+
+V návaznosti na uznanou reklamaci zboží [PRODUKT], č. protokolu [ČÍSLO], Vás tímto žádám o náhradu nákladů, které mi v souvislosti s reklamací vznikly.
+
+Jedná se o:
+1. Poštovné / Dopravné ve výši [ČÁSTKA] Kč (viz přiložený doklad).
+
+Nárok uplatňuji v souladu s § 1924 občanského zákoníku. Částku prosím zašlete na můj účet [ČÍSLO ÚČTU] do 14 dnů.
+
+V [MÍSTO] dne [AKTUÁLNÍ DATUM]
+
+__________________________
+[VAŠE JMÉNO]`
+  }
+];
+
+export const ClaimGuideModule: React.FC<ClaimGuideModuleProps> = ({ onBack, onActivateWithContext }) => {
   const [activeTab, setActiveTab] = useState<GuideTab>('STRATEGY');
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
+  const [selectedTemplate, setSelectedTemplate] = useState<LegalTemplate | null>(null);
+
+  const haptic = (p: number | number[] = 10) => { if ('vibrate' in navigator) navigator.vibrate(p); };
+
+  const toggleCheck = (id: string) => {
+    setChecklist(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleTemplateClick = (t: LegalTemplate) => {
+    haptic(15);
+    setSelectedTemplate(t);
+  };
+
+  const handleBuildWithJudy = () => {
+    if (!selectedTemplate || !onActivateWithContext) return;
+    haptic([10, 60]);
+    onActivateWithContext(`Ahoj Judy, chci sestavit dokument na základě tohoto blueprintu: \n\n${selectedTemplate.content}\n\nProsím použij data z mého SVID Matrixu a doplň je do dokumentu.`);
+  };
 
   const prepItems = [
     { id: 'receipt', text: 'Originální účtenka nebo faktura (fyzická/PDF)' },
@@ -27,34 +147,53 @@ export const ClaimGuideModule: React.FC<ClaimGuideModuleProps> = ({ onBack }) =>
     { title: 'Sledování lhůty', text: 'Prodejce má na vyřízení 30 kalendářních dnů. Pokud to nestihne, máte nárok na vrácení peněz.' }
   ];
 
-  const toggleCheck = (id: string) => {
-    setChecklist(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const allPrepChecked = prepItems.every(item => checklist[item.id]);
-
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-12 space-y-12 animate-synthesis-in bg-[#FBFBFD] no-scrollbar">
-      <header className="space-y-6">
-        <div className="flex items-center gap-6">
-          <div className="w-20 h-20 bg-[#1D1D1F] rounded-[32px] flex items-center justify-center text-white text-4xl shadow-2xl shadow-black/20">⚖️</div>
-          <div>
-            <h2 className="text-4xl font-black tracking-tighter italic leading-none text-[#1D1D1F]">Průvodce Reklamací</h2>
-            <p className="text-[10px] font-black uppercase tracking-[0.6em] text-[#1D1D1F]/40 mt-2">Advocacy & Strategy Core</p>
-          </div>
-        </div>
-      </header>
+    <div className="p-6 md:p-12 space-y-12 animate-synthesis-in no-scrollbar relative">
+      
+      {/* TEMPLATE PREVIEW MODAL */}
+      {selectedTemplate && (
+        <div className="fixed inset-0 z-[500] bg-black/60 backdrop-blur-xl flex items-center justify-center p-6 animate-synthesis-in">
+           <div className="max-w-2xl w-full bg-white rounded-[56px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-black/5">
+              <header className="p-10 border-b border-black/5 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-10">
+                 <div className="flex items-center gap-4">
+                    <span className="text-4xl">{selectedTemplate.icon}</span>
+                    <div>
+                       <h3 className="text-2xl font-black italic tracking-tighter uppercase leading-none">{selectedTemplate.title}</h3>
+                       <p className="text-[9px] font-black uppercase text-[#007AFF] mt-2 tracking-widest">Blueprint Integrity v10.0</p>
+                    </div>
+                 </div>
+                 <button onClick={() => setSelectedTemplate(null)} className="w-12 h-12 bg-black/5 rounded-full flex items-center justify-center font-black">✕</button>
+              </header>
 
-      <nav className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+              <div className="flex-1 overflow-y-auto p-10 bg-[#FBFBFD]">
+                 <div className="p-12 bg-white border border-black/5 shadow-inner rounded-[32px] font-serif text-sm leading-relaxed text-black/80 whitespace-pre-wrap" style={{ fontFamily: "'Libre Baskerville', serif" }}>
+                    {selectedTemplate.content}
+                 </div>
+              </div>
+
+              <footer className="p-8 border-t border-black/5 flex gap-4 bg-white">
+                 <button 
+                  onClick={handleBuildWithJudy}
+                  className="flex-1 h-16 bg-black text-white rounded-full font-black text-[11px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3"
+                 >
+                  <span className="text-xl">⚖️</span> Sestavit s JUDY
+                 </button>
+                 <button onClick={() => setSelectedTemplate(null)} className="px-8 h-16 bg-black/5 text-black/40 rounded-full font-black text-[10px] uppercase tracking-widest">Zavřít</button>
+              </footer>
+           </div>
+        </div>
+      )}
+
+      <nav className="flex gap-2 overflow-x-auto no-scrollbar pb-2 sticky top-0 z-50 backdrop-blur-xl bg-[#FBFBFD]/80 py-4">
         {[
           { id: 'STRATEGY', label: 'Strategie', icon: '♟️' },
           { id: 'PREPARATION', label: 'Příprava', icon: '📦' },
-          { id: 'DOCS', label: 'Dokumentace', icon: '📄' },
+          { id: 'DOCS', label: 'Dokumenty', icon: '📄' },
           { id: 'LEGISLATION', label: 'Legislativa', icon: '⚖️' }
         ].map(tab => (
           <button 
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as GuideTab)}
+            onClick={() => { setActiveTab(tab.id as GuideTab); haptic(5); }}
             className={`h-12 px-6 rounded-2xl flex items-center gap-3 whitespace-nowrap transition-all text-[11px] font-black uppercase tracking-widest ${activeTab === tab.id ? 'bg-[#1D1D1F] text-white shadow-lg' : 'bg-white border border-black/5 text-black/40 hover:bg-black/5'}`}
           >
             <span>{tab.icon}</span>
@@ -92,7 +231,7 @@ export const ClaimGuideModule: React.FC<ClaimGuideModuleProps> = ({ onBack }) =>
               {prepItems.map(item => (
                 <button 
                   key={item.id}
-                  onClick={() => toggleCheck(item.id)}
+                  onClick={() => { toggleCheck(item.id); haptic(5); }}
                   className="w-full p-6 flex items-center gap-6 rounded-[28px] hover:bg-black/[0.02] transition-colors text-left group"
                 >
                   <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all ${checklist[item.id] ? 'bg-black border-black text-white' : 'border-black/5'}`}>
@@ -104,74 +243,39 @@ export const ClaimGuideModule: React.FC<ClaimGuideModuleProps> = ({ onBack }) =>
                 </button>
               ))}
             </div>
-
-            {allPrepChecked && (
-              <div className="p-8 bg-green-50 border border-green-100 rounded-[40px] text-center animate-bounce">
-                <p className="text-green-700 font-black uppercase text-xs tracking-widest">Máte vše připraveno k podání reklamace!</p>
-              </div>
-            )}
           </div>
         )}
 
         {activeTab === 'DOCS' && (
           <div className="space-y-8 animate-synthesis-in">
-            <h3 className="text-2xl font-black italic tracking-tighter">Dokumentace & Vzory</h3>
-            <div className="bg-white border border-black/5 rounded-[48px] p-10 space-y-6 shadow-sm">
-              <p className="text-sm text-black/50 font-medium leading-relaxed">
-                Potřebujete sepsat formální reklamaci nebo odstoupení od smlouvy? Zde jsou typické formáty používané v r. 2026.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="h-20 px-8 bg-[#FBFBFD] border border-black/5 rounded-3xl flex items-center justify-between">
-                    <span className="font-black italic text-sm text-black/30">Vzor: Reklamační list</span>
-                 </div>
-                 <div className="h-20 px-8 bg-[#FBFBFD] border border-black/5 rounded-3xl flex items-center justify-between">
-                    <span className="font-black italic text-sm text-black/30">Vzor: Odstoupení do 14 dnů</span>
-                 </div>
-                 <div className="h-20 px-8 bg-[#FBFBFD] border border-black/5 rounded-3xl flex items-center justify-between">
-                    <span className="font-black italic text-sm text-black/30">Vzor: Předžalobní výzva</span>
-                 </div>
-                 <div className="h-20 px-8 bg-[#FBFBFD] border border-black/5 rounded-3xl flex items-center justify-between">
-                    <span className="font-black italic text-sm text-black/30">Vzor: Žádost o náhradu nákladů</span>
-                 </div>
-              </div>
-              <p className="text-[10px] text-black/20 italic text-center">Funkce přímého tisku vzorů byla v této verzi deaktivována.</p>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'LEGISLATION' && (
-          <div className="space-y-12 animate-synthesis-in">
-            <div className="text-center space-y-4">
-              <h3 className="text-3xl font-black italic tracking-tighter">Vaše Práva v Roce 2026</h3>
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40">Zákon o ochraně spotřebitele & NOZ</p>
-            </div>
-
-            <div className="space-y-6">
-              {[
-                { title: 'Odpovědnost za vady', text: 'Prodejce odpovídá za vady, které se projeví v době 24 měsíců od převzetí.' },
-                { title: 'Důkazní břemeno', text: 'V prvním roce se má za to, že věc byla vadná již při převzetí. Prodejce musí dokázat opak.' },
-                { title: 'Lhůta 30 dnů', text: 'Reklamace musí být vyřízena bez zbytečného odkladu, nejpozději do 30 dnů.' }
-              ].map((step, i) => (
-                <div key={i} className="flex gap-8 items-start">
-                  <div className="w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center text-sm font-black shrink-0">{i+1}</div>
-                  <div className="space-y-1 pt-1">
-                    <h5 className="font-black italic text-lg leading-none">{step.title}</h5>
-                    <p className="text-sm text-black/40 font-medium">{step.text}</p>
-                  </div>
-                </div>
-              ))}
+            <h3 className="text-2xl font-black italic tracking-tighter">Blueprinty Listin</h3>
+            <p className="text-sm text-black/40 font-medium px-2">Vyberte si šablonu pro váš spor. Synthesis Jádro zajistí formální správnost dle aktuální legislativy.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               {TEMPLATES.map(template => (
+                 <button 
+                  key={template.id}
+                  onClick={() => handleTemplateClick(template)}
+                  className="p-8 bg-white border border-black/5 rounded-[44px] text-left space-y-6 hover:shadow-2xl hover:border-black/10 transition-all group relative overflow-hidden shadow-sm"
+                 >
+                    <div className="flex items-center justify-between">
+                       <div className="w-14 h-14 bg-black/5 rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-black/5 group-hover:scale-110 transition-transform">{template.icon}</div>
+                       <span className="text-[8px] font-black uppercase text-[#007AFF] tracking-widest">NOZ 2026 Compatible</span>
+                    </div>
+                    <div className="space-y-2">
+                       <h4 className="font-black italic text-xl tracking-tight leading-none">{template.title}</h4>
+                       <p className="text-[10px] font-bold text-black/30 uppercase tracking-[0.2em] mt-3">{template.description}</p>
+                    </div>
+                 </button>
+               ))}
             </div>
           </div>
         )}
       </main>
 
-      <footer className="pt-12 text-center opacity-20 pb-10">
-        <p className="text-[9px] font-black uppercase tracking-[0.6em] italic text-[#1D1D1F]">{COPYRIGHT}</p>
-      </footer>
-
-      <button onClick={onBack} className="w-full py-8 glass rounded-[36px] font-black text-xs uppercase tracking-[0.3em] text-black/20 hover:text-black transition-all active:scale-95 shadow-sm">
-        Zpět k Terminálu
-      </button>
+      <div className="pt-10 text-center pb-20 opacity-10">
+        <p className="text-[9px] font-black uppercase tracking-[0.5em] italic text-black">{COPYRIGHT}</p>
+      </div>
     </div>
   );
 };
