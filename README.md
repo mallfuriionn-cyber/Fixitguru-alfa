@@ -1,44 +1,54 @@
+Tady to máš v čistém Markdownu. Stačí kliknout na ikonu kopírovat u tohoto bloku kódu a vložit do tvého souboru README.md na GitHubu.
+# 🌐 Synthesis OS: Core Kernel
+**Precise. Modular. Integral.**
 
-🌐 Synthesis OS: The Core Kernel
-Precise. Modular. Integral.
-🧩 O Projektu
-Synthesis OS je distribuovaný ekosystém navržený pro inženýrskou asistenci, kreativní syntézu a pokročilé technické opravy. Jádrem celého systému je Synthesis Guru – centrální inteligence, která orchestrátuje specializované agenty a hlídá integritu každého bitu dat.
-Tento projekt propojuje světy Fixit Guru (technický hardware), Studio Synthesis (kreativa) a Lab (R&D) do jednoho nekompromisního celku.
-🏗️ Architektura systému (Model Ladder)
-Systém využívá vícevrstvou neurální architekturu pro maximální efektivitu:
- * Gemini 3 Pro: Hloubková syntéza, strukturální analýza a logické operace.
- * Gemini 3 Flash: Blesková odezva pro rutinní interakce a UI logiku.
-Klíčové moduly (V7.5):
- * JUDY/EDA (Legal Assistant): Advocacy Engine pro právo na opravu a právní analýzu (LP-05).
- * LUCIE (Workshop Mentor): Interaktivní průvodce opravami s metodikou Step-Lock.
- * Synthesis Verifier: Forenzní audit dokumentů s technologií Synthesis SHA-256 Shield.
- * SVID (Synthesis Identity): Identitní vrstva s client-side šifrováním SEE-256.
-📁 Struktura projektu
-Projekt je striktně modulární. Každá funkce má své pevně vymezené místo:
-├── components/           # UI Moduly (React/TSX)
-│   ├── AgentCard.tsx     # Minimalistické rozhraní agentů
-│   └── SynthesisPass.tsx # Digitální ID karta
-├── services/             # Logika a API
-│   ├── geminiService.ts  # LLM Cascade Orchestrator
-│   └── encryption.ts     # SEE-256-GCM implementace
-├── registry/             # Konfigurace
-│   └── id-registry.json  # Centrální rejstřík ID a RBAC
-└── docs/                 # Právní a technické standardy (LP-05, law.html)
+![Status: Integrity OK](https://img.shields.io/badge/Status-INTEGRITY__OK-00FF00?style=for-the-badge)
+![Version: 7.5.1](https://img.shields.io/badge/Version-7.5.1-white?style=for-the-badge)
+
+## 🧩 O projektu
+**Synthesis OS** je modulární ekosystém pro inženýrskou asistenci. Jádrem je **Synthesis Guru** – inteligence orchestrující agenty a hlídající integritu dat pomocí protokolu **Synthesis SHA-256 Shield**.
+
+
+
+---
+
+## 🏗️ Architektura (Model Ladder)
+* **Gemini 3 Pro:** Hloubková syntéza a komplexní logika.
+* **Gemini 3 Flash:** UI logika a bleskové systémové operace.
+
+### Klíčoví Agenti:
+* **JUDY/EDA:** Právní analýza a Advocacy Engine (LP-05).
+* **LUCIE:** Workshop Mentor s metodikou *Step-Lock*.
+* **Synthesis Verifier:** Forenzní audit a validace pečetí.
+
+---
+
+## 📁 Struktura projektu
+```text
+.
+├── App.tsx              # Hlavní router - Hub V2.2
+├── index.tsx            # Bootloader Jádra
+├── id-registry.json     # Rejstřík ID a RBAC (Synthesis Shield)
+├── components/          # UI Moduly
+│   ├── AgentCard.tsx    # Minimalistické rozhraní
+│   ├── SynthesisPass.tsx # SVID Identity Card
+│   └── LucieWorkshop.tsx # Workshop modul
+├── services/            # Systémová logika
+│   ├── geminiService.ts # LLM Cascade Orchestrator
+│   └── encryption.ts    # SEE-256-GCM vrstva
+└── pages/               # Dokumentace
+    ├── lp-05.html       # Mandát Integrity
+    └── law.html         # Right to Repair
 
 🛡️ Mandát Integrity (LP-05)
-Všechny části tohoto systému podléhají Mandátu Integrity. Jakákoli změna v jádru musí být v souladu se standardy udržitelnosti, opravitelnosti a digitální suverenity.
-> "Design není to, jak to vypadá. Design je to, jak to funguje a jak čistě je to integrováno."
+Všechny části systému podléhají standardům udržitelnosti a digitální suverenity.
+> "Design je to, jak čistě je systém integrován."
 > 
-🚀 Instalace & Spuštění
-# Klonování jádra
-git clone https://github.com/user/synthesis-os.git
-
-# Instalace závislostí
+🚀 Rychlý start
+git clone [https://github.com/user/synthesis-os.git](https://github.com/user/synthesis-os.git)
 npm install
+npm run start
 
-# Inicializace Synthesis Guru
-npm run start:core
+© 2026 Synthesis Guru // STATUS: INTEGRITY_OK
 
-🤝 Spolupráce
-Projekt je momentálně v režimu Alpha (Stable). Příspěvky do systému jsou vítány, pokud dodržují náš designový manuál a technickou čistotu (Clean Code).
-© 2026 Synthesis Guru
+
