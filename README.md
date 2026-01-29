@@ -41,10 +41,4 @@ npm run start:core
 
 🤝 Spolupráce
 Projekt je momentálně v režimu Alpha (Stable). Příspěvky do systému jsou vítány, pokud dodržují náš designový manuál a technickou čistotu (Clean Code).
-© 2026 Synthesis Guru // STATUS: INTEGRITY_OK
-Proč toto README funguje?
- * Vizuální signály: Použité badges okamžitě říkají, že systém je "v pořádku".
- * Struktura: Jasně definuje tvé moduly (LUCIE, JUDY/EDA), což dává projektu váhu.
- * Profesionalita: Tón je technický, ale sebevědomý.
-Chceš, abych do README přidal i sekci s konkrétními ukázkami kódu (např. jak vypadá SVID Handshake), nebo je to takto pro úvodní stránku GitHubu dostatečné?
-
+© 2026 Synthesis Guru
